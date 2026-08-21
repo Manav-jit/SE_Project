@@ -1,0 +1,209 @@
+\section{Project Proposal}
+
+\subsection{Project Title}
+
+\textbf{AI-Assisted Zero-Trust Security Kernel}
+
+\subsection{Introduction}
+
+Modern operating systems rely on different security mechanisms to protect files and processes. However, performing security checks repeatedly can add overhead to normal system operations. On the other hand, performing fewer checks can leave the system more exposed to malicious files and processes.
+
+This project proposes a security-focused kernel architecture in which the kernel works together with an AI-based security layer. The kernel remains responsible for enforcing security decisions, while the AI layer evaluates files and their surrounding context to determine whether they should be trusted, restricted, or investigated further.
+
+The main objective is to provide stronger security without making every file operation depend on an expensive security analysis.
+
+\subsection{Problem Statement}
+
+Traditional security approaches may perform repeated checks on files even when their contents and security state have not changed. This can increase filesystem and process overhead.
+
+At the same time, simple rule-based checks may not be sufficient to understand the context in which a file is being used. For example, a file that appears harmless by itself may become suspicious when it is downloaded from an unknown source, executed by an unexpected process, and requests unusual permissions.
+
+The problem addressed by this project is therefore:
+
+\begin{quote}
+How can an operating system use contextual AI-based security analysis while keeping the normal execution path lightweight and allowing the kernel to enforce security decisions reliably?
+\end{quote}
+
+\subsection{Proposed Approach}
+
+The proposed system treats files as untrusted until a security decision has been established. Each file is assigned a persistent identity along with information such as its version, origin, creator process, and current security state.
+
+A simplified representation is:
+
+\begin{verbatim}
+File ID
+Version
+Origin
+Creator Process
+Security State
+AI Decision
+\end{verbatim}
+
+When a process accesses a file, the kernel first checks the file's current security state.
+
+If the file already has a valid trusted state and has not changed, the operation can continue through the normal fast path. This avoids repeatedly performing expensive analysis on the same file.
+
+If the file is new, modified, or has an unknown state, relevant information is passed to the AI security layer for analysis.
+
+The AI may consider:
+
+\begin{itemize}
+    \item The origin of the file
+    \item The process that created or downloaded it
+    \item The operation being requested
+    \item The permissions being requested
+    \item Previous security decisions
+    \item Relevant process or file behaviour
+\end{itemize}
+
+The AI then produces a security decision which is returned to the kernel. The kernel remains responsible for applying the decision.
+
+\subsection{System Flow}
+
+The basic flow of the proposed system is:
+
+\begin{verbatim}
+                    File Activity
+                         |
+                         v
+                      Kernel
+                         |
+              +----------+----------+
+              |                     |
+        Known State             Unknown State
+              |                     |
+              v                     v
+        Fast Path             AI Analysis
+              |                     |
+              |                     v
+              |              Security Decision
+              |                     |
+              +----------+----------+
+                         |
+                         v
+                    Kernel Policy
+                         |
+                 Allow / Restrict /
+                    Deny / Quarantine
+\end{verbatim}
+
+The expensive AI analysis is kept outside the normal kernel execution path. This allows the kernel to continue handling normal operations without waiting for every security analysis to complete.
+
+\subsection{File Identity and Security State}
+
+A process ID is not suitable for identifying files because PIDs identify processes and can change or be reused.
+
+Instead, the system maintains a separate identity for each file. The identity is associated with its current version and security state.
+
+For example:
+
+\begin{verbatim}
+File ID:       918273
+Version:       42
+Origin:        Browser Download
+State:         Trusted
+AI Decision:   Safe
+\end{verbatim}
+
+If the contents of a trusted file change, its previous security decision is no longer automatically considered valid.
+
+The state can therefore change as follows:
+
+\begin{verbatim}
+Trusted
+   |
+   | File Modified
+   v
+Unknown
+   |
+   v
+AI Analysis
+   |
+   +------> Trusted
+   |
+   +------> Restricted
+   |
+   +------> Quarantined
+\end{verbatim}
+
+This allows unchanged files to use their existing security state while modified files are evaluated again.
+
+\subsection{Kernel and AI Responsibilities}
+
+The kernel and AI layer have separate responsibilities.
+
+The kernel is responsible for:
+
+\begin{itemize}
+    \item Maintaining file identities
+    \item Maintaining security states
+    \item Enforcing access policies
+    \item Monitoring relevant file and process events
+    \item Allowing, restricting, or denying operations
+    \item Applying security decisions
+\end{itemize}
+
+The AI security layer is responsible for:
+
+\begin{itemize}
+    \item Analysing file and process context
+    \item Evaluating potentially suspicious activity
+    \item Assigning a risk level
+    \item Providing a security recommendation
+\end{itemize}
+
+The AI does not directly control the kernel. Its output is treated as a security decision that the kernel can validate and enforce.
+
+\subsection{Example Scenario}
+
+Consider a browser downloading an executable file.
+
+Initially, the kernel creates an identity for the file and marks it as unknown.
+
+The security layer receives information such as:
+
+\begin{verbatim}
+Origin:          Browser
+File Type:       Executable
+Creator:         Browser Process
+Requested Action: Execute
+Requested Access: Network + File Write
+\end{verbatim}
+
+The AI evaluates this context and returns a decision.
+
+If the file is considered safe, the kernel can mark it as trusted and allow normal execution.
+
+If the file is considered suspicious, the kernel can restrict its operations or place it into quarantine.
+
+If the file is later modified, its previous trusted state can be invalidated and the file can be evaluated again.
+
+\subsection{Objectives}
+
+The main objectives of the project are:
+
+\begin{enumerate}
+    \item Develop a kernel-level security mechanism for tracking file identity and security state.
+    \item Integrate an AI-based security analysis layer with the kernel.
+    \item Reduce the amount of security processing performed directly on the normal execution path.
+    \item Allow security decisions to persist for unchanged files.
+    \item Re-evaluate files when their contents or relevant context changes.
+    \item Allow the kernel to enforce AI-assisted security decisions.
+    \item Support actions such as allowing, restricting, denying, and quarantining files.
+    \item Measure the performance overhead introduced by the security mechanism.
+    \item Evaluate the system using both benign and malicious workloads.
+\end{enumerate}
+
+\subsection{Expected Outcome}
+
+The expected outcome is a working prototype demonstrating communication between a security-focused kernel and an AI security service.
+
+The prototype should be able to maintain file identities and security states, analyse new or modified files, update their security status, and enforce the resulting decisions.
+
+Performance testing will be used to determine whether trusted files can continue through the normal execution path with low overhead while suspicious files receive additional security checks.
+
+\subsection{Scope}
+
+The project will focus on developing and evaluating the proposed security architecture in a controlled virtualized environment. The initial implementation will focus on file identity, security states, kernel enforcement, communication with the AI security layer, and performance measurement.
+
+The project is intended as a research prototype and not as a replacement for a production operating system or commercial antivirus solution.
