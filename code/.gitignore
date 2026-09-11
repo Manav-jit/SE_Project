@@ -1,0 +1,30 @@
+# Compiled eBPF object files
+*.bpf.o
+*.o
+
+# Generated libbpf skeletons
+*.skel.h
+
+# Generated kernel headers
+vmlinux.h
+
+# Compiled userspace binaries
+caller
+*.out
+
+# Build directories
+build/
+dist/
+
+# Debug / temporary files
+*.log
+*.tmp
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*~
+
+# OS files
+.DS_Store
