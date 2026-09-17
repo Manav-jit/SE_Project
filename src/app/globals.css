@@ -1,26 +1,160 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  /* Organic Vector Palette (Go Green Theme) */
+  --background: #F5F3E7; /* Soft Cream */
+  --foreground: #2D4A22; /* Deep Forest Green */
+  
+  --primary: #9CD869; /* Vibrant Lime Green */
+  --primary-foreground: #2D4A22;
+  
+  --card: #FFFFFF;
+  --card-border: #2D4A22;
+  --card-foreground: #2D4A22;
+  
+  --muted: #E6E2D0;
+  --muted-foreground: #6B7C62;
+  
+  --accent: #F4A21D; /* Warm Yellow/Orange */
+  --accent-foreground: #2D4A22;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --secondary: #9CD869;
+  --secondary-foreground: #2D4A22;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Spacing scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+
+  /* Border radius scale */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-quicksand), system-ui, sans-serif;
+  font-weight: 500;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6, .font-serif {
+  font-family: var(--font-nunito), system-ui, sans-serif;
+  font-weight: 900;
+}
+
+/* Organic Flat Card */
+.organic-card {
+  background: var(--card);
+  border: 2.5px solid var(--card-border);
+  border-radius: 16px;
+  box-shadow: 6px 6px 0px 0px var(--card-border);
+  transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+  position: relative;
+}
+.organic-card:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 9px 9px 0px 0px var(--card-border);
+  background: #F9FFF4;
+}
+
+/* Organic Button */
+.organic-button {
+  background: var(--primary);
+  border: 2.5px solid var(--foreground);
+  border-radius: 9999px;
+  box-shadow: 4px 4px 0px 0px var(--foreground);
+  transition: all 0.2s ease;
+  font-family: var(--font-nunito), sans-serif;
+  font-weight: 900;
+  color: var(--foreground);
+}
+.organic-button:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px 0px var(--foreground);
+}
+.organic-button:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px 0px var(--foreground);
+}
+
+/* Floating Clouds (Schemes) */
+.floating-cloud {
+  background: #E2F1C1;
+  border: 2px solid var(--foreground);
+  border-radius: 9999px;
+  padding: 8px 20px;
+  font-family: var(--font-nunito), sans-serif;
+  font-weight: 800;
+  color: var(--foreground);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* Drift Animations */
+@keyframes cloudDrift1 {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(40px, -20px); }
+  100% { transform: translate(0, 0); }
+}
+@keyframes cloudDrift2 {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(-30px, -30px); }
+  100% { transform: translate(0, 0); }
+}
+@keyframes cloudDrift3 {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(30px, 30px); }
+  100% { transform: translate(0, 0); }
+}
+.animate-drift-1 { animation: cloudDrift1 12s ease-in-out infinite; }
+.animate-drift-2 { animation: cloudDrift2 15s ease-in-out infinite; }
+.animate-drift-3 { animation: cloudDrift3 18s ease-in-out infinite; }
+
+/* Sequence Reveal Animation */
+@keyframes sequenceReveal {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.animate-sequence {
+  opacity: 0;
+  animation: sequenceReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.25s; }
+.stagger-3 { animation-delay: 0.4s; }
+.stagger-4 { animation-delay: 0.55s; }
+.stagger-5 { animation-delay: 0.7s; }
+
+/* Hide scrollbar for cleaner look */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background);
+  border-left: 2px solid var(--foreground);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border: 2px solid var(--foreground);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
 }

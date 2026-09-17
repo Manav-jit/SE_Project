@@ -1,0 +1,26 @@
+{
+  "id": "pm_kisan",
+  "name": "Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)",
+  "ministry": "Ministry of Agriculture and Farmers Welfare",
+  "category": "Agriculture",
+  "eligibility": {
+    "occupation": ["farmer"],
+    "landholding_limit": "Must own cultivable land (no size limit currently, but originally up to 2 hectares). Institutional landholders are excluded.",
+    "income_limit": "Professionals, pensioners (over Rs 10000/month), and taxpayers are excluded.",
+    "age_limit": "No specific age limit",
+    "citizenship": "Indian"
+  },
+  "benefits": "Income support of Rs. 6000 per year in three equal installments of Rs. 2000 each.",
+  "documents_required": [
+    "Aadhaar Card",
+    "Bank Account Details (linked to Aadhaar)",
+    "Land ownership documents (Khatauni)"
+  ],
+  "application_process": [
+    "Register online at PM-KISAN portal or visit the nearest Common Service Centre (CSC).",
+    "Submit Aadhaar, land details, and bank information.",
+    "Wait for verification by state/UT nodal officers."
+  ],
+  "submission_url": "https://pmkisan.gov.in/",
+  "form_template_path": "pm_kisan_form.pdf"
+}

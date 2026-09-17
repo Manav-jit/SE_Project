@@ -1,0 +1,12 @@
+AI_APICallError: Tool choice is none, but model called a tool
+    at createOpenAIStreamError (D:\SE_PROJECT2\.next\dev\server\chunks\node_modules_@ai-sdk_openai_dist_index_1k_duh7.js:199:12)
+    at throwIfOpenAIStreamErrorBeforeOutput (D:\SE_PROJECT2\.next\dev\server\chunks\node_modules_@ai-sdk_openai_dist_index_1k_duh7.js:145:23)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async _OpenAIChatLanguageModel.doStream (D:\SE_PROJECT2\.next\dev\server\chunks\node_modules_@ai-sdk_openai_dist_index_1k_duh7.js:1380:33)
+    at async execute (D:\SE_PROJECT2\.next\dev\server\chunks\node_modules_ai_dist_index_16zsbns.js:8918:28)
+    at async runWithTracingChannelSpan (D:\SE_PROJECT2\.next\dev\server\chunks\node_modules_ai_dist_index_16zsbns.js:4929:16)
+    at async executeLanguageModelCall (D:\SE_PROJECT2\.next\dev\server\chunks\node_modules_ai_dist_index_16zsbns.js:5106:20)
+    at async streamLanguageModelCall (D:\SE_PROJECT2\.next\dev\server\chunks\node_modules_ai_dist_index_16zsbns.js:8916:64)
+    at async retryWithExponentialBackoffInternal (D:\SE_PROJECT2\.next\dev\server\chunks\node_modules_@ai-sdk_provider-utils_dist_04eavvt._.js:5615:16)
+    at async streamStep (D:\SE_PROJECT2\.next\dev\server\chunks\node_modules_ai_dist_index_16zsbns.js:10497:54)
+    at async D:\SE_PROJECT2\.next\dev\server\chunks\node_modules_ai_dist_index_16zsbns.js:10981:13

@@ -1,0 +1,26 @@
+{
+  "id": "pmay_urban",
+  "name": "Pradhan Mantri Awas Yojana - Urban (PMAY-U)",
+  "ministry": "Ministry of Housing and Urban Affairs",
+  "category": "Housing",
+  "eligibility": {
+    "income_limit": "EWS (up to Rs 3 Lakh/yr), LIG (Rs 3-6 Lakh/yr), MIG-I (Rs 6-12 Lakh/yr), MIG-II (Rs 12-18 Lakh/yr)",
+    "age_limit": "18 to 70 years",
+    "citizenship": "Indian",
+    "other_conditions": "Beneficiary family should not own a pucca house in their name anywhere in India. Female ownership is mandatory in EWS/LIG."
+  },
+  "benefits": "Interest subsidy on home loans (CLSS) up to Rs 2.67 lakhs, or direct financial assistance for house construction/enhancement.",
+  "documents_required": [
+    "Aadhaar Card",
+    "Income Proof / Salary Slip",
+    "Bank Account Details",
+    "Property Valuation Certificate"
+  ],
+  "application_process": [
+    "Apply online on PMAY(U) MIS portal using Aadhaar.",
+    "Select the appropriate component (CLSS, ISSR, AHP, BLC).",
+    "Submit required documents and track assessment status."
+  ],
+  "submission_url": "https://pmaymis.gov.in/",
+  "form_template_path": "pmay_urban_form.pdf"
+}

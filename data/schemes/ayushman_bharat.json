@@ -1,0 +1,26 @@
+{
+  "id": "ayushman_bharat",
+  "name": "Ayushman Bharat Pradhan Mantri Jan Arogya Yojana (AB-PMJAY)",
+  "ministry": "Ministry of Health and Family Welfare",
+  "category": "Healthcare",
+  "eligibility": {
+    "occupation": ["laborer", "domestic worker", "rag picker", "mechanic", "sweeper", "tailor", "driver"],
+    "income_limit": "Based on SECC 2011 data. Focuses on bottom 40% of the population.",
+    "age_limit": "No specific age limit (senior citizens 70+ now fully covered unconditionally)",
+    "citizenship": "Indian",
+    "other_conditions": "Must be listed in the SECC 2011 database or possess a valid ration card."
+  },
+  "benefits": "Health insurance cover of up to Rs. 5 lakhs per family per year for secondary and tertiary care hospitalization.",
+  "documents_required": [
+    "Aadhaar Card",
+    "Ration Card",
+    "Mobile Number"
+  ],
+  "application_process": [
+    "Verify eligibility online via 'Am I Eligible' portal.",
+    "Visit a PMJAY empanelled hospital or Common Service Centre.",
+    "Complete KYC using Aadhaar to generate Ayushman Card."
+  ],
+  "submission_url": "https://mera.pmjay.gov.in/",
+  "form_template_path": "ayushman_bharat_form.pdf"
+}
