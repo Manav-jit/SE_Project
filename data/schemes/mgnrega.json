@@ -1,0 +1,23 @@
+{
+  "id": "mgnrega",
+  "name": "Mahatma Gandhi National Rural Employment Guarantee Act (MGNREGA)",
+  "ministry": "Ministry of Rural Development",
+  "category": "employment",
+  "eligibility": {
+    "age_min": 18,
+    "residence": "rural"
+  },
+  "benefits": "Provides at least 100 days of guaranteed wage employment in a financial year to every rural household whose adult members volunteer to do unskilled manual work.",
+  "documents_required": [
+    "Aadhaar Card",
+    "Bank Account Details",
+    "Proof of Residence (Gram Panchayat)"
+  ],
+  "application_process": [
+    "Visit your local Gram Panchayat.",
+    "Submit an application for registration (oral or written).",
+    "Obtain your Job Card which is issued within 15 days.",
+    "Submit a work application when you need employment."
+  ],
+  "submission_url": "https://nrega.nic.in/"
+}

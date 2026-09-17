@@ -43,18 +43,18 @@ export function SchemeCard({ scheme, profile = {}, onGenerateForm, onViewDetails
   const progressPercent = Math.round((metReq / totalReq) * 100);
 
   return (
-    <div className="glass-panel p-5 flex flex-col gap-4 animate-fade-in transition-all hover:border-primary/30 hover:shadow-[0_0_15px_rgba(59,130,246,0.1)] relative">
+    <div className="organic-card p-5 flex flex-col gap-4 animate-fade-in transition-all relative">
       <button 
         onClick={toggleSave}
-        className="absolute top-4 right-4 p-1.5 rounded-md hover:bg-card-border transition-colors text-muted-foreground hover:text-primary z-10"
+        className="absolute top-4 right-4 p-1.5 rounded-lg border-2 border-transparent hover:border-foreground hover:shadow-[2px_2px_0px_0px_var(--foreground)] transition-all text-muted-foreground hover:text-foreground z-10"
         title={isSaved ? "Remove from saved" : "Save scheme"}
       >
         {isSaved ? <BookmarkCheck className="w-5 h-5 text-primary" /> : <Bookmark className="w-5 h-5" />}
       </button>
 
       <div className="pr-8">
-        <h3 className="font-semibold text-lg text-foreground line-clamp-2">{scheme.name}</h3>
-        <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-2">
+        <h3 className="font-black font-serif text-xl text-foreground line-clamp-2">{scheme.name}</h3>
+        <div className="flex items-center gap-1.5 text-xs font-bold text-foreground/80 mt-2">
           <Building2 className="w-3.5 h-3.5" />
           <span className="truncate">{scheme.ministry}</span>
         </div>
@@ -66,13 +66,13 @@ export function SchemeCard({ scheme, profile = {}, onGenerateForm, onViewDetails
 
       {/* Eligibility Tracker */}
       <div className="space-y-1.5 mt-2">
-        <div className="flex justify-between text-xs text-muted-foreground">
+        <div className="flex justify-between text-xs font-bold text-foreground">
           <span>Eligibility Readiness</span>
-          <span className="text-primary font-medium">{metReq}/{totalReq} Docs</span>
+          <span className="text-foreground">{metReq}/{totalReq} Docs</span>
         </div>
-        <div className="h-1.5 w-full bg-card-border rounded-full overflow-hidden">
+        <div className="h-2 w-full bg-background border-2 border-foreground rounded-full overflow-hidden">
           <div 
-            className="h-full bg-gradient-to-r from-primary to-accent transition-all duration-1000 ease-out" 
+            className="h-full bg-primary transition-all duration-1000 ease-out border-r-2 border-foreground" 
             style={{ width: `${progressPercent}%` }}
           />
         </div>
@@ -81,15 +81,15 @@ export function SchemeCard({ scheme, profile = {}, onGenerateForm, onViewDetails
       <div className="pt-2 mt-auto flex gap-2">
         <button 
           onClick={() => onViewDetails(scheme.id)}
-          className="w-1/2 py-2.5 rounded-lg bg-secondary/30 text-secondary-foreground font-medium hover:bg-secondary transition-colors text-sm"
+          className="w-1/2 py-2.5 rounded-full border-2 border-foreground bg-card text-foreground font-black uppercase tracking-wider text-xs hover:shadow-[4px_4px_0px_0px_var(--foreground)] hover:translate-y-[-2px] transition-all"
         >
           View Details
         </button>
         <button 
           onClick={() => onGenerateForm(scheme.id)}
-          className="w-1/2 py-2.5 rounded-lg bg-accent/10 text-accent font-medium hover:bg-accent hover:text-accent-foreground transition-colors flex items-center justify-center gap-2 text-sm"
+          className="w-1/2 py-2.5 organic-button text-xs flex items-center justify-center gap-1.5"
         >
-          <FileText className="w-4 h-4" />
+          <FileText className="w-3.5 h-3.5" />
           Get Form
         </button>
       </div>

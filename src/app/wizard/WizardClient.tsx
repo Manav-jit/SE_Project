@@ -101,13 +101,13 @@ export default function WizardPage() {
 
       <div className="w-full max-w-lg relative z-10">
         {/* Header */}
-        <div className="mb-8 animate-fade-in">
-          <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm mb-6">
+        <div className="mb-8 animate-fade-in text-center">
+          <Link href="/" className="inline-flex items-center justify-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm font-bold mb-6">
             <ArrowLeft className="w-4 h-4" />
             Back to Home
           </Link>
-          <h1 className="text-2xl sm:text-3xl font-bold">Quick-Match Wizard</h1>
-          <p className="text-muted-foreground text-sm mt-1">3 quick steps to find your eligible schemes.</p>
+          <h1 className="text-3xl sm:text-4xl font-black font-serif text-foreground">Quick-Match Wizard</h1>
+          <p className="text-muted-foreground font-bold text-sm mt-2">3 quick steps to find your eligible schemes.</p>
         </div>
 
         {/* Progress */}
@@ -131,7 +131,7 @@ export default function WizardPage() {
         </div>
 
         {/* Steps */}
-        <div className="glass-panel p-6 sm:p-8 min-h-[320px] flex flex-col">
+        <div className="organic-card p-6 sm:p-8 min-h-[360px] flex flex-col bg-[#F9FFF4]">
           {isSubmitting ? (
             <div className="flex-1 flex flex-col items-center justify-center gap-4 animate-fade-in">
               <Loader2 className="w-8 h-8 text-primary animate-spin" />
@@ -158,7 +158,7 @@ export default function WizardPage() {
                       placeholder="Enter your age"
                       value={profile.age || ''}
                       onChange={(e) => updateProfile('age', parseInt(e.target.value) || 0)}
-                      className="w-full bg-background border border-card-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary transition-colors"
+                      className="w-full bg-background border-2 border-foreground rounded-xl px-4 py-3 text-sm font-bold outline-none focus:border-primary focus:shadow-[4px_4px_0px_0px_var(--primary)] transition-all"
                       aria-label="Age"
                     />
                   </fieldset>
@@ -171,7 +171,7 @@ export default function WizardPage() {
                           key={g}
                           type="button"
                           onClick={() => updateProfile('gender', g.toLowerCase())}
-                          className={`flex-1 py-2.5 rounded-lg text-sm font-medium border transition-all ${profile.gender === g.toLowerCase() ? 'border-primary bg-primary/10 text-primary' : 'border-card-border text-muted-foreground hover:border-foreground/20'}`}
+                          className={`flex-1 py-3 rounded-xl text-sm font-bold border-2 transition-all ${profile.gender === g.toLowerCase() ? 'border-foreground bg-primary text-foreground shadow-[4px_4px_0px_0px_var(--foreground)] translate-y-[-2px]' : 'border-foreground/30 text-foreground hover:border-foreground hover:shadow-[4px_4px_0px_0px_var(--foreground)] hover:translate-y-[-2px]'}`}
                         >
                           {g}
                         </button>
@@ -197,7 +197,7 @@ export default function WizardPage() {
                           key={occ}
                           type="button"
                           onClick={() => updateProfile('occupation', occ.toLowerCase())}
-                          className={`px-3 py-2.5 rounded-lg text-sm text-left border transition-all ${profile.occupation === occ.toLowerCase() ? 'border-primary bg-primary/10 text-primary font-medium' : 'border-card-border text-muted-foreground hover:border-foreground/20'}`}
+                          className={`px-3 py-3 rounded-xl text-sm text-left border-2 transition-all ${profile.occupation === occ.toLowerCase() ? 'border-foreground bg-primary text-foreground shadow-[4px_4px_0px_0px_var(--foreground)] translate-y-[-2px] font-black' : 'border-foreground/30 text-foreground font-bold hover:border-foreground hover:shadow-[4px_4px_0px_0px_var(--foreground)] hover:translate-y-[-2px]'}`}
                         >
                           {occ}
                         </button>
@@ -213,7 +213,7 @@ export default function WizardPage() {
                       placeholder="e.g. 250000"
                       value={profile.income || ''}
                       onChange={(e) => updateProfile('income', parseInt(e.target.value) || 0)}
-                      className="w-full bg-background border border-card-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary transition-colors"
+                      className="w-full bg-background border-2 border-foreground rounded-xl px-4 py-3 text-sm font-bold outline-none focus:border-primary focus:shadow-[4px_4px_0px_0px_var(--primary)] transition-all"
                       aria-label="Annual income in rupees"
                     />
                   </fieldset>
@@ -236,7 +236,7 @@ export default function WizardPage() {
                           key={st}
                           type="button"
                           onClick={() => updateProfile('state', st)}
-                          className={`px-3 py-2 rounded-lg text-sm text-left border transition-all ${profile.state === st ? 'border-primary bg-primary/10 text-primary font-medium' : 'border-card-border text-muted-foreground hover:border-foreground/20'}`}
+                          className={`px-3 py-2 rounded-xl text-sm text-left border-2 transition-all ${profile.state === st ? 'border-foreground bg-primary text-foreground shadow-[4px_4px_0px_0px_var(--foreground)] translate-y-[-2px] font-black' : 'border-foreground/30 text-foreground font-bold hover:border-foreground hover:shadow-[4px_4px_0px_0px_var(--foreground)] hover:translate-y-[-2px]'}`}
                         >
                           {st}
                         </button>
@@ -256,7 +256,7 @@ export default function WizardPage() {
                 type="button"
                 onClick={goBack}
                 disabled={step === 0}
-                className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                className="flex items-center gap-1.5 text-sm font-black uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
               >
                 <ArrowLeft className="w-4 h-4" /> Back
               </button>
@@ -266,7 +266,7 @@ export default function WizardPage() {
                   <button
                     type="button"
                     onClick={() => setIsDigiLockerOpen(true)}
-                    className="flex items-center gap-1.5 px-4 py-2 rounded-lg border border-accent/30 text-accent text-sm font-medium hover:bg-accent/10 transition-colors"
+                    className="flex items-center gap-1.5 px-5 py-2.5 rounded-full border-2 border-foreground bg-[#FFE5B4] text-foreground text-sm font-black uppercase tracking-wider hover:shadow-[4px_4px_0px_0px_var(--foreground)] hover:translate-y-[-2px] transition-all"
                   >
                     <ShieldCheck className="w-4 h-4" /> Use DigiLocker
                   </button>
@@ -275,7 +275,7 @@ export default function WizardPage() {
                   type="button"
                   onClick={goNext}
                   disabled={!isStepValid()}
-                  className="flex items-center gap-1.5 px-5 py-2.5 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="flex items-center gap-1.5 px-6 py-2.5 organic-button disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-[4px_4px_0px_0px_var(--foreground)] text-sm"
                 >
                   {step === 2 ? 'Find Schemes' : 'Next'}
                   <ArrowRight className="w-4 h-4" />

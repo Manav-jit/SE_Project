@@ -76,10 +76,10 @@ export default function MatchesClient() {
             Back to Home
           </Link>
           <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center shrink-0">
-              <Sparkles className="w-5 h-5 text-primary" />
+            <div className="w-10 h-10 rounded-xl border-2 border-foreground bg-primary flex items-center justify-center shrink-0 shadow-[2px_2px_0px_0px_var(--foreground)]">
+              <Sparkles className="w-5 h-5 text-foreground" />
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold">Your Matched Schemes</h1>
+            <h1 className="text-3xl sm:text-4xl font-black font-serif text-foreground">Your Matched Schemes</h1>
           </div>
           {profileSummary && (
             <p className="text-sm text-muted-foreground mt-2 flex items-center gap-1.5">
@@ -100,14 +100,14 @@ export default function MatchesClient() {
 
         {/* Empty */}
         {!isLoading && schemes.length === 0 && (
-          <div className="glass-panel p-12 text-center animate-fade-in" role="status">
-            <h2 className="text-xl font-semibold mb-2">No matches found</h2>
-            <p className="text-sm text-muted-foreground mb-6">Try the wizard again with different details, or browse categories.</p>
-            <div className="flex items-center justify-center gap-3">
-              <Link href="/wizard" className="px-5 py-2.5 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors">
+          <div className="organic-card p-12 text-center animate-fade-in bg-[#F9FFF4]" role="status">
+            <h2 className="text-xl font-black font-serif mb-2">No matches found</h2>
+            <p className="text-sm font-medium text-muted-foreground mb-6">Try the wizard again with different details, or browse categories.</p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link href="/wizard" className="px-5 py-2.5 organic-button text-sm w-full sm:w-auto">
                 Try Wizard Again
               </Link>
-              <Link href="/categories" className="px-5 py-2.5 rounded-lg border border-card-border text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+              <Link href="/categories" className="px-5 py-2.5 rounded-full border-2 border-foreground bg-card text-foreground text-sm font-black uppercase tracking-wider hover:shadow-[4px_4px_0px_0px_var(--foreground)] hover:translate-y-[-2px] transition-all w-full sm:w-auto">
                 Browse Categories
               </Link>
             </div>
@@ -125,16 +125,16 @@ export default function MatchesClient() {
               {schemes.map((scheme, i) => {
                 const isSaved = savedIds.includes(scheme.id);
                 return (
-                  <article key={scheme.id} className="glass-panel p-6 flex flex-col gap-4 transition-all hover:border-card-border/50" role="listitem">
+                  <article key={scheme.id} className="organic-card p-6 flex flex-col gap-4 transition-all hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_var(--foreground)]" role="listitem">
                     {/* Title row */}
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-start gap-3 flex-1 min-w-0">
-                        <div className="w-8 h-8 rounded-lg bg-primary/15 flex items-center justify-center shrink-0 mt-0.5">
-                          <span className="text-sm font-bold text-primary">{i + 1}</span>
+                        <div className="w-8 h-8 rounded-lg border-2 border-foreground bg-primary flex items-center justify-center shrink-0 mt-0.5 shadow-[2px_2px_0px_0px_var(--foreground)]">
+                          <span className="text-sm font-black text-foreground">{i + 1}</span>
                         </div>
                         <div className="min-w-0">
-                          <h2 className="text-lg font-semibold text-foreground">{scheme.name}</h2>
-                          <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-1">
+                          <h2 className="text-xl font-black font-serif text-foreground">{scheme.name}</h2>
+                          <div className="flex items-center gap-1.5 text-xs font-bold text-foreground/80 mt-1">
                             <Building2 className="w-3.5 h-3.5 shrink-0" />
                             <span className="truncate">{scheme.ministry}</span>
                           </div>
@@ -142,7 +142,7 @@ export default function MatchesClient() {
                       </div>
                       <button
                         onClick={() => toggleSave(scheme.id)}
-                        className="p-1.5 rounded-md hover:bg-card-border transition-colors text-muted-foreground hover:text-primary shrink-0"
+                        className="p-1.5 rounded-lg border-2 border-transparent hover:border-foreground hover:shadow-[2px_2px_0px_0px_var(--foreground)] hover:translate-y-[-1px] transition-all text-muted-foreground hover:text-foreground shrink-0"
                         aria-label={isSaved ? `Remove ${scheme.name} from saved` : `Save ${scheme.name}`}
                       >
                         {isSaved ? <BookmarkCheck className="w-5 h-5 text-primary" /> : <Bookmark className="w-5 h-5" />}
@@ -171,14 +171,14 @@ export default function MatchesClient() {
                           href={scheme.submission_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
+                          className="inline-flex items-center gap-1.5 px-5 py-2.5 organic-button text-sm"
                         >
                           Apply Now <ExternalLink className="w-3.5 h-3.5" />
                         </a>
                       )}
                       <Link
                         href="/chat"
-                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-card-border text-sm text-muted-foreground hover:text-foreground transition-colors"
+                        className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border-2 border-foreground bg-card text-foreground text-sm font-black uppercase tracking-wider hover:shadow-[4px_4px_0px_0px_var(--foreground)] hover:translate-y-[-2px] transition-all"
                       >
                         Ask AI about this
                       </Link>
@@ -190,8 +190,8 @@ export default function MatchesClient() {
 
             {/* Bottom CTA */}
             <div className="mt-8 text-center animate-fade-in" style={{ animationDelay: '0.4s' }}>
-              <p className="text-sm text-muted-foreground mb-4">Want more detailed guidance on how to apply?</p>
-              <Link href="/chat" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-all">
+              <p className="text-sm font-bold text-foreground mb-4">Want more detailed guidance on how to apply?</p>
+              <Link href="/chat" className="inline-flex items-center justify-center gap-2 px-6 py-3 organic-button w-full sm:w-auto">
                 Chat with SchemeSaathi AI
               </Link>
             </div>

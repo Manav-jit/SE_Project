@@ -11,10 +11,10 @@ export function ChatMessage({ message }: { message: UIMessage }) {
   return (
     <div className={`flex w-full ${isUser ? 'justify-end' : 'justify-start'} animate-spring-up`}>
       <div 
-        className={`max-w-[80%] md:max-w-[70%] p-4 rounded-2xl ${
+        className={`max-w-[80%] md:max-w-[70%] p-4 ${
           isUser 
-            ? 'bg-primary text-primary-foreground rounded-tr-sm' 
-            : 'glass-panel rounded-tl-sm'
+            ? 'bg-primary text-foreground border-2 border-foreground rounded-[16px] rounded-br-[4px] shadow-[4px_4px_0px_0px_var(--foreground)] font-bold' 
+            : 'bg-[#F9FFF4] border-2 border-foreground rounded-[16px] rounded-tl-[4px] shadow-[4px_4px_0px_0px_var(--foreground)] font-bold'
         }`}
       >
         <p className="whitespace-pre-wrap text-sm md:text-base leading-relaxed">

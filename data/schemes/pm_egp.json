@@ -1,0 +1,23 @@
+{
+  "id": "pm_egp",
+  "name": "Prime Minister's Employment Generation Programme (PMEGP)",
+  "ministry": "Ministry of Micro, Small and Medium Enterprises",
+  "category": "employment",
+  "eligibility": {
+    "age_min": 18
+  },
+  "benefits": "Credit-linked subsidy scheme for generating employment opportunities through establishment of micro-enterprises in non-farm sector.",
+  "documents_required": [
+    "Aadhaar Card",
+    "Project Report",
+    "Education Qualification Document",
+    "Special Category Certificate (if applicable)"
+  ],
+  "application_process": [
+    "Visit the PMEGP ePortal.",
+    "Fill the online application form and upload documents.",
+    "The application is reviewed by a Task Force.",
+    "Once approved, bank sanctions the loan."
+  ],
+  "submission_url": "https://www.kviconline.gov.in/pmegpeportal/"
+}

@@ -68,7 +68,7 @@ export function ChatInput({ input, handleInputChange, handleSubmit, isLoading, o
   return (
     <form 
       onSubmit={handleSubmit}
-      className="relative flex items-center w-full glass-panel p-2 mt-4 gap-2"
+      className="relative flex items-center w-full bg-card border-2 border-foreground rounded-[16px] shadow-[4px_4px_0px_0px_var(--foreground)] focus-within:shadow-[6px_6px_0px_0px_var(--foreground)] focus-within:translate-y-[-2px] transition-all p-2 mt-4 gap-2"
     >
       <input 
         type="file" 
@@ -111,7 +111,7 @@ export function ChatInput({ input, handleInputChange, handleSubmit, isLoading, o
       <button
         type="submit"
         disabled={isLoading || !(input || '').trim()}
-        className="p-2.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shrink-0 ml-1 glass-button"
+        className="p-2.5 organic-button flex items-center justify-center shrink-0 ml-1 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <Send className="w-5 h-5" />
       </button>

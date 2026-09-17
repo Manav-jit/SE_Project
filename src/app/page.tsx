@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, MessageSquare, ShieldCheck, Sparkles, LayoutGrid, Zap, ClipboardList, Cloud } from 'lucide-react';
+import { ArrowRight, Sparkles, Zap, Cloud, Bot, Fingerprint, Wand, Compass } from 'lucide-react';
 
 // A simple SVG 4-point star for decoration
 const FourPointStar = ({ className }: { className?: string }) => (
@@ -64,14 +64,10 @@ export default function Home() {
 
         {/* Hero */}
         <section className="text-center mb-20 animate-sequence stagger-2 relative">
-          <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#E2F1C1] border-2 border-foreground rounded-full shadow-[3px_3px_0px_0px_var(--foreground)] text-foreground text-sm font-black uppercase tracking-wider mb-8">
-            <Sparkles className="w-4 h-4 text-accent" fill="currentColor" />
-            <span>AI-Powered Discovery</span>
-          </div>
           
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.15] mb-6 font-serif text-foreground">
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.15] mb-6 font-serif text-foreground mt-8">
             Find schemes you <br className="hidden sm:block" />
-            <span className="text-primary" style={{ textShadow: '2px 2px 0px var(--foreground)' }}>
+            <span className="text-primary animate-wiggle inline-block" style={{ textShadow: '2px 2px 0px var(--foreground)' }}>
               actually qualify for!
             </span>
           </h1>
@@ -87,76 +83,88 @@ export default function Home() {
           {/* Card 1: Chat with AI */}
           <Link 
             href="/chat"
-            className="group organic-card p-8 flex flex-col gap-6 no-underline animate-sequence stagger-3"
+            className="group organic-card p-0 flex flex-col no-underline animate-sequence stagger-3 overflow-hidden bg-card"
           >
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-full bg-[#E2F1C1] border-2 border-foreground flex items-center justify-center shrink-0">
-                <MessageSquare className="w-7 h-7 text-foreground" fill="currentColor" />
-              </div>
-              <h2 className="text-2xl font-black text-foreground font-serif">Chat with AI</h2>
+            <div className="h-48 w-full border-b-2 border-foreground overflow-hidden bg-[#E2F1C1]">
+              <img src="/images/chat.png" alt="Person using smartphone" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
             </div>
-            <p className="text-base font-bold text-muted-foreground leading-relaxed">
-              Have a guided conversation. Tell us about yourself and get personalized scheme recommendations.
-            </p>
-            <div className="mt-auto pt-4 flex items-center gap-2 text-sm text-foreground font-black uppercase tracking-wider group-hover:gap-4 transition-all">
-              Start Chatting <ArrowRight className="w-5 h-5" />
+            <div className="p-8 flex flex-col gap-4 flex-1">
+              <div className="flex items-center gap-3">
+                <Bot className="w-8 h-8 text-primary" />
+                <h2 className="text-2xl font-black text-foreground font-serif">Chat with AI</h2>
+              </div>
+              <p className="text-base font-bold text-muted-foreground leading-relaxed">
+                Have a guided conversation. Tell us about yourself and get personalized scheme recommendations.
+              </p>
+              <div className="mt-auto pt-4 flex items-center gap-2 text-sm text-foreground font-black uppercase tracking-wider group-hover:gap-4 transition-all">
+                Start Chatting <ArrowRight className="w-5 h-5" />
+              </div>
             </div>
           </Link>
 
           {/* Card 2: DigiLocker Instant Match */}
           <Link 
             href="/wizard?mode=digilocker"
-            className="group organic-card p-8 flex flex-col gap-6 no-underline animate-sequence stagger-4"
+            className="group organic-card p-0 flex flex-col no-underline animate-sequence stagger-4 overflow-hidden bg-card"
           >
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-full bg-[#FFE5B4] border-2 border-foreground flex items-center justify-center shrink-0">
-                <ShieldCheck className="w-7 h-7 text-foreground" />
-              </div>
-              <h2 className="text-2xl font-black text-foreground font-serif">Instant DigiLocker</h2>
+            <div className="h-48 w-full border-b-2 border-foreground overflow-hidden bg-[#FFE5B4] flex items-center justify-center p-6">
+              <img src="/images/digilocker.png" alt="DigiLocker" className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500" />
             </div>
-            <p className="text-base font-bold text-muted-foreground leading-relaxed">
-              Connect your DigiLocker, auto-verify your identity, and see eligible schemes instantly. No questions asked.
-            </p>
-            <div className="mt-auto pt-4 flex items-center gap-2 text-sm text-foreground font-black uppercase tracking-wider group-hover:gap-4 transition-all">
-              Connect &amp; Match <Zap className="w-5 h-5" fill="currentColor" />
+            <div className="p-8 flex flex-col gap-4 flex-1">
+              <div className="flex items-center gap-3">
+                <Fingerprint className="w-8 h-8 text-accent" />
+                <h2 className="text-2xl font-black text-foreground font-serif">Instant DigiLocker</h2>
+              </div>
+              <p className="text-base font-bold text-muted-foreground leading-relaxed">
+                Connect your DigiLocker, auto-verify your identity, and see eligible schemes instantly. No questions asked.
+              </p>
+              <div className="mt-auto pt-4 flex items-center gap-2 text-sm text-foreground font-black uppercase tracking-wider group-hover:gap-4 transition-all">
+                Connect &amp; Match <Zap className="w-5 h-5" fill="currentColor" />
+              </div>
             </div>
           </Link>
 
           {/* Card 3: Quick-Match Wizard */}
           <Link 
             href="/wizard"
-            className="group organic-card p-8 flex flex-col gap-6 no-underline animate-sequence stagger-5"
+            className="group organic-card p-0 flex flex-col no-underline animate-sequence stagger-5 overflow-hidden bg-card"
           >
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-full bg-[#E2F1C1] border-2 border-foreground flex items-center justify-center shrink-0">
-                <ClipboardList className="w-7 h-7 text-foreground" />
-              </div>
-              <h2 className="text-2xl font-black text-foreground font-serif">Quick-Match Wizard</h2>
+            <div className="h-48 w-full border-b-2 border-foreground overflow-hidden bg-[#E2F1C1]">
+              <img src="/images/wizard.png" alt="Person filling a form" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
             </div>
-            <p className="text-base font-bold text-muted-foreground leading-relaxed">
-              Answer 3 simple steps — age, occupation, and state — and get matched in under 30 seconds.
-            </p>
-            <div className="mt-auto pt-4 flex items-center gap-2 text-sm text-foreground font-black uppercase tracking-wider group-hover:gap-4 transition-all">
-              Take the Quiz <ArrowRight className="w-5 h-5" />
+            <div className="p-8 flex flex-col gap-4 flex-1">
+              <div className="flex items-center gap-3">
+                <Wand className="w-8 h-8 text-primary" />
+                <h2 className="text-2xl font-black text-foreground font-serif">Quick-Match Wizard</h2>
+              </div>
+              <p className="text-base font-bold text-muted-foreground leading-relaxed">
+                Answer 3 simple steps — age, occupation, and state — and get matched in under 30 seconds.
+              </p>
+              <div className="mt-auto pt-4 flex items-center gap-2 text-sm text-foreground font-black uppercase tracking-wider group-hover:gap-4 transition-all">
+                Take the Quiz <ArrowRight className="w-5 h-5" />
+              </div>
             </div>
           </Link>
 
           {/* Card 4: Browse by Category */}
           <Link 
             href="/categories"
-            className="group organic-card p-8 flex flex-col gap-6 no-underline animate-sequence stagger-5"
+            className="group organic-card p-0 flex flex-col no-underline animate-sequence stagger-5 overflow-hidden bg-card"
           >
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-full bg-[#FFE5B4] border-2 border-foreground flex items-center justify-center shrink-0">
-                <LayoutGrid className="w-7 h-7 text-foreground" fill="currentColor" />
-              </div>
-              <h2 className="text-2xl font-black text-foreground font-serif">Browse by Category</h2>
+            <div className="h-48 w-full border-b-2 border-foreground overflow-hidden bg-[#FFE5B4]">
+              <img src="/images/categories.png" alt="Indian agriculture" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
             </div>
-            <p className="text-base font-bold text-muted-foreground leading-relaxed">
-              Explore schemes by sector — Agriculture, Healthcare, Housing and more. Find what matters to you.
-            </p>
-            <div className="mt-auto pt-4 flex items-center gap-2 text-sm text-foreground font-black uppercase tracking-wider group-hover:gap-4 transition-all">
-              Explore Categories <ArrowRight className="w-5 h-5" />
+            <div className="p-8 flex flex-col gap-4 flex-1">
+              <div className="flex items-center gap-3">
+                <Compass className="w-8 h-8 text-accent" />
+                <h2 className="text-2xl font-black text-foreground font-serif">Browse by Category</h2>
+              </div>
+              <p className="text-base font-bold text-muted-foreground leading-relaxed">
+                Explore schemes by sector — Agriculture, Healthcare, Housing and more. Find what matters to you.
+              </p>
+              <div className="mt-auto pt-4 flex items-center gap-2 text-sm text-foreground font-black uppercase tracking-wider group-hover:gap-4 transition-all">
+                Explore Categories <ArrowRight className="w-5 h-5" />
+              </div>
             </div>
           </Link>
 

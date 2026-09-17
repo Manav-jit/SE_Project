@@ -180,7 +180,7 @@ export default function ChatPage() {
       {/* State Selector Modal */}
       {(!profile.state && !hasSkippedStateSelection) && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/20 backdrop-blur-sm p-4 animate-fade-in">
-          <div className="bg-background border border-card-border p-6 rounded-2xl shadow-xl w-full max-w-md flex flex-col gap-4">
+          <div className="organic-card p-6 w-full max-w-md flex flex-col gap-4">
             <div className="flex justify-between items-center">
               <h3 className="text-xl font-semibold">Select your State</h3>
               <button onClick={() => setHasSkippedStateSelection(true)} className="p-1 hover:bg-card-border rounded-lg text-muted-foreground transition-colors">
@@ -209,7 +209,7 @@ export default function ChatPage() {
       {/* OCR Scanning Overlay */}
       {isScanning && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/20 backdrop-blur-sm p-4 animate-fade-in">
-          <div className="bg-background border border-card-border p-8 rounded-2xl shadow-xl flex flex-col items-center gap-6">
+          <div className="organic-card p-8 flex flex-col items-center gap-6">
             <div className="relative">
               <Scan className="w-16 h-16 text-primary animate-pulse" />
               <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full"></div>
@@ -265,7 +265,7 @@ export default function ChatPage() {
         </div>
 
         <div className="mb-8 animate-fade-in">
-          <h2 className="text-lg font-semibold flex items-center gap-2 mb-4 text-foreground">
+          <h2 className="text-xl font-black font-serif flex items-center gap-2 mb-4 text-foreground">
             <UserIcon className="w-5 h-5 text-primary" />
             Your Profile
           </h2>
@@ -296,7 +296,7 @@ export default function ChatPage() {
 
         {matchedSchemes.length > 0 && (
           <div className="mt-8 pt-8 border-t border-card-border animate-fade-in">
-            <h2 className="text-lg font-semibold mb-4 text-foreground">Matched Schemes</h2>
+            <h2 className="text-xl font-black font-serif mb-4 text-foreground">Matched Schemes</h2>
             <div className="space-y-4">
               {matchedSchemes.map(scheme => (
                 <SchemeCard 
@@ -315,15 +315,15 @@ export default function ChatPage() {
           {!profile.verified && (
             <button 
               onClick={() => setIsDigiLockerOpen(true)}
-              className="w-full py-2.5 rounded-lg bg-blue-600/10 text-blue-500 font-medium hover:bg-blue-600 hover:text-white transition-colors flex items-center justify-center gap-2 text-sm border border-blue-500/20"
+              className="w-full py-3 organic-button flex items-center justify-center gap-2 text-sm"
             >
               <ShieldCheck className="w-4 h-4" />
               Connect DigiLocker
             </button>
           )}
 
-          <div className="glass-panel p-4 text-xs text-muted-foreground flex items-start gap-2">
-            <ShieldAlert className="w-4 h-4 text-yellow-500 shrink-0 mt-0.5" />
+          <div className="bg-[#FFE5B4] border-2 border-foreground rounded-[12px] p-4 text-xs font-bold text-foreground shadow-[3px_3px_0px_0px_var(--foreground)] flex items-start gap-2 mt-4">
+            <ShieldAlert className="w-4 h-4 text-accent shrink-0 mt-0.5" />
             <p>Your data is processed securely and is not stored permanently. Mock DigiLocker integration active.</p>
           </div>
         </div>
@@ -355,7 +355,7 @@ export default function ChatPage() {
           ))}
           {isLoading && messages[messages.length - 1].role === 'user' && (
             <div className="flex w-full justify-start animate-fade-in">
-              <div className="glass-panel p-4 rounded-2xl rounded-tl-sm flex items-center gap-2">
+              <div className="bg-[#F9FFF4] border-2 border-foreground rounded-[16px] rounded-tl-[4px] shadow-[4px_4px_0px_0px_var(--foreground)] p-4 flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-primary animate-pulse-soft"></div>
                 <div className="w-2 h-2 rounded-full bg-primary animate-pulse-soft" style={{ animationDelay: '0.2s' }}></div>
                 <div className="w-2 h-2 rounded-full bg-primary animate-pulse-soft" style={{ animationDelay: '0.4s' }}></div>

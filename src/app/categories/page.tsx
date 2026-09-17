@@ -62,12 +62,12 @@ export default function CategoriesPage() {
       <div className="max-w-5xl mx-auto px-6 py-8 md:py-12 relative z-10">
         {/* Header */}
         <div className="mb-10 animate-fade-in">
-          <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm mb-6">
+          <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm font-bold mb-6">
             <ArrowLeft className="w-4 h-4" />
             Back to Home
           </Link>
-          <h1 className="text-3xl sm:text-4xl font-bold">Browse by Category</h1>
-          <p className="text-muted-foreground mt-2 max-w-xl">
+          <h1 className="text-4xl sm:text-5xl font-black font-serif">Browse by Category</h1>
+          <p className="text-muted-foreground font-bold mt-2 max-w-xl">
             Explore government welfare schemes organized by sector. Click a category to see all available schemes.
           </p>
         </div>
@@ -82,30 +82,30 @@ export default function CategoriesPage() {
               <>
                 <div className="flex items-center justify-between">
                   <div 
-                    className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-105"
-                    style={{ backgroundColor: `${cat.color}15` }}
+                    className="w-12 h-12 rounded-xl border-2 border-foreground flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 group-hover:rotate-3 shadow-[2px_2px_0px_0px_var(--foreground)]"
+                    style={{ backgroundColor: cat.color }}
                   >
-                    <Icon className="w-6 h-6" style={{ color: cat.color }} />
+                    <Icon className="w-6 h-6 text-foreground" />
                   </div>
                   {hasSchemes ? (
                     <span 
-                      className="text-xs font-medium px-2 py-1 rounded-full"
-                      style={{ backgroundColor: `${cat.color}15`, color: cat.color }}
+                      className="text-xs font-black uppercase tracking-wider px-3 py-1 rounded-full border-2 border-foreground shadow-[2px_2px_0px_0px_var(--foreground)]"
+                      style={{ backgroundColor: cat.color, color: 'var(--foreground)' }}
                     >
                       {cat.count} {cat.count === 1 ? 'scheme' : 'schemes'}
                     </span>
                   ) : (
-                    <span className="text-xs text-muted-foreground">Coming soon</span>
+                    <span className="text-xs font-black uppercase tracking-wider px-3 py-1 rounded-full border-2 border-foreground bg-card-border shadow-[2px_2px_0px_0px_var(--foreground)] text-muted-foreground">Coming soon</span>
                   )}
                 </div>
                 
                 <div>
-                  <h2 className="text-lg font-semibold text-foreground">{cat.name}</h2>
-                  <p className="text-sm text-muted-foreground mt-1 leading-relaxed">{cat.description}</p>
+                  <h2 className="text-xl font-black text-foreground">{cat.name}</h2>
+                  <p className="text-sm font-medium text-foreground/80 mt-1 leading-relaxed">{cat.description}</p>
                 </div>
 
                 {hasSchemes && (
-                  <div className="mt-auto pt-2 flex items-center gap-1.5 text-sm font-medium transition-all group-hover:gap-2.5" style={{ color: cat.color }}>
+                  <div className="mt-auto pt-2 flex items-center gap-1.5 text-sm font-black transition-all group-hover:gap-2.5 text-foreground">
                     View Schemes <ArrowRight className="w-4 h-4" />
                   </div>
                 )}
@@ -117,7 +117,7 @@ export default function CategoriesPage() {
                 <Link
                   key={cat.slug}
                   href={`/categories/${cat.slug}`}
-                  className="group glass-panel p-6 flex flex-col gap-4 transition-all no-underline cursor-pointer hover:shadow-[0_0_24px_rgba(255,255,255,0.03)]"
+                  className="group organic-card p-6 flex flex-col gap-4 transition-all no-underline cursor-pointer hover:translate-y-[-4px] hover:shadow-[8px_8px_0px_0px_var(--foreground)]"
                   role="listitem"
                 >
                   {cardContent}
@@ -128,7 +128,7 @@ export default function CategoriesPage() {
             return (
               <div
                 key={cat.slug}
-                className="group glass-panel p-6 flex flex-col gap-4 transition-all no-underline opacity-50 cursor-default"
+                className="group organic-card p-6 flex flex-col gap-4 transition-all no-underline opacity-50 cursor-default bg-[#F9FFF4]"
                 role="listitem"
               >
                 {cardContent}

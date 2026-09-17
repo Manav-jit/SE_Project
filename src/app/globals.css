@@ -158,3 +158,14 @@ h1, h2, h3, h4, h5, h6, .font-serif {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--accent);
 }
+
+/* Wiggle Text Animation */
+@keyframes wiggleText {
+  0%, 100% { transform: rotate(-2deg); color: var(--primary); }
+  50% { transform: rotate(2deg); color: var(--accent); }
+}
+.animate-wiggle {
+  display: inline-block;
+  animation: wiggleText 2s ease-in-out infinite;
+  transform-origin: center;
+}

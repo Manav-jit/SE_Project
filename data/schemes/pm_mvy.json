@@ -1,0 +1,22 @@
+{
+  "id": "pm_mvy",
+  "name": "Pradhan Mantri Matru Vandana Yojana (PMMVY)",
+  "ministry": "Ministry of Women and Child Development",
+  "category": "women-and-child",
+  "eligibility": {
+    "gender": "female",
+    "age_min": 19
+  },
+  "benefits": "Maternity benefit of Rs. 5000 is provided in three installments to pregnant women and lactating mothers for the first living child of the family.",
+  "documents_required": [
+    "Aadhaar Card",
+    "Bank Account Details",
+    "Mother and Child Protection (MCP) Card"
+  ],
+  "application_process": [
+    "Register pregnancy at an Anganwadi Centre (AWC) or approved Health facility.",
+    "Fill Form 1-A with requisite documents.",
+    "Subsequent installments require claiming with Form 1-B and 1-C."
+  ],
+  "submission_url": "https://pmmvy.wcd.gov.in/"
+}

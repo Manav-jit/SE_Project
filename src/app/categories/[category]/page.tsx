@@ -60,25 +60,25 @@ export default function CategoryDetailPage() {
         {/* Loading state */}
         {isLoading && (
           <div className="flex flex-col items-center justify-center py-16 gap-4 animate-fade-in" aria-busy="true" aria-label="Loading schemes">
-            <Loader2 className="w-8 h-8 text-muted-foreground animate-spin" />
-            <p className="text-sm text-muted-foreground">Loading schemes...</p>
+            <Loader2 className="w-8 h-8 text-foreground animate-spin" />
+            <p className="text-sm font-bold text-foreground">Loading schemes...</p>
           </div>
         )}
 
         {/* Error state */}
         {error && !isLoading && (
-          <div className="glass-panel p-8 text-center animate-fade-in" role="alert">
-            <p className="text-red-400 font-medium">{error}</p>
-            <Link href="/categories" className="text-sm text-primary mt-4 inline-block hover:underline">Go back to categories</Link>
+          <div className="organic-card p-8 text-center animate-fade-in" role="alert">
+            <p className="text-red-600 font-bold">{error}</p>
+            <Link href="/categories" className="text-sm font-bold text-foreground mt-4 inline-block hover:underline">Go back to categories</Link>
           </div>
         )}
 
         {/* Empty state */}
         {!isLoading && !error && schemes.length === 0 && (
-          <div className="glass-panel p-12 text-center animate-fade-in" role="status">
-            <h2 className="text-xl font-semibold mb-2">No schemes available yet</h2>
-            <p className="text-sm text-muted-foreground mb-6">We are continuously adding more government schemes. Check back soon!</p>
-            <Link href="/categories" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors">
+          <div className="organic-card p-12 text-center animate-fade-in bg-[#F9FFF4]" role="status">
+            <h2 className="text-xl font-black font-serif mb-2">No schemes available yet</h2>
+            <p className="text-sm font-medium text-muted-foreground mb-6">We are continuously adding more government schemes. Check back soon!</p>
+            <Link href="/categories" className="inline-flex items-center gap-2 px-5 py-2.5 organic-button text-sm">
               <ArrowLeft className="w-4 h-4" /> Browse other categories
             </Link>
           </div>
@@ -88,11 +88,11 @@ export default function CategoryDetailPage() {
         {!isLoading && !error && schemes.length > 0 && (
           <div className="space-y-4 stagger-children" role="list" aria-label={`${meta.name} schemes`}>
             {schemes.map(scheme => (
-              <article key={scheme.id} className="glass-panel p-6 flex flex-col gap-4 transition-all hover:border-card-border/50" role="listitem">
+              <article key={scheme.id} className="organic-card p-6 flex flex-col gap-4 transition-all hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_var(--foreground)]" role="listitem">
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                   <div className="flex-1">
-                    <h2 className="text-lg font-semibold text-foreground">{scheme.name}</h2>
-                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-1.5">
+                    <h2 className="text-xl font-black font-serif text-foreground">{scheme.name}</h2>
+                    <div className="flex items-center gap-1.5 text-xs font-bold text-foreground/80 mt-1.5">
                       <Building2 className="w-3.5 h-3.5" />
                       <span>{scheme.ministry}</span>
                     </div>
@@ -102,7 +102,7 @@ export default function CategoryDetailPage() {
                       href={scheme.submission_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-card-border text-muted-foreground hover:text-foreground hover:border-foreground/20 transition-colors shrink-0"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 organic-button text-xs shrink-0"
                     >
                       Official Portal <ExternalLink className="w-3 h-3" />
                     </a>
