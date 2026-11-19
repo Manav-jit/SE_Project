@@ -1,14 +1,14 @@
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, Sprout, Heart, Home, GraduationCap, Users, Briefcase } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Sprout, Heart, Home, GraduationCap, Users, Briefcase, ShieldCheck } from 'lucide-react';
+import { loadSchemes } from '@/lib/schemes/loader';
 
-const categories = [
+const categoryDefinitions = [
   {
     slug: 'agriculture',
     name: 'Agriculture',
     description: 'Income support, crop insurance, and farming subsidies for farmers.',
     icon: Sprout,
     color: '#22c55e',
-    count: 1,
   },
   {
     slug: 'healthcare',
@@ -16,7 +16,6 @@ const categories = [
     description: 'Health insurance, free treatment, and medical aid for families.',
     icon: Heart,
     color: '#ef4444',
-    count: 1,
   },
   {
     slug: 'housing',
@@ -24,35 +23,45 @@ const categories = [
     description: 'Affordable housing, home loan subsidies, and shelter schemes.',
     icon: Home,
     color: '#f59e0b',
-    count: 1,
   },
   {
     slug: 'education',
     name: 'Education',
-    description: 'Scholarships, skill development, and free education for students.',
+    description: 'Scholarships, fee waivers, and academic support for students.',
     icon: GraduationCap,
     color: '#3b82f6',
-    count: 0,
   },
   {
     slug: 'women-and-child',
     name: 'Women & Child',
-    description: 'Maternity benefits, nutrition programs, and women empowerment.',
+    description: 'Maternity assistance, girl child savings, and female welfare.',
     icon: Users,
     color: '#ec4899',
-    count: 0,
   },
   {
     slug: 'employment',
     name: 'Employment',
-    description: 'Job guarantees, skill training, and startup incentives.',
+    description: 'Job guarantees, micro-enterprise loans, and self-employment subsidies.',
     icon: Briefcase,
     color: '#8b5cf6',
-    count: 0,
+  },
+  {
+    slug: 'social-security',
+    name: 'Social Security',
+    description: 'Guaranteed pension schemes and social safety nets for unorganized workers.',
+    icon: ShieldCheck,
+    color: '#6366f1',
   },
 ];
 
-export default function CategoriesPage() {
+export default async function CategoriesPage() {
+  const allSchemes = await loadSchemes();
+
+  const categories = categoryDefinitions.map(cat => {
+    const count = allSchemes.filter(s => s.category.toLowerCase() === cat.slug).length;
+    return { ...cat, count };
+  });
+
   return (
     <main className="min-h-screen relative overflow-hidden">
       {/* Background */}
@@ -68,7 +77,7 @@ export default function CategoriesPage() {
           </Link>
           <h1 className="text-4xl sm:text-5xl font-black font-serif">Browse by Category</h1>
           <p className="text-muted-foreground font-bold mt-2 max-w-xl">
-            Explore government welfare schemes organized by sector. Click a category to see all available schemes.
+            Explore government welfare schemes organized by sector. Click a category to see all available schemes and apply.
           </p>
         </div>
 
@@ -100,7 +109,7 @@ export default function CategoriesPage() {
                 </div>
                 
                 <div>
-                  <h2 className="text-xl font-black text-foreground">{cat.name}</h2>
+                  <h2 className="text-xl font-black text-foreground font-serif">{cat.name}</h2>
                   <p className="text-sm font-medium text-foreground/80 mt-1 leading-relaxed">{cat.description}</p>
                 </div>
 

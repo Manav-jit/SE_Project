@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { createOpenAI } from '@ai-sdk/openai';
-import { generateText, streamText } from 'ai';
+import { streamText } from 'ai';
 
 const key = fs.readFileSync('.env.local', 'utf8').split('=')[1].trim();
 const groq = createOpenAI({
@@ -11,7 +11,7 @@ const groq = createOpenAI({
 async function run() {
   try {
     const result = streamText({
-      model: groq('openai/gpt-oss-20b'),
+      model: groq.chat('openai/gpt-oss-20b'),
       system: 'You are an AI.',
       messages: [
         { role: 'user', content: 'i am a farmer' },

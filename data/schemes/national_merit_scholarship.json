@@ -1,0 +1,29 @@
+{
+  "id": "national_merit_scholarship",
+  "name": "National Means-cum-Merit Scholarship Scheme (NMMSS)",
+  "ministry": "Ministry of Education",
+  "category": "education",
+  "eligibility": {
+    "age_min": 12,
+    "age_max": 18,
+    "gender": "all",
+    "occupations": ["student"],
+    "income_max": 350000,
+    "other_conditions": "Studying in class IX in a government or local body school, having secured at least 55% marks in class VIII exam."
+  },
+  "benefits": "Scholarship of Rs. 12,000 per annum (Rs. 1,000 per month) from Class IX through Class XII to arrest dropout rates.",
+  "documents_required": [
+    "Aadhaar Card",
+    "Class VII & VIII Marksheets",
+    "Parental Income Certificate",
+    "Bank Account Passbook (student's name)"
+  ],
+  "application_process": [
+    "Appear for the state-level NMMSS selection exam conducted in Class VIII.",
+    "Selected students register on the National Scholarship Portal (NSP).",
+    "Disbursement occurs through Direct Benefit Transfer (DBT)."
+  ],
+  "submission_url": "https://scholarships.gov.in/",
+  "form_template_path": "national_merit_scholarship_form.pdf"
+}
+

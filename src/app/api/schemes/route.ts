@@ -23,7 +23,8 @@ export async function GET(req: NextRequest) {
       const searchString = Object.values(profile).filter(Boolean).join(' ');
       const schemes = await findRelevantSchemes(
         searchString.length > 0 ? searchString : 'welfare schemes',
-        3
+        6,
+        profile
       );
       return NextResponse.json({ schemes, profile });
     }

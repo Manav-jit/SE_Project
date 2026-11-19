@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight, User, Briefcase, MapPin, ShieldCheck, Loader2, Check } from 'lucide-react';
 import { DigiLockerModal } from '@/components/DigiLockerModal';
-import { UserProfile } from '@/lib/chat/profile';
+import { UserProfile, getStoredProfile, saveStoredProfile } from '@/lib/chat/profile';
 
 const indianStates = [
   "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana",
@@ -29,28 +29,23 @@ export default function WizardPage() {
   const isDigiLockerMode = searchParams.get('mode') === 'digilocker';
 
   const [step, setStep] = useState<WizardStep>(0);
-  const [isDigiLockerOpen, setIsDigiLockerOpen] = useState(false);
+  const [isDigiLockerOpen, setIsDigiLockerOpen] = useState(isDigiLockerMode);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [direction, setDirection] = useState<'forward' | 'backward'>('forward');
 
-  const [profile, setProfile] = useState<UserProfile>({});
-
-  // Auto-open DigiLocker if mode=digilocker
-  useEffect(() => {
-    if (isDigiLockerMode) {
-      setIsDigiLockerOpen(true);
-    }
-  }, [isDigiLockerMode]);
+  const [profile, setProfile] = useState<UserProfile>(() => getStoredProfile());
 
   const handleDigiLockerVerify = (verifiedData: Partial<UserProfile>) => {
     const merged = { ...profile, ...verifiedData };
     setProfile(merged);
+    saveStoredProfile(merged);
     // Go directly to results
     navigateToResults(merged);
   };
 
   const navigateToResults = (p: UserProfile) => {
     setIsSubmitting(true);
+    saveStoredProfile(p);
     const profileParam = encodeURIComponent(JSON.stringify(p));
     setTimeout(() => {
       router.push(`/matches?profile=${profileParam}`);

@@ -1,0 +1,31 @@
+{
+  "id": "post_matric_scholarship",
+  "name": "Post Matric Scholarship Scheme",
+  "ministry": "Ministry of Social Justice and Empowerment / Tribal Affairs",
+  "category": "education",
+  "eligibility": {
+    "age_min": 14,
+    "age_max": 35,
+    "gender": "all",
+    "occupations": ["student"],
+    "income_max": 250000,
+    "other_conditions": "Enrolled in recognized post-matriculation or post-secondary courses (Class 11 to PhD)."
+  },
+  "benefits": "Complete reimbursement of compulsory non-refundable course fees and monthly maintenance allowance up to Rs 13,500 per year.",
+  "documents_required": [
+    "Aadhaar Card",
+    "Income Certificate (below Rs 2.5 Lakh/yr)",
+    "Caste / Community Certificate",
+    "Previous Class Marksheet",
+    "Fee Receipt and College Bonafide Certificate",
+    "Bank Account Details"
+  ],
+  "application_process": [
+    "Register online on the National Scholarship Portal (NSP).",
+    "Fill student profile, academic records, and upload verification docs.",
+    "Institute verifies application, followed by State Nodal Officer approval."
+  ],
+  "submission_url": "https://scholarships.gov.in/",
+  "form_template_path": "post_matric_scholarship_form.pdf"
+}
+

@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { ArrowRight, Sparkles, Zap, Cloud, Bot, Fingerprint, Wand, Compass } from 'lucide-react';
+import Image from 'next/image';
+import { ArrowRight, Zap, Cloud, Bot, Fingerprint, Wand, Compass } from 'lucide-react';
 
 // A simple SVG 4-point star for decoration
 const FourPointStar = ({ className }: { className?: string }) => (
@@ -85,8 +86,8 @@ export default function Home() {
             href="/chat"
             className="group organic-card p-0 flex flex-col no-underline animate-sequence stagger-3 overflow-hidden bg-card"
           >
-            <div className="h-48 w-full border-b-2 border-foreground overflow-hidden bg-[#E2F1C1]">
-              <img src="/images/chat.png" alt="Person using smartphone" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div className="h-48 w-full border-b-2 border-foreground overflow-hidden bg-[#E2F1C1] relative">
+              <Image src="/images/chat.png" alt="Person using smartphone" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
             </div>
             <div className="p-8 flex flex-col gap-4 flex-1">
               <div className="flex items-center gap-3">
@@ -107,8 +108,8 @@ export default function Home() {
             href="/wizard?mode=digilocker"
             className="group organic-card p-0 flex flex-col no-underline animate-sequence stagger-4 overflow-hidden bg-card"
           >
-            <div className="h-48 w-full border-b-2 border-foreground overflow-hidden bg-[#FFE5B4] flex items-center justify-center p-6">
-              <img src="/images/digilocker.png" alt="DigiLocker" className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500" />
+            <div className="h-48 w-full border-b-2 border-foreground overflow-hidden bg-[#FFE5B4] flex items-center justify-center p-6 relative">
+              <Image src="/images/digilocker.png" alt="DigiLocker" fill className="object-contain p-6 group-hover:scale-110 transition-transform duration-500" />
             </div>
             <div className="p-8 flex flex-col gap-4 flex-1">
               <div className="flex items-center gap-3">
@@ -129,8 +130,8 @@ export default function Home() {
             href="/wizard"
             className="group organic-card p-0 flex flex-col no-underline animate-sequence stagger-5 overflow-hidden bg-card"
           >
-            <div className="h-48 w-full border-b-2 border-foreground overflow-hidden bg-[#E2F1C1]">
-              <img src="/images/wizard.png" alt="Person filling a form" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div className="h-48 w-full border-b-2 border-foreground overflow-hidden bg-[#E2F1C1] relative">
+              <Image src="/images/wizard.png" alt="Person filling a form" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
             </div>
             <div className="p-8 flex flex-col gap-4 flex-1">
               <div className="flex items-center gap-3">
@@ -151,8 +152,8 @@ export default function Home() {
             href="/categories"
             className="group organic-card p-0 flex flex-col no-underline animate-sequence stagger-5 overflow-hidden bg-card"
           >
-            <div className="h-48 w-full border-b-2 border-foreground overflow-hidden bg-[#FFE5B4]">
-              <img src="/images/categories.png" alt="Indian agriculture" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div className="h-48 w-full border-b-2 border-foreground overflow-hidden bg-[#FFE5B4] relative">
+              <Image src="/images/categories.png" alt="Indian agriculture" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
             </div>
             <div className="p-8 flex flex-col gap-4 flex-1">
               <div className="flex items-center gap-3">

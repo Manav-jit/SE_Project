@@ -36,8 +36,8 @@ export async function POST(req: NextRequest) {
       .map((m) => `${m.role}: ${getMessageText(m)}`)
       .join('\n');
 
-    // 1. Extract info
-    let extractedData = {};
+    // 1. Extract info safely
+    let extractedData: Partial<UserProfile> = {};
     try {
       const extractionPrompt = EXTRACTION_PROMPT
         .replace('{history}', history)
@@ -47,24 +47,58 @@ export async function POST(req: NextRequest) {
         model: groq.chat('openai/gpt-oss-20b'),
         prompt: extractionPrompt,
         temperature: 0,
-        maxOutputTokens: 200
+        maxOutputTokens: 250
       });
 
-      const cleaned = text.replace(/```json/g, '').replace(/```/g, '').trim();
-      extractedData = JSON.parse(cleaned);
+      // Match JSON block between the first { and the last }
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        const rawParsed = JSON.parse(jsonMatch[0]);
+        const sanitized: Partial<UserProfile> = {};
+        if (rawParsed.name && typeof rawParsed.name === 'string') {
+          sanitized.name = rawParsed.name.trim();
+        }
+        if (rawParsed.age !== undefined && rawParsed.age !== null) {
+          const parsedAge = parseInt(String(rawParsed.age), 10);
+          if (!isNaN(parsedAge) && parsedAge > 0 && parsedAge <= 120) {
+            sanitized.age = parsedAge;
+          }
+        }
+        if (rawParsed.gender && typeof rawParsed.gender === 'string') {
+          sanitized.gender = rawParsed.gender.toLowerCase().trim();
+        }
+        if (rawParsed.occupation && typeof rawParsed.occupation === 'string') {
+          sanitized.occupation = rawParsed.occupation.toLowerCase().trim();
+        }
+        if (rawParsed.income !== undefined && rawParsed.income !== null) {
+          const parsedIncome = parseInt(String(rawParsed.income).replace(/[^0-9]/g, ''), 10);
+          if (!isNaN(parsedIncome) && parsedIncome >= 0) {
+            sanitized.income = parsedIncome;
+          }
+        }
+        if (rawParsed.state && typeof rawParsed.state === 'string') {
+          sanitized.state = rawParsed.state.trim();
+        }
+        if (rawParsed.caste && typeof rawParsed.caste === 'string') {
+          sanitized.caste = rawParsed.caste.trim();
+        }
+        extractedData = sanitized;
+      }
     } catch (e) {
-      console.warn("Extraction failed or returned invalid JSON", e);
+      console.warn("Extraction failed or returned invalid JSON format", e);
     }
 
-    const mergedProfile = { ...currentProfile, ...extractedData };
+    const mergedProfile: UserProfile = { ...currentProfile, ...extractedData };
 
-    // 2. Retrieve schemes
-    const profileSummary = Object.values(mergedProfile).join(" ");
+    // 2. Retrieve schemes using hybrid eligibility engine
+    const profileSummary = Object.values(mergedProfile)
+      .filter((val): val is string | number => typeof val === 'string' || typeof val === 'number')
+      .join(" ");
     const searchString = profileSummary.length > 0 ? profileSummary : "welfare schemes";
-    const relevantSchemes = await findRelevantSchemes(searchString, 2);
+    const relevantSchemes = await findRelevantSchemes(searchString, 4, mergedProfile);
 
     // Reduce token size by only sending scheme name and benefits to the prompt
-    const simplifiedSchemes = relevantSchemes.map((s: any) => ({ name: s.name, benefits: s.benefits }));
+    const simplifiedSchemes = relevantSchemes.map((s: { name: string; benefits: string }) => ({ name: s.name, benefits: s.benefits }));
 
     // 3. Generate response
     let formattedSysPrompt = SYSTEM_PROMPT
@@ -91,7 +125,9 @@ export async function POST(req: NextRequest) {
     response.headers.set('x-updated-profile', JSON.stringify(mergedProfile));
     try {
       response.headers.set('x-matched-schemes', encodeURIComponent(JSON.stringify(relevantSchemes)));
-    } catch(e) { console.error("Failed to set schemes header"); }
+    } catch (err) {
+      console.error("Failed to set schemes header", err);
+    }
 
     return response;
   } catch (error) {

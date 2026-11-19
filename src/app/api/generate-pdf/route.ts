@@ -12,15 +12,16 @@ export async function POST(req: NextRequest) {
     const pdfBytes = await generateFilledForm(profile, schemeId);
 
     // Return as downloadable PDF
-    return new NextResponse(pdfBytes as any, {
+    return new NextResponse(pdfBytes as unknown as BodyInit, {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="${schemeId}_application.pdf"`,
       }
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("PDF Generation Error:", error);
-    return NextResponse.json({ error: error.message || "Failed to generate PDF" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Failed to generate PDF";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

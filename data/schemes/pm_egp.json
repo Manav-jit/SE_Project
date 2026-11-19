@@ -4,20 +4,25 @@
   "ministry": "Ministry of Micro, Small and Medium Enterprises",
   "category": "employment",
   "eligibility": {
-    "age_min": 18
+    "age_min": 18,
+    "age_max": 65,
+    "gender": "all",
+    "occupations": ["self-employed", "unemployed", "laborer", "other"],
+    "education": "At least 8th standard pass for projects costing above Rs 10 lakh in manufacturing and Rs 5 lakh in services."
   },
-  "benefits": "Credit-linked subsidy scheme for generating employment opportunities through establishment of micro-enterprises in non-farm sector.",
+  "benefits": "Credit-linked subsidy of up to 35% on bank loans for setting up new micro-enterprises in manufacturing (up to Rs 50 lakh) or service (up to Rs 20 lakh) sectors.",
   "documents_required": [
     "Aadhaar Card",
-    "Project Report",
-    "Education Qualification Document",
-    "Special Category Certificate (if applicable)"
+    "Detailed Project Report (DPR)",
+    "Educational Qualification Certificate",
+    "Caste / Special Category Certificate (if applicable)"
   ],
   "application_process": [
-    "Visit the PMEGP ePortal.",
-    "Fill the online application form and upload documents.",
-    "The application is reviewed by a Task Force.",
-    "Once approved, bank sanctions the loan."
+    "Visit the PMEGP e-Portal.",
+    "Fill online application form and upload DPR and KYC documents.",
+    "Application is screened by District Level Task Force Committee (DLTFC).",
+    "Approved applications are sanctioned by designated banks."
   ],
-  "submission_url": "https://www.kviconline.gov.in/pmegpeportal/"
+  "submission_url": "https://www.kviconline.gov.in/pmegpeportal/",
+  "form_template_path": "pm_egp_form.pdf"
 }

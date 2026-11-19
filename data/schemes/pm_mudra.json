@@ -1,0 +1,29 @@
+{
+  "id": "pm_mudra",
+  "name": "Pradhan Mantri MUDRA Yojana (PMMY)",
+  "ministry": "Ministry of Finance",
+  "category": "employment",
+  "eligibility": {
+    "age_min": 18,
+    "age_max": 65,
+    "gender": "all",
+    "occupations": ["self-employed", "laborer", "other"],
+    "other_conditions": "Non-corporate, non-farm small/micro enterprises. Loans categorized into Shishu (up to Rs 50,000), Kishore (Rs 50,000 to Rs 5 Lakh), and Tarun (Rs 5 to 10 Lakh)."
+  },
+  "benefits": "Collateral-free business loans up to Rs 10 Lakhs (and up to Rs 20 Lakhs under Tarun Plus) at competitive interest rates with no processing fees for Shishu.",
+  "documents_required": [
+    "Aadhaar Card",
+    "PAN Card",
+    "Business Registration / Trade License",
+    "Bank Account Statement (last 6 months)",
+    "Quotation of machinery or items to be purchased"
+  ],
+  "application_process": [
+    "Apply online via Udyami Mitra portal or visit any commercial bank, RRB, or NBFC.",
+    "Submit MUDRA loan application form with business proposal.",
+    "Bank conducts field inspection and disburses approved loan amount."
+  ],
+  "submission_url": "https://www.udyamimitra.in/",
+  "form_template_path": "pm_mudra_form.pdf"
+}
+

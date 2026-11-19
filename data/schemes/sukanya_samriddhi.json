@@ -1,0 +1,27 @@
+{
+  "id": "sukanya_samriddhi",
+  "name": "Sukanya Samriddhi Yojana (SSY)",
+  "ministry": "Ministry of Finance / Women and Child Development",
+  "category": "women-and-child",
+  "eligibility": {
+    "age_min": 0,
+    "age_max": 10,
+    "gender": "female",
+    "other_conditions": "Account can be opened by parents/legal guardians for a girl child from birth until age 10. Maximum 2 accounts per family."
+  },
+  "benefits": "High sovereign-guaranteed interest rate (currently 8.2% p.a.), exempt-exempt-exempt (EEE) tax benefits under Section 80C, for higher education and marriage of girl child.",
+  "documents_required": [
+    "Birth Certificate of Girl Child",
+    "Identity & Address Proof of Parent/Guardian (Aadhaar/PAN)",
+    "Passport size photographs"
+  ],
+  "application_process": [
+    "Visit any authorized Post Office or designated Commercial Bank branch.",
+    "Fill the SSY account opening form.",
+    "Submit initial deposit (minimum Rs 250) along with documents.",
+    "Collect passbook issued by the bank or post office."
+  ],
+  "submission_url": "https://www.indiapost.gov.in/",
+  "form_template_path": "sukanya_samriddhi_form.pdf"
+}
+

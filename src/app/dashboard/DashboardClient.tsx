@@ -7,34 +7,46 @@ import { SchemeCard } from '@/components/SchemeCard';
 import { Scheme } from '@/lib/schemes/loader';
 import { ActionPlanModal } from '@/components/ActionPlanModal';
 import { SchemeDetailModal } from '@/components/SchemeDetailModal';
-import { UserProfile } from '@/lib/chat/profile';
+import { ProofGraphModal } from '@/components/dag/ProofGraphModal';
+import { UserProfile, getStoredProfile, PROFILE_EVENT } from '@/lib/chat/profile';
 
 export default function DashboardClient({ schemes }: { schemes: Scheme[] }) {
-  const [savedSchemes, setSavedSchemes] = useState<Scheme[]>([]);
+  const [savedSchemes, setSavedSchemes] = useState<Scheme[]>(() => {
+    if (typeof window === 'undefined') return [];
+    try {
+      const savedIds: string[] = JSON.parse(localStorage.getItem('saved_schemes') || '[]');
+      return schemes.filter(s => savedIds.includes(s.id));
+    } catch {
+      return [];
+    }
+  });
   const [selectedSchemeForAction, setSelectedSchemeForAction] = useState<Scheme | null>(null);
   const [selectedSchemeForDetails, setSelectedSchemeForDetails] = useState<Scheme | null>(null);
-
-  // Mock profile since we don't have global state. In a real app, this would come from Context.
-  const profile: UserProfile = { verified: true, state: "Maharashtra" };
-
-  useEffect(() => {
-    const savedIds = JSON.parse(localStorage.getItem('saved_schemes') || '[]');
-    setSavedSchemes(schemes.filter(s => savedIds.includes(s.id)));
-  }, [schemes]);
-
-  // Handle updates when a scheme is un-saved
-  const handleStorageChange = () => {
-    const savedIds = JSON.parse(localStorage.getItem('saved_schemes') || '[]');
-    setSavedSchemes(schemes.filter(s => savedIds.includes(s.id)));
-  };
+  const [selectedSchemeForProof, setSelectedSchemeForProof] = useState<Scheme | null>(null);
+  const [profile, setProfile] = useState<UserProfile>(() => getStoredProfile());
 
   useEffect(() => {
-    window.addEventListener('storage', handleStorageChange);
-    // Also poll occasionally since local storage changes in same window don't trigger 'storage' event always
-    const interval = setInterval(handleStorageChange, 1000);
+    const handleProfileUpdate = (e: Event) => {
+      const customEvent = e as CustomEvent<UserProfile>;
+      setProfile(customEvent.detail || getStoredProfile());
+    };
+
+    const handleStorage = () => {
+      try {
+        const savedIds: string[] = JSON.parse(localStorage.getItem('saved_schemes') || '[]');
+        setSavedSchemes(schemes.filter(s => savedIds.includes(s.id)));
+        setProfile(getStoredProfile());
+      } catch {
+        // ignore
+      }
+    };
+
+    window.addEventListener(PROFILE_EVENT, handleProfileUpdate);
+    window.addEventListener('storage', handleStorage);
+
     return () => {
-      window.removeEventListener('storage', handleStorageChange);
-      clearInterval(interval);
+      window.removeEventListener(PROFILE_EVENT, handleProfileUpdate);
+      window.removeEventListener('storage', handleStorage);
     };
   }, [schemes]);
 
@@ -48,37 +60,51 @@ export default function DashboardClient({ schemes }: { schemes: Scheme[] }) {
         onClose={() => setSelectedSchemeForAction(null)}
         scheme={selectedSchemeForAction}
         profile={profile}
+        onVerifyProof={(s) => setSelectedSchemeForProof(s)}
       />
       <SchemeDetailModal
         isOpen={!!selectedSchemeForDetails}
         onClose={() => setSelectedSchemeForDetails(null)}
         scheme={selectedSchemeForDetails}
       />
+      <ProofGraphModal
+        isOpen={!!selectedSchemeForProof}
+        onClose={() => setSelectedSchemeForProof(null)}
+        scheme={selectedSchemeForProof}
+        profile={profile}
+      />
       
       <div className="mb-12 relative z-10 animate-fade-in">
-        <Link href="/chat" className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-6">
+        <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground font-bold transition-colors mb-6 text-sm">
           <ArrowLeft className="w-4 h-4" />
-          <span>Back to Chat</span>
+          <span>Back to Home</span>
         </Link>
-        <h1 className="text-4xl font-bold flex items-center gap-3">
-          <Bookmark className="w-8 h-8 text-primary" />
+        <h1 className="text-4xl sm:text-5xl font-black font-serif flex items-center gap-3">
+          <Bookmark className="w-9 h-9 text-primary" />
           Saved Schemes
         </h1>
-        <p className="text-muted-foreground mt-2 max-w-xl">Manage your bookmarked government schemes and track your application readiness progress.</p>
+        <p className="text-muted-foreground font-bold mt-2 max-w-xl">
+          Manage your bookmarked government schemes and track your application readiness progress.
+        </p>
       </div>
 
       {savedSchemes.length === 0 ? (
-        <div className="glass-panel p-12 flex flex-col items-center justify-center text-center animate-fade-in relative z-10 border border-card-border shadow-[0_0_50px_rgba(59,130,246,0.05)]">
-          <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-6">
-            <Bookmark className="w-10 h-10 text-primary/60" />
+        <div className="organic-card p-12 flex flex-col items-center justify-center text-center animate-fade-in relative z-10 bg-[#F9FFF4]">
+          <div className="w-20 h-20 bg-primary/20 rounded-full border-2 border-foreground flex items-center justify-center mb-6 shadow-[2px_2px_0px_0px_var(--foreground)]">
+            <Bookmark className="w-10 h-10 text-foreground" />
           </div>
-          <h2 className="text-2xl font-semibold mb-3">No saved schemes yet</h2>
-          <p className="text-muted-foreground max-w-md mb-8">
-            Go back to the chat and click the bookmark icon on any scheme to save it for later review and fast-track your applications.
+          <h2 className="text-2xl font-black font-serif mb-3">No saved schemes yet</h2>
+          <p className="text-muted-foreground font-bold max-w-md mb-8">
+            Bookmark any scheme from Chat, Wizard, or Categories to track your documents and generate your pre-filled forms.
           </p>
-          <Link href="/chat" className="px-8 py-3 bg-primary text-primary-foreground font-medium rounded-xl hover:bg-primary/90 transition-all hover:scale-105 shadow-[0_0_20px_rgba(59,130,246,0.3)]">
-            Discover Schemes Now
-          </Link>
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            <Link href="/chat" className="px-8 py-3 organic-button text-sm">
+              Discover via Chat
+            </Link>
+            <Link href="/categories" className="px-8 py-3 rounded-full border-2 border-foreground bg-card text-foreground font-black uppercase tracking-wider text-xs hover:shadow-[4px_4px_0px_0px_var(--foreground)] hover:translate-y-[-2px] transition-all">
+              Browse Categories
+            </Link>
+          </div>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 animate-fade-in relative z-10">
@@ -89,6 +115,7 @@ export default function DashboardClient({ schemes }: { schemes: Scheme[] }) {
               profile={profile}
               onGenerateForm={(id) => setSelectedSchemeForAction(schemes.find(s => s.id === id) || null)} 
               onViewDetails={(id) => setSelectedSchemeForDetails(schemes.find(s => s.id === id) || null)}
+              onVerifyProof={(id) => setSelectedSchemeForProof(schemes.find(s => s.id === id) || null)}
             />
           ))}
         </div>

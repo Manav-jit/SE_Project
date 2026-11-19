@@ -12,7 +12,7 @@ async function listModels() {
   
   const data = await res.json();
   if (data.data) {
-    console.log("AVAILABLE MODELS:", data.data.map((m: any) => m.id).join(', '));
+    console.log("AVAILABLE MODELS:", (data.data as Array<{ id: string }>).map(m => m.id).join(', '));
   } else {
     console.log("ERROR:", data);
   }

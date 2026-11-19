@@ -1,0 +1,27 @@
+{
+  "id": "atal_pension",
+  "name": "Atal Pension Yojana (APY)",
+  "ministry": "Ministry of Finance / PFRDA",
+  "category": "social-security",
+  "eligibility": {
+    "age_min": 18,
+    "age_max": 40,
+    "gender": "all",
+    "occupations": ["laborer", "self-employed", "farmer", "unemployed", "homemaker", "other"],
+    "income_limit": "Must not be an income taxpayer. Targeted at unorganized sector workers."
+  },
+  "benefits": "Guaranteed monthly pension of Rs. 1000 to Rs. 5000 per month starting from age 60, depending on contribution amount. Same pension continues to spouse on subscriber's demise.",
+  "documents_required": [
+    "Aadhaar Card",
+    "Savings Bank Account Details",
+    "Mobile Number"
+  ],
+  "application_process": [
+    "Approach bank branch or post office where you hold a savings account.",
+    "Fill out APY registration form with auto-debit consent.",
+    "Ensure monthly debit balance is maintained."
+  ],
+  "submission_url": "https://www.npscra.nsdl.co.in/scheme-details.php",
+  "form_template_path": "atal_pension_form.pdf"
+}
+

@@ -1,0 +1,28 @@
+{
+  "id": "pm_fasal_bima",
+  "name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
+  "ministry": "Ministry of Agriculture and Farmers Welfare",
+  "category": "agriculture",
+  "eligibility": {
+    "age_min": 18,
+    "age_max": 120,
+    "gender": "all",
+    "occupations": ["farmer", "self-employed"],
+    "other_conditions": "Farmers growing notified crops in notified areas, including sharecroppers and tenant farmers."
+  },
+  "benefits": "Comprehensive risk insurance covering yield losses due to non-preventable natural risks from pre-sowing to post-harvest. Uniform low premium: 2% for Kharif crops, 1.5% for Rabi, and 5% for commercial/horticultural crops.",
+  "documents_required": [
+    "Aadhaar Card",
+    "Land Possession Certificate (LPC) or Tenancy Agreement",
+    "Sowing Certificate / Patwari Report",
+    "Bank Account Details"
+  ],
+  "application_process": [
+    "Apply online on National Crop Insurance Portal (NCIP) or through bank/CSC.",
+    "Pay the subsidized farmer share of premium within cutoff date.",
+    "Claims assessed automatically via satellite and Crop Cutting Experiments (CCE)."
+  ],
+  "submission_url": "https://pmfby.gov.in/",
+  "form_template_path": "pm_fasal_bima_form.pdf"
+}
+

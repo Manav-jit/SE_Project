@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, FileText, CheckCircle, Download, Loader2, MapPin } from 'lucide-react';
+import { X, FileText, CheckCircle, Download, Loader2, MapPin, ShieldCheck } from 'lucide-react';
 import { UserProfile } from '@/lib/chat/profile';
 import { Scheme } from '@/lib/schemes/loader';
 
@@ -8,11 +8,14 @@ interface ActionPlanModalProps {
   onClose: () => void;
   scheme: Scheme | null;
   profile: UserProfile;
+  onVerifyProof?: (scheme: Scheme) => void;
+  onAutoFile?: (scheme: Scheme) => void;
 }
 
-export function ActionPlanModal({ isOpen, onClose, scheme, profile }: ActionPlanModalProps) {
+export function ActionPlanModal({ isOpen, onClose, scheme, profile, onVerifyProof, onAutoFile }: ActionPlanModalProps) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const handleProof = onVerifyProof || onAutoFile;
 
   if (!isOpen || !scheme) return null;
 
@@ -37,8 +40,8 @@ export function ActionPlanModal({ isOpen, onClose, scheme, profile }: ActionPlan
       a.click();
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
-    } catch (err: any) {
-      setError(err.message || "An error occurred");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setIsGenerating(false);
     }
@@ -68,6 +71,7 @@ export function ActionPlanModal({ isOpen, onClose, scheme, profile }: ActionPlan
           <p className="text-sm font-bold text-muted-foreground mb-6">Follow these steps to apply for this scheme.</p>
           
           <div className="space-y-4 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-1 before:bg-foreground">
+            
             {/* Step 1 */}
             <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
               <div className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-foreground bg-primary shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-[2px_2px_0px_0px_var(--foreground)] z-10">
@@ -77,7 +81,7 @@ export function ActionPlanModal({ isOpen, onClose, scheme, profile }: ActionPlan
                 <div className="flex flex-col">
                   <span className="font-black text-sm text-foreground uppercase tracking-wide">Step 1: Get Pre-filled Form</span>
                   <span className="text-xs font-bold text-foreground/80 mt-1">
-                    Download the auto-generated application form filled with your details.
+                    Download the official standardized government form populated with your details.
                   </span>
                   
                   {error && <p className="text-xs text-red-500 mt-2 font-bold">{error}</p>}
@@ -103,7 +107,7 @@ export function ActionPlanModal({ isOpen, onClose, scheme, profile }: ActionPlan
                 <div className="flex flex-col">
                   <span className="font-black text-sm text-foreground uppercase tracking-wide">Step 2: Attach Documents</span>
                   <span className="text-xs font-bold text-foreground/80 mt-1">
-                    Print the form and attach copies of your Aadhaar card and bank passbook.
+                    Attach copies of your Aadhaar card, bank passbook, and required documents listed on the form.
                   </span>
                 </div>
               </div>
@@ -118,13 +122,27 @@ export function ActionPlanModal({ isOpen, onClose, scheme, profile }: ActionPlan
                 <div className="flex flex-col">
                   <span className="font-black text-sm text-foreground uppercase tracking-wide">Step 3: Submit Application</span>
                   <span className="text-xs font-bold text-foreground/80 mt-1">
-                    Submit the signed form to your nearest Common Service Centre (CSC) or relevant government office.
+                    Submit via official portal, or visit your nearest Common Service Centre (CSC).
                   </span>
+                  
+                  {handleProof && (
+                    <button
+                      onClick={() => {
+                        onClose();
+                        handleProof(scheme);
+                      }}
+                      className="mt-3 w-full py-2 rounded-full border-2 border-foreground bg-primary text-foreground font-black uppercase tracking-wider text-xs hover:shadow-[4px_4px_0px_0px_var(--foreground)] hover:translate-y-[-2px] transition-all flex items-center justify-center gap-1.5"
+                    >
+                      <ShieldCheck className="w-4 h-4 text-foreground" />
+                      Verify Eligibility Proof (DAG)
+                    </button>
+                  )}
+
                   <a 
                     href="https://www.google.com/maps/search/Common+Service+Centre+near+me"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-4 w-full py-2 rounded-full border-2 border-foreground bg-accent text-foreground font-black uppercase tracking-wider text-xs hover:shadow-[4px_4px_0px_0px_var(--foreground)] hover:translate-y-[-2px] transition-all flex items-center justify-center gap-2"
+                    className="mt-2.5 w-full py-2 rounded-full border-2 border-foreground bg-accent text-foreground font-black uppercase tracking-wider text-xs hover:shadow-[4px_4px_0px_0px_var(--foreground)] hover:translate-y-[-2px] transition-all flex items-center justify-center gap-2"
                   >
                     <MapPin className="w-4 h-4" />
                     Find nearby CSC

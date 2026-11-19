@@ -5,7 +5,11 @@ import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Sparkles, Loader2, Building2, FileText, ExternalLink, Bookmark, BookmarkCheck, CheckCircle2 } from 'lucide-react';
 import { Scheme } from '@/lib/schemes/loader';
-import { UserProfile } from '@/lib/chat/profile';
+import { UserProfile, getStoredProfile, saveStoredProfile } from '@/lib/chat/profile';
+import { ActionPlanModal } from '@/components/ActionPlanModal';
+import { SchemeDetailModal } from '@/components/SchemeDetailModal';
+import { ProofGraphModal } from '@/components/dag/ProofGraphModal';
+import { ShieldCheck } from 'lucide-react';
 
 export default function MatchesClient() {
   const searchParams = useSearchParams();
@@ -14,21 +18,38 @@ export default function MatchesClient() {
   const [schemes, setSchemes] = useState<Scheme[]>([]);
   const [profile, setProfile] = useState<UserProfile>({});
   const [isLoading, setIsLoading] = useState(true);
-  const [savedIds, setSavedIds] = useState<string[]>([]);
+  const [savedIds, setSavedIds] = useState<string[]>(() => {
+    if (typeof window === 'undefined') return [];
+    try {
+      return JSON.parse(localStorage.getItem('saved_schemes') || '[]');
+    } catch {
+      return [];
+    }
+  });
 
-  useEffect(() => {
-    setSavedIds(JSON.parse(localStorage.getItem('saved_schemes') || '[]'));
-  }, []);
+  const [selectedSchemeForAction, setSelectedSchemeForAction] = useState<Scheme | null>(null);
+  const [selectedSchemeForDetails, setSelectedSchemeForDetails] = useState<Scheme | null>(null);
+  const [selectedSchemeForProof, setSelectedSchemeForProof] = useState<Scheme | null>(null);
 
   useEffect(() => {
     async function fetchMatches() {
       setIsLoading(true);
       try {
-        let url = '/api/schemes';
+        let activeProfile = getStoredProfile();
         if (profileStr) {
-          url += `?profile=${profileStr}`;
-          const parsed = JSON.parse(decodeURIComponent(profileStr));
-          setProfile(parsed);
+          try {
+            const parsed = JSON.parse(decodeURIComponent(profileStr));
+            activeProfile = { ...activeProfile, ...parsed };
+            saveStoredProfile(activeProfile);
+          } catch (e) {
+            console.error('Failed to parse profile param', e);
+          }
+        }
+        setProfile(activeProfile);
+
+        let url = '/api/schemes';
+        if (Object.keys(activeProfile).length > 0) {
+          url += `?profile=${encodeURIComponent(JSON.stringify(activeProfile))}`;
         }
         const res = await fetch(url);
         const data = await res.json();
@@ -68,10 +89,29 @@ export default function MatchesClient() {
       <div className="absolute top-[-15%] right-[-5%] w-[30%] h-[30%] rounded-full bg-primary/10 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-15%] left-[-10%] w-[25%] h-[25%] rounded-full bg-accent/10 blur-[120px] pointer-events-none" />
 
+      <ActionPlanModal 
+        isOpen={!!selectedSchemeForAction}
+        onClose={() => setSelectedSchemeForAction(null)}
+        scheme={selectedSchemeForAction}
+        profile={profile}
+        onVerifyProof={(s) => setSelectedSchemeForProof(s)}
+      />
+      <SchemeDetailModal
+        isOpen={!!selectedSchemeForDetails}
+        onClose={() => setSelectedSchemeForDetails(null)}
+        scheme={selectedSchemeForDetails}
+      />
+      <ProofGraphModal
+        isOpen={!!selectedSchemeForProof}
+        onClose={() => setSelectedSchemeForProof(null)}
+        scheme={selectedSchemeForProof}
+        profile={profile}
+      />
+
       <div className="max-w-4xl mx-auto px-6 py-8 md:py-12 relative z-10">
         {/* Header */}
         <div className="mb-8 animate-fade-in">
-          <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm mb-6">
+          <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground font-bold transition-colors text-sm mb-6">
             <ArrowLeft className="w-4 h-4" />
             Back to Home
           </Link>
@@ -82,9 +122,9 @@ export default function MatchesClient() {
             <h1 className="text-3xl sm:text-4xl font-black font-serif text-foreground">Your Matched Schemes</h1>
           </div>
           {profileSummary && (
-            <p className="text-sm text-muted-foreground mt-2 flex items-center gap-1.5">
-              <CheckCircle2 className="w-3.5 h-3.5 text-[#22c55e]" />
-              Based on: {profileSummary}
+            <p className="text-sm text-foreground/80 font-bold mt-2 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-green-600" />
+              Matched profile: {profileSummary}
             </p>
           )}
         </div>
@@ -93,8 +133,8 @@ export default function MatchesClient() {
         {isLoading && (
           <div className="flex flex-col items-center justify-center py-20 gap-4 animate-fade-in" aria-busy="true">
             <Loader2 className="w-8 h-8 text-primary animate-spin" />
-            <p className="text-foreground font-medium">Finding your best matches...</p>
-            <p className="text-sm text-muted-foreground">Analyzing eligibility across all schemes</p>
+            <p className="text-foreground font-bold">Finding your best matches...</p>
+            <p className="text-sm text-muted-foreground font-medium">Evaluating eligibility across all government schemes</p>
           </div>
         )}
 
@@ -102,7 +142,7 @@ export default function MatchesClient() {
         {!isLoading && schemes.length === 0 && (
           <div className="organic-card p-12 text-center animate-fade-in bg-[#F9FFF4]" role="status">
             <h2 className="text-xl font-black font-serif mb-2">No matches found</h2>
-            <p className="text-sm font-medium text-muted-foreground mb-6">Try the wizard again with different details, or browse categories.</p>
+            <p className="text-sm font-bold text-muted-foreground mb-6">Try the wizard again with different details, or browse by categories.</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link href="/wizard" className="px-5 py-2.5 organic-button text-sm w-full sm:w-auto">
                 Try Wizard Again
@@ -117,11 +157,11 @@ export default function MatchesClient() {
         {/* Results */}
         {!isLoading && schemes.length > 0 && (
           <>
-            <p className="text-sm text-muted-foreground mb-6 animate-fade-in">
-              Found <span className="text-foreground font-medium">{schemes.length}</span> {schemes.length === 1 ? 'scheme' : 'schemes'} matching your profile
+            <p className="text-sm font-bold text-muted-foreground mb-6 animate-fade-in">
+              Found <span className="text-foreground font-black">{schemes.length}</span> {schemes.length === 1 ? 'scheme' : 'schemes'} matching your profile
             </p>
 
-            <div className="space-y-4 stagger-children" role="list" aria-label="Matched schemes">
+            <div className="space-y-6 stagger-children" role="list" aria-label="Matched schemes">
               {schemes.map((scheme, i) => {
                 const isSaved = savedIds.includes(scheme.id);
                 return (
@@ -150,13 +190,13 @@ export default function MatchesClient() {
                     </div>
 
                     {/* Benefits */}
-                    <p className="text-sm text-foreground/80 leading-relaxed">{scheme.benefits}</p>
+                    <p className="text-sm font-medium text-foreground/80 leading-relaxed">{scheme.benefits}</p>
 
                     {/* Docs */}
                     {scheme.documents_required && scheme.documents_required.length > 0 && (
                       <div className="flex flex-wrap gap-1.5">
                         {scheme.documents_required.map(doc => (
-                          <span key={doc} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-card-border/50 text-xs text-muted-foreground">
+                          <span key={doc} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-card-border/10 text-xs font-bold text-foreground/80 border border-card-border/30">
                             <FileText className="w-3 h-3" />
                             {doc}
                           </span>
@@ -165,23 +205,44 @@ export default function MatchesClient() {
                     )}
 
                     {/* Actions */}
-                    <div className="flex items-center gap-3 pt-2 border-t border-card-border">
+                    <div className="flex flex-wrap items-center gap-3 pt-3 border-t border-card-border/40">
+                      <button
+                        onClick={() => setSelectedSchemeForProof(scheme)}
+                        className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border-2 border-foreground bg-primary text-foreground font-black text-xs uppercase tracking-wider shadow-[3px_3px_0px_0px_var(--foreground)] hover:shadow-[5px_5px_0px_0px_var(--foreground)] hover:translate-y-[-2px] transition-all"
+                      >
+                        <ShieldCheck className="w-3.5 h-3.5" />
+                        Verify Proof Graph (DAG)
+                      </button>
+                      <button
+                        onClick={() => setSelectedSchemeForAction(scheme)}
+                        className="inline-flex items-center gap-1.5 px-4 py-2.5 organic-button text-xs"
+                      >
+                        <FileText className="w-3.5 h-3.5" />
+                        Get Pre-filled Form
+                      </button>
+                      <button
+                        onClick={() => setSelectedSchemeForDetails(scheme)}
+                        className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full border-2 border-foreground bg-card text-foreground text-xs font-black uppercase tracking-wider hover:shadow-[4px_4px_0px_0px_var(--foreground)] hover:translate-y-[-2px] transition-all"
+                      >
+                        <Sparkles className="w-3.5 h-3.5 text-accent" />
+                        View Details
+                      </button>
+                      <Link
+                        href="/chat"
+                        className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full border-2 border-foreground bg-[#F9FFF4] text-foreground text-xs font-black uppercase tracking-wider hover:shadow-[4px_4px_0px_0px_var(--foreground)] hover:translate-y-[-2px] transition-all"
+                      >
+                        Ask AI Assistant
+                      </Link>
                       {scheme.submission_url && (
                         <a
                           href={scheme.submission_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 px-5 py-2.5 organic-button text-sm"
+                          className="inline-flex items-center gap-1.5 text-xs font-bold text-muted-foreground hover:text-foreground transition-colors ml-auto"
                         >
-                          Apply Now <ExternalLink className="w-3.5 h-3.5" />
+                          Official Portal <ExternalLink className="w-3.5 h-3.5" />
                         </a>
                       )}
-                      <Link
-                        href="/chat"
-                        className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border-2 border-foreground bg-card text-foreground text-sm font-black uppercase tracking-wider hover:shadow-[4px_4px_0px_0px_var(--foreground)] hover:translate-y-[-2px] transition-all"
-                      >
-                        Ask AI about this
-                      </Link>
                     </div>
                   </article>
                 );
@@ -190,8 +251,8 @@ export default function MatchesClient() {
 
             {/* Bottom CTA */}
             <div className="mt-8 text-center animate-fade-in" style={{ animationDelay: '0.4s' }}>
-              <p className="text-sm font-bold text-foreground mb-4">Want more detailed guidance on how to apply?</p>
-              <Link href="/chat" className="inline-flex items-center justify-center gap-2 px-6 py-3 organic-button w-full sm:w-auto">
+              <p className="text-sm font-bold text-foreground mb-4">Want conversational guidance on your eligibility?</p>
+              <Link href="/chat" className="inline-flex items-center justify-center gap-2 px-6 py-3 organic-button w-full sm:w-auto text-sm">
                 Chat with SchemeSaathi AI
               </Link>
             </div>

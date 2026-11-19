@@ -27,7 +27,7 @@ export function ChatInput({ input, handleInputChange, handleSubmit, isLoading, o
       return;
     }
     
-    // @ts-ignore
+    // @ts-expect-error - Web Speech API window property
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
     recognition.lang = language === 'hi' ? 'hi-IN' : 'en-IN';
@@ -38,12 +38,12 @@ export function ChatInput({ input, handleInputChange, handleSubmit, isLoading, o
       setIsRecording(true);
     };
 
-    recognition.onresult = (event: any) => {
+    recognition.onresult = (event: { results: Array<Array<{ transcript: string }>> }) => {
       const transcript = event.results[0][0].transcript;
       handleInputChange({ target: { value: input ? input + ' ' + transcript : transcript } });
     };
 
-    recognition.onerror = (event: any) => {
+    recognition.onerror = (event: { error: unknown }) => {
       console.error('Speech recognition error', event.error);
       setIsRecording(false);
     };
@@ -92,7 +92,7 @@ export function ChatInput({ input, handleInputChange, handleSubmit, isLoading, o
         ref={inputRef}
         type="text"
         value={input || ''}
-        onChange={handleInputChange as any}
+        onChange={handleInputChange}
         placeholder={placeholderText}
         disabled={isLoading}
         className="flex-1 bg-transparent border-none outline-none px-2 text-foreground placeholder:text-muted-foreground disabled:opacity-50"

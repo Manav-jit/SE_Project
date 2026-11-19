@@ -1,24 +1,28 @@
 import { Scheme } from '@/lib/schemes/loader';
-import { FileText, Building2, Bookmark, BookmarkCheck } from 'lucide-react';
+import { FileText, Building2, Bookmark, BookmarkCheck, ShieldCheck } from 'lucide-react';
 import { UserProfile } from '@/lib/chat/profile';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 interface SchemeCardProps {
   scheme: Scheme;
   profile?: UserProfile;
   onGenerateForm: (schemeId: string) => void;
   onViewDetails: (schemeId: string) => void;
+  onVerifyProof?: (schemeId: string) => void;
+  onAutoFile?: (schemeId: string) => void;
 }
 
-export function SchemeCard({ scheme, profile = {}, onGenerateForm, onViewDetails }: SchemeCardProps) {
-  const [isSaved, setIsSaved] = useState(false);
-
-  useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem('saved_schemes') || '[]');
-    if (saved.includes(scheme.id)) {
-      setIsSaved(true);
+export function SchemeCard({ scheme, profile = {}, onGenerateForm, onViewDetails, onVerifyProof, onAutoFile }: SchemeCardProps) {
+  const [isSaved, setIsSaved] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    try {
+      const saved = JSON.parse(localStorage.getItem('saved_schemes') || '[]');
+      return saved.includes(scheme.id);
+    } catch {
+      return false;
     }
-  }, [scheme.id]);
+  });
+  const handleProof = onVerifyProof || onAutoFile;
 
   const toggleSave = () => {
     const saved = JSON.parse(localStorage.getItem('saved_schemes') || '[]');
@@ -33,7 +37,7 @@ export function SchemeCard({ scheme, profile = {}, onGenerateForm, onViewDetails
     }
   };
 
-  // Mock eligibility calculation based on profile data
+  // Eligibility calculation based on profile data
   const totalReq = scheme.documents_required?.length || 3;
   let metReq = 0;
   if (profile.name) metReq++;
@@ -60,15 +64,15 @@ export function SchemeCard({ scheme, profile = {}, onGenerateForm, onViewDetails
         </div>
       </div>
       
-      <div className="text-sm text-foreground/80 line-clamp-3">
+      <div className="text-sm font-medium text-foreground/80 line-clamp-3">
         {scheme.benefits}
       </div>
 
       {/* Eligibility Tracker */}
       <div className="space-y-1.5 mt-2">
         <div className="flex justify-between text-xs font-bold text-foreground">
-          <span>Eligibility Readiness</span>
-          <span className="text-foreground">{metReq}/{totalReq} Docs</span>
+          <span>Application Readiness</span>
+          <span className="text-foreground">{metReq}/{totalReq} Verified</span>
         </div>
         <div className="h-2 w-full bg-background border-2 border-foreground rounded-full overflow-hidden">
           <div 
@@ -78,20 +82,31 @@ export function SchemeCard({ scheme, profile = {}, onGenerateForm, onViewDetails
         </div>
       </div>
       
-      <div className="pt-2 mt-auto flex gap-2">
-        <button 
-          onClick={() => onViewDetails(scheme.id)}
-          className="w-1/2 py-2.5 rounded-full border-2 border-foreground bg-card text-foreground font-black uppercase tracking-wider text-xs hover:shadow-[4px_4px_0px_0px_var(--foreground)] hover:translate-y-[-2px] transition-all"
-        >
-          View Details
-        </button>
-        <button 
-          onClick={() => onGenerateForm(scheme.id)}
-          className="w-1/2 py-2.5 organic-button text-xs flex items-center justify-center gap-1.5"
-        >
-          <FileText className="w-3.5 h-3.5" />
-          Get Form
-        </button>
+      <div className="pt-2 mt-auto flex flex-col gap-2">
+        {handleProof && (
+          <button
+            onClick={() => handleProof(scheme.id)}
+            className="w-full py-2.5 rounded-full border-2 border-foreground bg-primary text-foreground font-black text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-[3px_3px_0px_0px_var(--foreground)] hover:shadow-[5px_5px_0px_0px_var(--foreground)] hover:translate-y-[-2px] transition-all"
+          >
+            <ShieldCheck className="w-4 h-4 text-foreground" />
+            🔍 Verify Proof Graph (DAG)
+          </button>
+        )}
+        <div className="flex gap-2">
+          <button 
+            onClick={() => onViewDetails(scheme.id)}
+            className="w-1/2 py-2 rounded-full border-2 border-foreground bg-card text-foreground font-black uppercase tracking-wider text-xs hover:shadow-[3px_3px_0px_0px_var(--foreground)] hover:translate-y-[-1px] transition-all"
+          >
+            Details
+          </button>
+          <button 
+            onClick={() => onGenerateForm(scheme.id)}
+            className="w-1/2 py-2 organic-button text-xs flex items-center justify-center gap-1.5"
+          >
+            <FileText className="w-3.5 h-3.5" />
+            Get PDF
+          </button>
+        </div>
       </div>
     </div>
   );

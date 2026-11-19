@@ -5,9 +5,12 @@
   "category": "employment",
   "eligibility": {
     "age_min": 18,
+    "age_max": 120,
+    "gender": "all",
+    "occupations": ["laborer", "unemployed", "farmer", "other"],
     "residence": "rural"
   },
-  "benefits": "Provides at least 100 days of guaranteed wage employment in a financial year to every rural household whose adult members volunteer to do unskilled manual work.",
+  "benefits": "Provides at least 100 days of guaranteed wage employment in a financial year to rural adult members willing to do unskilled manual work.",
   "documents_required": [
     "Aadhaar Card",
     "Bank Account Details",
@@ -16,8 +19,9 @@
   "application_process": [
     "Visit your local Gram Panchayat.",
     "Submit an application for registration (oral or written).",
-    "Obtain your Job Card which is issued within 15 days.",
+    "Obtain your Job Card issued within 15 days.",
     "Submit a work application when you need employment."
   ],
-  "submission_url": "https://nrega.nic.in/"
+  "submission_url": "https://nrega.nic.in/",
+  "form_template_path": "mgnrega_form.pdf"
 }
