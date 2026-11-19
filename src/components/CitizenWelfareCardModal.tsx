@@ -27,6 +27,8 @@ export function CitizenWelfareCardModal({
   const citizenName = profile.name || (profile.occupation ? `${profile.occupation} Entitlement Holder` : 'Verified Citizen');
   const citizenAadhaar = profile.aadhaarNumber 
     ? `•••• •••• ${profile.aadhaarNumber.slice(-4)}`
+    : profile.aadhaarLast4
+    ? `•••• •••• ${profile.aadhaarLast4}`
     : profile.digilockerId 
     ? `DL-${profile.digilockerId.slice(0, 8)}`
     : 'DPI-VERIFIED-2026';
@@ -118,9 +120,9 @@ export function CitizenWelfareCardModal({
                       .filter(Boolean)
                       .join(' · ') || 'Verified Resident of India'}
                   </p>
-                  {profile.annualIncome && (
+                  {(profile.annualIncome || profile.income) && (
                     <p className="text-[11px] font-bold text-foreground/80 mt-1">
-                      Reported Income: ₹{profile.annualIncome.toLocaleString('en-IN')}/yr
+                      Reported Income: ₹{(profile.annualIncome || profile.income)?.toLocaleString('en-IN')}/yr
                     </p>
                   )}
                 </div>

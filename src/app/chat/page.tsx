@@ -4,7 +4,11 @@ import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport, UIMessage } from 'ai';
 import { useState, useRef, useEffect, useMemo } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, User as UserIcon, ShieldAlert, ShieldCheck, Globe, Volume2, VolumeX, X } from 'lucide-react';
+import { 
+  ArrowLeft, ShieldCheck, Globe, Volume2, VolumeX, X, 
+  Sparkles, Award, FileText, CheckCircle2, Building2,
+  Scan, UserCheck, Check
+} from 'lucide-react';
 import { ChatMessage } from '@/components/ChatMessage';
 import { ChatInput } from '@/components/ChatInput';
 import { SchemeCard } from '@/components/SchemeCard';
@@ -13,8 +17,10 @@ import { ActionPlanModal } from '@/components/ActionPlanModal';
 import { SchemeDetailModal } from '@/components/SchemeDetailModal';
 import { ProofGraphModal } from '@/components/dag/ProofGraphModal';
 import { DocumentScannerModal } from '@/components/DocumentScannerModal';
+import { CitizenWelfareCardModal } from '@/components/CitizenWelfareCardModal';
 import { UserProfile, getStoredProfile, saveStoredProfile, PROFILE_EVENT } from '@/lib/chat/profile';
 import { Scheme } from '@/lib/schemes/loader';
+import { calculateBenefitSummary } from '@/lib/schemes/benefits';
 
 function getMessageText(message: UIMessage): string {
   return message.parts
@@ -30,6 +36,13 @@ const indianStates = [
   "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal"
 ];
 
+const QUICK_PROMPT_CHIPS = [
+  { label: '🌾 Small Farmer (1.5 ha)', text: 'I am a small farmer with 1.5 hectares of land in Uttar Pradesh.' },
+  { label: '🎓 Student Scholarship', text: 'I am a class 9 student looking for government scholarships.' },
+  { label: '👩‍👧 Women & Mother Support', text: 'I am a married woman looking for maternity and women welfare schemes.' },
+  { label: '💼 Artisan / Street Vendor', text: 'I am a traditional artisan and street vendor needing working capital credit.' },
+];
+
 export default function ChatPage() {
   const [profile, setProfile] = useState<UserProfile>(() => getStoredProfile());
   const [matchedSchemes, setMatchedSchemes] = useState<Scheme[]>([]);
@@ -39,18 +52,19 @@ export default function ChatPage() {
   // Modals state
   const [isDigiLockerOpen, setIsDigiLockerOpen] = useState(false);
   const [isScannerOpen, setIsScannerOpen] = useState(false);
+  const [isCardModalOpen, setIsCardModalOpen] = useState(false);
   const [selectedSchemeForAction, setSelectedSchemeForAction] = useState<Scheme | null>(null);
   const [selectedSchemeForDetails, setSelectedSchemeForDetails] = useState<Scheme | null>(null);
   const [selectedSchemeForProof, setSelectedSchemeForProof] = useState<Scheme | null>(null);
   
-  // New features state
+  // View states
   const [language, setLanguage] = useState<'en' | 'hi'>('en');
   const [voiceOutputEnabled, setVoiceOutputEnabled] = useState(false);
+  const [mobileTab, setMobileTab] = useState<'dossier' | 'copilot'>('copilot');
   const [hasSkippedStateSelection, setHasSkippedStateSelection] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false;
     return !!getStoredProfile().state;
   });
-  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
 
   const lastSpokenMessageRef = useRef<string>('');
 
@@ -127,7 +141,7 @@ export default function ChatPage() {
         parts: [
           {
             type: 'text',
-            text: "Namaste! I'm SchemeSaathi. I can help you find government welfare schemes you're eligible for. To get started, could you tell me a little about yourself, like your age and occupation?",
+            text: "Namaste! I am your SchemeSaathi Copilot. As we talk or when you scan your documents, watch your live Citizen Entitlement Dossier populate on the left with official statutory proofs.",
           },
         ],
       },
@@ -136,7 +150,7 @@ export default function ChatPage() {
 
   const isLoading = status === 'submitted' || status === 'streaming';
 
-  // Handle Text-to-Speech
+  // Text-to-Speech
   useEffect(() => {
     if (!voiceOutputEnabled || isLoading || messages.length === 0) return;
     const lastMessage = messages[messages.length - 1];
@@ -190,7 +204,7 @@ export default function ChatPage() {
     updateAndSaveProfile(prev => ({ ...prev, ...verifiedData }));
     clearError();
     sendMessage({
-      text: 'My DigiLocker profile has been successfully connected and verified. Please use the verified details from my updated profile.',
+      text: 'My DigiLocker profile has been successfully connected and verified. Please update my dossier.',
     });
   };
 
@@ -202,120 +216,32 @@ export default function ChatPage() {
     updateAndSaveProfile(prev => ({ ...prev, ...extractedData }));
     clearError();
     sendMessage({
-      text: `Document scanned successfully via AI OCR. Extracted details: Name: ${extractedData.name || 'Verified Citizen'}, Age: ${extractedData.age || 'Verified'}, Gender: ${extractedData.gender || 'Verified'}, State: ${extractedData.state || 'Verified'}. These details have been confirmed and applied to my profile.`,
+      text: `Document scanned via OCR: Name: ${extractedData.name || 'Citizen'}, Age: ${extractedData.age || 'Verified'}, Gender: ${extractedData.gender || 'Verified'}, State: ${extractedData.state || 'Verified'}. Please evaluate my statutory eligibility.`,
     });
   };
 
-  // Reusable Sidebar Content
-  const renderSidebarContent = () => (
-    <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between mb-8">
-        <Link href="/" className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-bold transition-colors">
-          <ArrowLeft className="w-4 h-4" />
-          <span>Back</span>
-        </Link>
-        <div className="flex gap-2">
-          <button 
-            onClick={() => setVoiceOutputEnabled(!voiceOutputEnabled)}
-            className={`p-2 rounded-lg border-2 transition-colors ${voiceOutputEnabled ? 'bg-primary border-foreground text-foreground shadow-[2px_2px_0px_0px_var(--foreground)]' : 'border-card-border/40 text-muted-foreground hover:bg-card/50'}`}
-            title="Toggle Voice Output"
-          >
-            {voiceOutputEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
-          </button>
-          <button 
-            onClick={() => setLanguage(l => l === 'en' ? 'hi' : 'en')}
-            className="px-2.5 py-1.5 rounded-lg border-2 border-foreground bg-card text-xs font-black text-foreground shadow-[2px_2px_0px_0px_var(--foreground)] transition-colors flex items-center gap-1.5"
-          >
-            <Globe className="w-3.5 h-3.5" />
-            {language === 'en' ? 'English' : 'हिंदी'}
-          </button>
-        </div>
-      </div>
+  const handleChipClick = (promptText: string) => {
+    if (isLoading) return;
+    clearError();
+    sendMessage({ text: promptText });
+  };
 
-      <div className="mb-6 animate-fade-in">
-        <h2 className="text-xl font-black font-serif flex items-center gap-2 mb-4 text-foreground">
-          <UserIcon className="w-5 h-5 text-primary" />
-          Your Profile
-        </h2>
-        
-        <div className="space-y-3 text-sm">
-          {Object.keys(profile).length === 0 ? (
-            <p className="text-muted-foreground font-medium italic">Tell me about yourself in the chat to build your profile.</p>
-          ) : (
-            <div className="grid gap-2">
-              {Object.entries(profile).map(([key, value]) => {
-                if (!value || key === 'verified') return null;
-                return (
-                  <div key={key} className="flex flex-col bg-[#F9FFF4] p-2.5 rounded-lg border-2 border-foreground shadow-[2px_2px_0px_0px_var(--foreground)]">
-                    <span className="text-muted-foreground capitalize text-[10px] font-black uppercase tracking-wider">{key}</span>
-                    <div className="flex items-center gap-1.5 font-bold text-foreground text-sm mt-0.5">
-                      {String(value)}
-                      {profile.verified && ['name', 'age', 'gender', 'state'].includes(key) && (
-                        <span title="Verified Data"><ShieldCheck className="w-4 h-4 text-green-600" /></span>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {matchedSchemes.length > 0 && (
-        <div className="mt-4 pt-6 border-t-2 border-foreground/20 animate-fade-in">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-black font-serif text-foreground">Matched Schemes</h2>
-            <span className="text-xs font-black px-2 py-0.5 rounded-full bg-primary border border-foreground">{matchedSchemes.length}</span>
-          </div>
-          <div className="space-y-4">
-            {matchedSchemes.map(scheme => (
-              <SchemeCard 
-                key={scheme.id} 
-                scheme={scheme} 
-                profile={profile}
-                onGenerateForm={handleGenerateForm} 
-                onViewDetails={handleViewDetails}
-                onVerifyProof={handleVerifyProof}
-              />
-            ))}
-          </div>
-        </div>
-      )}
-      
-      <div className="mt-auto pt-6 flex flex-col gap-4">
-        {!profile.verified && (
-          <button 
-            onClick={() => setIsDigiLockerOpen(true)}
-            className="w-full py-3 organic-button flex items-center justify-center gap-2 text-sm"
-          >
-            <ShieldCheck className="w-4 h-4" />
-            Connect DigiLocker
-          </button>
-        )}
-
-        <div className="bg-[#FFE5B4] border-2 border-foreground rounded-[12px] p-3 text-xs font-bold text-foreground shadow-[3px_3px_0px_0px_var(--foreground)] flex items-start gap-2">
-          <ShieldAlert className="w-4 h-4 text-accent shrink-0 mt-0.5" />
-          <p>Your data is processed securely and is not stored permanently. Mock DigiLocker integration active.</p>
-        </div>
-      </div>
-    </div>
-  );
+  const benefitSummary = calculateBenefitSummary(matchedSchemes);
 
   return (
-    <div className="flex h-screen bg-background bg-dot-pattern relative">
+    <div className="flex flex-col h-screen bg-background overflow-hidden">
       
       {/* State Selector Modal */}
       {(!profile.state && !hasSkippedStateSelection) && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/20 backdrop-blur-sm p-4 animate-fade-in">
-          <div className="organic-card p-6 w-full max-w-md flex flex-col gap-4">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4 animate-fade-in">
+          <div className="organic-card p-6 w-full max-w-md flex flex-col gap-4 bg-card">
             <div className="flex justify-between items-center">
-              <h3 className="text-xl font-semibold">Select your State</h3>
+              <h3 className="text-xl font-serif font-black">Select Your State / UT</h3>
               <button onClick={() => setHasSkippedStateSelection(true)} className="p-1 hover:bg-card-border rounded-lg text-muted-foreground transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <p className="text-sm text-muted-foreground">This helps us find schemes specific to your region.</p>
+            <p className="text-xs font-bold text-muted-foreground">Select your home state to unlock location-specific state welfare schemes.</p>
             <div className="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto pr-2">
               {indianStates.map(st => (
                 <button
@@ -324,7 +250,7 @@ export default function ChatPage() {
                     updateAndSaveProfile(prev => ({ ...prev, state: st }));
                     setHasSkippedStateSelection(true);
                   }}
-                  className="px-3 py-2 text-left text-sm rounded-lg hover:bg-primary/20 hover:text-primary transition-colors border border-card-border"
+                  className="px-3 py-2 text-left text-xs font-bold rounded-lg hover:bg-primary/20 hover:text-primary transition-colors border border-card-border"
                 >
                   {st}
                 </button>
@@ -334,6 +260,7 @@ export default function ChatPage() {
         </div>
       )}
 
+      {/* Modals */}
       <DigiLockerModal 
         isOpen={isDigiLockerOpen} 
         onClose={() => setIsDigiLockerOpen(false)} 
@@ -362,81 +289,340 @@ export default function ChatPage() {
         onClose={() => setIsScannerOpen(false)}
         onConfirm={handleScannerConfirm}
       />
+      <CitizenWelfareCardModal
+        isOpen={isCardModalOpen}
+        onClose={() => setIsCardModalOpen(false)}
+        profile={profile}
+        schemes={matchedSchemes}
+      />
 
-      {/* Mobile Drawer (Slide-Over) */}
-      {isMobileDrawerOpen && (
-        <div className="md:hidden fixed inset-0 z-50 flex">
-          <div 
-            className="fixed inset-0 bg-foreground/20 backdrop-blur-sm transition-opacity"
-            onClick={() => setIsMobileDrawerOpen(false)}
-          />
-          <div className="relative w-4/5 max-w-sm bg-card border-r-2 border-foreground p-6 overflow-y-auto z-10 flex flex-col shadow-[6px_0px_0px_0px_var(--foreground)] animate-slide-in-right">
-            <div className="flex justify-between items-center mb-6">
-              <span className="font-black font-serif text-lg text-foreground">SchemeSaathi</span>
-              <button 
-                onClick={() => setIsMobileDrawerOpen(false)}
-                className="p-1.5 rounded-lg border-2 border-foreground bg-primary text-foreground shadow-[2px_2px_0px_0px_var(--foreground)]"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-            {renderSidebarContent()}
-          </div>
-        </div>
-      )}
-      
-      {/* Desktop Sidebar - Profile Summary */}
-      <div className="hidden md:flex w-80 flex-col border-r-2 border-foreground bg-card/60 p-6 overflow-y-auto">
-        {renderSidebarContent()}
-      </div>
-
-      {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col relative h-full">
-        {/* Mobile Header */}
-        <div className="md:hidden flex items-center justify-between p-3.5 border-b-2 border-foreground bg-background/90 backdrop-blur-md z-10">
-          <div className="flex items-center gap-2">
-            <Link href="/" className="text-foreground p-1.5 rounded-lg border-2 border-foreground bg-card shadow-[2px_2px_0px_0px_var(--foreground)]">
-              <ArrowLeft className="w-4 h-4" />
-            </Link>
-            <span className="font-black font-serif text-foreground text-sm">SchemeSaathi</span>
-          </div>
+      {/* Mobile Top Navigation & Tab Switcher */}
+      <div className="lg:hidden flex flex-col border-b-2 border-foreground bg-card z-20">
+        <div className="flex items-center justify-between px-4 py-2.5">
+          <Link href="/" className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-muted-foreground hover:text-foreground">
+            <ArrowLeft className="w-4 h-4" /> Home
+          </Link>
           <div className="flex items-center gap-2">
             <button
-              onClick={() => setIsMobileDrawerOpen(true)}
-              className="px-2.5 py-1.5 rounded-full border-2 border-foreground bg-primary text-foreground text-xs font-black flex items-center gap-1 shadow-[2px_2px_0px_0px_var(--foreground)]"
+              onClick={() => setIsCardModalOpen(true)}
+              className="px-3 py-1 rounded-full border-2 border-foreground bg-accent text-foreground text-[11px] font-black shadow-[2px_2px_0px_0px_var(--foreground)] flex items-center gap-1"
             >
-              <UserIcon className="w-3.5 h-3.5" />
-              <span>Profile {matchedSchemes.length > 0 && `(${matchedSchemes.length})`}</span>
+              <Award className="w-3.5 h-3.5" />
+              <span>Welfare Card</span>
             </button>
             <button 
               onClick={() => setLanguage(l => l === 'en' ? 'hi' : 'en')}
-              className="px-2 py-1 rounded-lg border-2 border-foreground bg-card text-xs font-black text-foreground shadow-[2px_2px_0px_0px_var(--foreground)]"
+              className="px-2 py-1 rounded-lg border-2 border-foreground bg-card text-[11px] font-black text-foreground shadow-[2px_2px_0px_0px_var(--foreground)]"
             >
               {language === 'en' ? 'EN' : 'HI'}
             </button>
           </div>
         </div>
+        
+        {/* Mobile Tabs */}
+        <div className="grid grid-cols-2 border-t border-foreground/15 text-xs font-black">
+          <button
+            onClick={() => setMobileTab('dossier')}
+            className={`py-2.5 text-center border-r border-foreground/15 flex items-center justify-center gap-1.5 ${mobileTab === 'dossier' ? 'bg-primary text-foreground font-black' : 'text-muted-foreground'}`}
+          >
+            <Building2 className="w-3.5 h-3.5" />
+            <span>Live Dossier ({matchedSchemes.length})</span>
+          </button>
+          <button
+            onClick={() => setMobileTab('copilot')}
+            className={`py-2.5 text-center flex items-center justify-center gap-1.5 ${mobileTab === 'copilot' ? 'bg-primary text-foreground font-black' : 'text-muted-foreground'}`}
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>AI Copilot</span>
+          </button>
+        </div>
+      </div>
 
-        {/* Chat Messages */}
-        <div className="flex-1 overflow-y-auto p-4 md:p-8 space-y-6">
-          {messages.map(m => (
-            <ChatMessage key={m.id} message={m} />
-          ))}
-          {isLoading && messages[messages.length - 1].role === 'user' && (
-            <div className="flex w-full justify-start animate-fade-in">
-              <div className="bg-[#F9FFF4] border-2 border-foreground rounded-[16px] rounded-tl-[4px] shadow-[4px_4px_0px_0px_var(--foreground)] p-4 flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-primary animate-pulse-soft"></div>
-                <div className="w-2 h-2 rounded-full bg-primary animate-pulse-soft" style={{ animationDelay: '0.2s' }}></div>
-                <div className="w-2 h-2 rounded-full bg-primary animate-pulse-soft" style={{ animationDelay: '0.4s' }}></div>
+      {/* Main Split-Pane Workspace */}
+      <div className="flex-1 flex overflow-hidden">
+        
+        {/* LEFT PANE (58%): Living Citizen Entitlement Dossier & Application Canvas */}
+        <div className={`w-full lg:w-[58%] border-r-2 border-foreground bg-[#FDFBF7] flex-col overflow-y-auto ${mobileTab === 'dossier' ? 'flex' : 'hidden lg:flex'}`}>
+          
+          {/* Top Sticky Benefit Ticker Bar */}
+          <div className="sticky top-0 z-10 bg-primary/20 backdrop-blur-md border-b-2 border-foreground p-4 md:p-6 shadow-[0px_4px_0px_0px_rgba(0,0,0,0.05)]">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-muted-foreground bg-background px-2 py-0.5 rounded border border-foreground/20">
+                    Living Citizen Entitlement Ledger
+                  </span>
+                  <span className="inline-flex items-center gap-1 text-[11px] font-black text-emerald-800">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> Statutory DAG Active
+                  </span>
+                </div>
+                <div className="flex items-baseline gap-2 mt-1">
+                  <span className="text-2xl sm:text-3xl font-black font-serif text-foreground">
+                    {benefitSummary.formattedTotal}
+                  </span>
+                  <span className="text-xs font-bold text-muted-foreground">
+                    / annual value unlocked
+                  </span>
+                </div>
+              </div>
+
+              {/* Action Buttons Toolbar */}
+              <div className="flex items-center gap-2 self-start sm:self-center">
+                <button
+                  type="button"
+                  onClick={() => setIsCardModalOpen(true)}
+                  className="px-3 py-2 rounded-xl border-2 border-foreground bg-accent text-foreground text-xs font-black uppercase tracking-wider shadow-[2px_2px_0px_0px_var(--foreground)] hover:translate-y-[-1px] transition-all flex items-center gap-1.5"
+                  title="View and download your official Citizen Welfare Card"
+                >
+                  <Award className="w-4 h-4" />
+                  <span>Welfare Card</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={handleFileUpload}
+                  className="px-3 py-2 rounded-xl border-2 border-foreground bg-card text-foreground text-xs font-black uppercase tracking-wider shadow-[2px_2px_0px_0px_var(--foreground)] hover:translate-y-[-1px] transition-all flex items-center gap-1.5"
+                  title="Scan your Aadhaar or Voter ID"
+                >
+                  <Scan className="w-4 h-4 text-primary" />
+                  <span>Scan ID</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsDigiLockerOpen(true)}
+                  className="px-3 py-2 rounded-xl border-2 border-foreground bg-[#FFE5B4] text-foreground text-xs font-black uppercase tracking-wider shadow-[2px_2px_0px_0px_var(--foreground)] hover:translate-y-[-1px] transition-all flex items-center gap-1.5"
+                  title="Connect official DigiLocker account"
+                >
+                  <ShieldCheck className="w-4 h-4 text-emerald-700" />
+                  <span>DigiLocker</span>
+                </button>
               </div>
             </div>
-          )}
-          <div ref={messagesEndRef} />
+
+            {/* Quick Metrics Pills */}
+            <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-foreground/15 text-[11px] font-black">
+              <span className="px-2.5 py-1 rounded-full bg-background border border-foreground/20 text-foreground">
+                Verified Schemes: <strong className="text-primary font-black">{benefitSummary.verifiedSchemeCount}</strong>
+              </span>
+              <span className="px-2.5 py-1 rounded-full bg-background border border-foreground/20 text-foreground">
+                Direct Cash DBT: <strong className="text-emerald-700 font-black">₹{benefitSummary.directCashTotal.toLocaleString('en-IN')}</strong>
+              </span>
+              {benefitSummary.insuranceCoverTotal > 0 && (
+                <span className="px-2.5 py-1 rounded-full bg-background border border-foreground/20 text-foreground">
+                  Risk Cover: <strong className="text-blue-700 font-black">₹{benefitSummary.insuranceCoverTotal.toLocaleString('en-IN')}</strong>
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Dossier Body Content */}
+          <div className="p-4 md:p-6 space-y-6">
+            
+            {/* Standardized Form Preview Canvas */}
+            <div className="rounded-2xl border-2 border-foreground bg-card p-5 shadow-[4px_4px_0px_0px_var(--foreground)] relative overflow-hidden">
+              <div className="flex items-center justify-between border-b-2 border-foreground/15 pb-3 mb-4">
+                <div className="flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-primary" />
+                  <div>
+                    <h3 className="font-serif font-black text-base text-foreground leading-tight">
+                      Standardized Public Welfare Application Dossier
+                    </h3>
+                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
+                      Auto-Populated Form No. 1 · Common Citizen Registry
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-400 text-emerald-800 text-[10px] font-black">
+                  <UserCheck className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>{profile.verified ? 'Verified Citizen' : 'Active Draft'}</span>
+                </div>
+              </div>
+
+              {/* Form Grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs mb-4">
+                <div className="p-2.5 rounded-xl border border-foreground/20 bg-[#F9FFF4]">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">Full Legal Name</span>
+                  <span className="font-bold text-foreground block truncate">
+                    {profile.name || 'Not Declared (Pending)'}
+                  </span>
+                </div>
+                <div className="p-2.5 rounded-xl border border-foreground/20 bg-[#F9FFF4]">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">Age & Gender</span>
+                  <span className="font-bold text-foreground block">
+                    {profile.age ? `${profile.age} Yrs` : '--'} · {profile.gender || '--'}
+                  </span>
+                </div>
+                <div className="p-2.5 rounded-xl border border-foreground/20 bg-[#F9FFF4]">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">Domicile State</span>
+                  <span className="font-bold text-foreground block truncate">
+                    {profile.state || 'Not Declared'}
+                  </span>
+                </div>
+                <div className="p-2.5 rounded-xl border border-foreground/20 bg-[#F9FFF4]">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">Primary Occupation</span>
+                  <span className="font-bold text-foreground block truncate">
+                    {profile.occupation || 'Not Declared'}
+                  </span>
+                </div>
+                <div className="p-2.5 rounded-xl border border-foreground/20 bg-[#F9FFF4]">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">Landholding</span>
+                  <span className="font-bold text-foreground block">
+                    {profile.landHoldingHectares !== undefined ? `${profile.landHoldingHectares} ha` : '--'}
+                  </span>
+                </div>
+                <div className="p-2.5 rounded-xl border border-foreground/20 bg-[#F9FFF4]">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">Annual Income</span>
+                  <span className="font-bold text-foreground block">
+                    {(profile.annualIncome || profile.income) ? `₹${(profile.annualIncome || profile.income)?.toLocaleString('en-IN')}` : '--'}
+                  </span>
+                </div>
+              </div>
+
+              {/* Verified Documents Checklist */}
+              <div className="pt-3 border-t border-foreground/15 flex flex-wrap items-center gap-2">
+                <span className="text-[10px] font-black uppercase tracking-wider text-muted-foreground mr-1">
+                  Required Documents:
+                </span>
+                <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold border ${(profile.aadhaarNumber || profile.aadhaarLast4 || profile.verified) ? 'bg-emerald-50 text-emerald-800 border-emerald-300' : 'bg-muted/50 text-muted-foreground border-foreground/20'}`}>
+                  {(profile.aadhaarNumber || profile.aadhaarLast4 || profile.verified) ? <Check className="w-3 h-3 text-emerald-600" /> : '○'} Aadhaar ID
+                </span>
+                <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold border ${profile.digilockerId ? 'bg-emerald-50 text-emerald-800 border-emerald-300' : 'bg-muted/50 text-muted-foreground border-foreground/20'}`}>
+                  {profile.digilockerId ? <Check className="w-3 h-3 text-emerald-600" /> : '○'} DigiLocker eKYC
+                </span>
+                <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold border ${profile.landHoldingHectares !== undefined ? 'bg-emerald-50 text-emerald-800 border-emerald-300' : 'bg-muted/50 text-muted-foreground border-foreground/20'}`}>
+                  {profile.landHoldingHectares !== undefined ? <Check className="w-3 h-3 text-emerald-600" /> : '○'} Land Record (RoR)
+                </span>
+              </div>
+            </div>
+
+            {/* Matched Schemes Stream */}
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <h3 className="text-xl font-black font-serif text-foreground">
+                    Pre-Qualified Government Schemes
+                  </h3>
+                  <span className="text-xs font-black px-2.5 py-0.5 rounded-full bg-primary border-2 border-foreground">
+                    {matchedSchemes.length}
+                  </span>
+                </div>
+                <span className="text-[11px] font-bold text-muted-foreground hidden sm:inline">
+                  Statutory proof verified via formal rules
+                </span>
+              </div>
+
+              {matchedSchemes.length === 0 ? (
+                <div className="p-8 rounded-2xl border-2 border-dashed border-foreground/30 bg-card/60 text-center animate-fade-in">
+                  <Building2 className="w-10 h-10 text-muted-foreground/60 mx-auto mb-3" />
+                  <h4 className="font-serif font-black text-lg text-foreground mb-1">
+                    No Schemes Matched Yet
+                  </h4>
+                  <p className="text-xs font-bold text-muted-foreground max-w-sm mx-auto mb-4">
+                    Answer the prompts in the Copilot pane on the right or scan your ID to instantly calculate your entitlements.
+                  </p>
+                  <div className="flex flex-wrap justify-center gap-2">
+                    {QUICK_PROMPT_CHIPS.map((chip) => (
+                      <button
+                        key={chip.label}
+                        onClick={() => handleChipClick(chip.text)}
+                        className="px-3 py-1.5 rounded-full border border-foreground/30 bg-background text-[11px] font-bold hover:bg-primary/20 transition-colors"
+                      >
+                        {chip.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {matchedSchemes.map((scheme) => (
+                    <SchemeCard
+                      key={scheme.id}
+                      scheme={scheme}
+                      profile={profile}
+                      onGenerateForm={handleGenerateForm}
+                      onViewDetails={handleViewDetails}
+                      onVerifyProof={handleVerifyProof}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+
+          </div>
         </div>
 
-        {/* Chat Input */}
-        <div className="p-4 md:p-8 pt-0 bg-gradient-to-t from-background to-transparent">
-          <div className="max-w-3xl mx-auto">
+        {/* RIGHT PANE (42%): AI Welfare Copilot */}
+        <div className={`w-full lg:w-[42%] flex-col bg-background relative h-full ${mobileTab === 'copilot' ? 'flex' : 'hidden lg:flex'}`}>
+          
+          {/* Copilot Header */}
+          <div className="flex items-center justify-between px-6 py-4 border-b-2 border-foreground bg-card">
+            <div className="flex items-center gap-3">
+              <Link href="/" className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors">
+                <ArrowLeft className="w-4 h-4" />
+                <span>Home</span>
+              </Link>
+              <div className="h-4 w-px bg-foreground/20" />
+              <div className="flex items-center gap-1.5">
+                <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="font-serif font-black text-sm text-foreground">Welfare Copilot</span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setVoiceOutputEnabled(!voiceOutputEnabled)}
+                className={`p-1.5 rounded-lg border-2 transition-colors ${voiceOutputEnabled ? 'bg-primary border-foreground text-foreground shadow-[2px_2px_0px_0px_var(--foreground)]' : 'border-card-border/40 text-muted-foreground hover:bg-card/50'}`}
+                title="Toggle vernacular voice output"
+              >
+                {voiceOutputEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+              </button>
+              <button 
+                type="button"
+                onClick={() => setLanguage(l => l === 'en' ? 'hi' : 'en')}
+                className="px-2.5 py-1 rounded-lg border-2 border-foreground bg-card text-xs font-black text-foreground shadow-[2px_2px_0px_0px_var(--foreground)] flex items-center gap-1"
+              >
+                <Globe className="w-3.5 h-3.5" />
+                {language === 'en' ? 'EN' : 'HI'}
+              </button>
+            </div>
+          </div>
+
+          {/* Quick Prompt Carousel / Chips */}
+          <div className="px-4 py-2.5 bg-accent/15 border-b border-foreground/15 overflow-x-auto flex items-center gap-2 no-scrollbar">
+            <span className="text-[10px] font-black uppercase tracking-wider text-muted-foreground shrink-0 flex items-center gap-1">
+              <Sparkles className="w-3 h-3 text-accent-foreground" /> Quick Pick:
+            </span>
+            {QUICK_PROMPT_CHIPS.map((chip) => (
+              <button
+                key={chip.label}
+                onClick={() => handleChipClick(chip.text)}
+                disabled={isLoading}
+                className="px-2.5 py-1 rounded-full border border-foreground/30 bg-card hover:bg-primary/30 text-foreground text-[11px] font-bold whitespace-nowrap transition-colors shadow-[1px_1px_0px_0px_var(--foreground)] shrink-0 disabled:opacity-50"
+              >
+                {chip.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Chat Messages Stream */}
+          <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4">
+            {messages.map((m) => (
+              <ChatMessage key={m.id} message={m} />
+            ))}
+            {isLoading && messages[messages.length - 1].role === 'user' && (
+              <div className="flex w-full justify-start animate-fade-in">
+                <div className="bg-[#F9FFF4] border-2 border-foreground rounded-[16px] rounded-tl-[4px] shadow-[4px_4px_0px_0px_var(--foreground)] p-4 flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-primary animate-pulse-soft"></div>
+                  <div className="w-2 h-2 rounded-full bg-primary animate-pulse-soft" style={{ animationDelay: '0.2s' }}></div>
+                  <div className="w-2 h-2 rounded-full bg-primary animate-pulse-soft" style={{ animationDelay: '0.4s' }}></div>
+                </div>
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+
+          {/* Chat Input Dock */}
+          <div className="p-4 border-t-2 border-foreground bg-card">
             <ChatInput 
               input={input}
               handleInputChange={handleInputChange}
@@ -446,8 +632,11 @@ export default function ChatPage() {
               language={language}
             />
           </div>
+
         </div>
+
       </div>
+
     </div>
   );
 }
