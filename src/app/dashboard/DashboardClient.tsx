@@ -10,8 +10,11 @@ import { SchemeDetailModal } from '@/components/SchemeDetailModal';
 import { ProofGraphModal } from '@/components/dag/ProofGraphModal';
 import { UserProfile, getStoredProfile, PROFILE_EVENT } from '@/lib/chat/profile';
 import { ApplicationRecord } from '@/lib/storage/applications';
+import { useLanguage } from '@/lib/i18n/context';
+import { LanguageToggle } from '@/components/LanguageToggle';
 
 export default function DashboardClient({ schemes }: { schemes: Scheme[] }) {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<'saved' | 'applications'>('saved');
   const [applications, setApplications] = useState<ApplicationRecord[]>([]);
   const [savedSchemes, setSavedSchemes] = useState<Scheme[]>(() => {
@@ -86,18 +89,21 @@ export default function DashboardClient({ schemes }: { schemes: Scheme[] }) {
       />
       
       <div className="mb-8 relative z-10 animate-fade-in">
-        <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground font-bold transition-colors mb-6 text-sm">
-          <ArrowLeft className="w-4 h-4" />
-          <span>Back to Home</span>
-        </Link>
+        <div className="flex items-center justify-between mb-6">
+          <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground font-bold transition-colors text-sm">
+            <ArrowLeft className="w-4 h-4" />
+            <span>{t('common.back_home')}</span>
+          </Link>
+          <LanguageToggle />
+        </div>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-4xl sm:text-5xl font-black font-serif flex items-center gap-3">
               <Bookmark className="w-9 h-9 text-primary" />
-              Citizen Dashboard
+              {t('dash.title')}
             </h1>
             <p className="text-muted-foreground font-bold mt-2 max-w-xl">
-              Manage your bookmarked government schemes and monitor your real-time application verification status.
+              {t('dash.subtitle')}
             </p>
           </div>
           <Link 
@@ -105,7 +111,7 @@ export default function DashboardClient({ schemes }: { schemes: Scheme[] }) {
             className="self-start sm:self-center px-5 py-2.5 rounded-full border-2 border-foreground bg-accent text-foreground text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-[2px_2px_0px_0px_var(--foreground)] hover:shadow-[4px_4px_0px_0px_var(--foreground)] hover:translate-y-[-1px] transition-all"
           >
             <Clock className="w-4 h-4" />
-            Live Tracking Portal
+            {t('dash.live_portal')}
           </Link>
         </div>
 
@@ -116,14 +122,14 @@ export default function DashboardClient({ schemes }: { schemes: Scheme[] }) {
             className={`px-5 py-2 rounded-xl text-xs font-black uppercase tracking-wider border-2 transition-all flex items-center gap-2 ${activeTab === 'saved' ? 'border-foreground bg-primary text-foreground shadow-[3px_3px_0px_0px_var(--foreground)]' : 'border-transparent text-muted-foreground hover:text-foreground'}`}
           >
             <Bookmark className="w-4 h-4" />
-            Saved Schemes ({savedSchemes.length})
+            {t('dash.tab_saved')} ({savedSchemes.length})
           </button>
           <button
             onClick={() => setActiveTab('applications')}
             className={`px-5 py-2 rounded-xl text-xs font-black uppercase tracking-wider border-2 transition-all flex items-center gap-2 ${activeTab === 'applications' ? 'border-foreground bg-primary text-foreground shadow-[3px_3px_0px_0px_var(--foreground)]' : 'border-transparent text-muted-foreground hover:text-foreground'}`}
           >
             <FileCheck className="w-4 h-4" />
-            Submitted Applications ({applications.length})
+            {t('dash.tab_apps')} ({applications.length})
           </button>
         </div>
       </div>
@@ -134,16 +140,16 @@ export default function DashboardClient({ schemes }: { schemes: Scheme[] }) {
             <div className="w-20 h-20 bg-primary/20 rounded-full border-2 border-foreground flex items-center justify-center mb-6 shadow-[2px_2px_0px_0px_var(--foreground)]">
               <Bookmark className="w-10 h-10 text-foreground" />
             </div>
-            <h2 className="text-2xl font-black font-serif mb-3">No saved schemes yet</h2>
+            <h2 className="text-2xl font-black font-serif mb-3">{t('dash.no_saved_title')}</h2>
             <p className="text-muted-foreground font-bold max-w-md mb-8">
-              Bookmark any scheme from Chat, Wizard, or Categories to track your documents and generate your pre-filled forms.
+              {t('dash.no_saved_desc')}
             </p>
             <div className="flex flex-col sm:flex-row items-center gap-4">
               <Link href="/chat" className="px-8 py-3 organic-button text-sm">
-                Discover via Chat
+                {t('dash.discover_chat')}
               </Link>
               <Link href="/categories" className="px-8 py-3 rounded-full border-2 border-foreground bg-card text-foreground font-black uppercase tracking-wider text-xs hover:shadow-[4px_4px_0px_0px_var(--foreground)] hover:translate-y-[-2px] transition-all">
-                Browse Categories
+                {t('dash.browse_cat')}
               </Link>
             </div>
           </div>

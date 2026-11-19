@@ -16,6 +16,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { ApplicationRecord, ApplicationStatus } from '@/lib/storage/applications';
+import { LanguageToggle } from '@/components/LanguageToggle';
 
 export default function TrackClient() {
   const searchParams = useSearchParams();
@@ -167,6 +168,7 @@ export default function TrackClient() {
           <span>Home</span>
         </Link>
         <div className="flex items-center gap-3">
+          <LanguageToggle />
           <Link href="/dashboard" className="text-xs font-bold text-muted-foreground hover:text-foreground">
             Saved Schemes
           </Link>

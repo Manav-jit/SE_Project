@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { ArrowLeft, ArrowRight, User, Briefcase, MapPin, ShieldCheck, Loader2, Check } from 'lucide-react';
 import { DigiLockerModal } from '@/components/DigiLockerModal';
 import { UserProfile, getStoredProfile, saveStoredProfile } from '@/lib/chat/profile';
+import { useLanguage } from '@/lib/i18n/context';
+import { LanguageToggle } from '@/components/LanguageToggle';
 
 const indianStates = [
   "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana",
@@ -24,6 +26,7 @@ const genderOptions = ["Male", "Female", "Other"];
 type WizardStep = 0 | 1 | 2;
 
 export default function WizardPage() {
+  const { t } = useLanguage();
   const router = useRouter();
   const searchParams = useSearchParams();
   const isDigiLockerMode = searchParams.get('mode') === 'digilocker';
@@ -72,7 +75,7 @@ export default function WizardPage() {
     setProfile(prev => ({ ...prev, [key]: value }));
   };
 
-  const stepLabels = ["About You", "Occupation & Income", "Your State"];
+  const stepLabels = [t('wizard.step1'), t('wizard.step2'), t('wizard.step3')];
   const stepIcons = [User, Briefcase, MapPin];
 
   const isStepValid = () => {
@@ -96,13 +99,16 @@ export default function WizardPage() {
 
       <div className="w-full max-w-lg relative z-10">
         {/* Header */}
-        <div className="mb-8 animate-fade-in text-center">
-          <Link href="/" className="inline-flex items-center justify-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm font-bold mb-6">
-            <ArrowLeft className="w-4 h-4" />
-            Back to Home
-          </Link>
-          <h1 className="text-3xl sm:text-4xl font-black font-serif text-foreground">Quick-Match Wizard</h1>
-          <p className="text-muted-foreground font-bold text-sm mt-2">3 quick steps to find your eligible schemes.</p>
+        <div className="mb-8 animate-fade-in text-center relative">
+          <div className="flex items-center justify-between mb-4">
+            <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm font-bold">
+              <ArrowLeft className="w-4 h-4" />
+              {t('common.back_home')}
+            </Link>
+            <LanguageToggle />
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-black font-serif text-foreground">{t('hero.wizard_card_title')}</h1>
+          <p className="text-muted-foreground font-bold text-sm mt-2">{t('hero.wizard_card_desc')}</p>
         </div>
 
         {/* Progress */}
@@ -253,7 +259,7 @@ export default function WizardPage() {
                 disabled={step === 0}
                 className="flex items-center gap-1.5 text-sm font-black uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
               >
-                <ArrowLeft className="w-4 h-4" /> Back
+                <ArrowLeft className="w-4 h-4" /> {t('wizard.back')}
               </button>
 
               <div className="flex items-center gap-3">
@@ -272,7 +278,7 @@ export default function WizardPage() {
                   disabled={!isStepValid()}
                   className="flex items-center gap-1.5 px-6 py-2.5 organic-button disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-[4px_4px_0px_0px_var(--foreground)] text-sm"
                 >
-                  {step === 2 ? 'Find Schemes' : 'Next'}
+                  {step === 2 ? t('wizard.finish') : t('wizard.next')}
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>

@@ -6,6 +6,6 @@
 - [x] TASK-04: Expand scheme catalog to 20 schemes with statutory DAG definitions
 - [x] TASK-05: Create application persistence model and `/api/applications` REST API
 - [x] TASK-06: Build citizen application status tracker (`/track` and Dashboard tab)
-- [ ] TASK-07: Implement bilingual UI localization (English/Hindi) with language switcher
-- [ ] TASK-08: Add PWA manifest, service worker, and offline scheme caching
+- [x] TASK-07: Implement bilingual UI localization (English/Hindi) with language switcher
+- [/] TASK-08: Add PWA manifest, service worker, and offline scheme caching
 - [ ] TASK-09: Run complete test suite, production build, linting, and git commit

@@ -10,8 +10,11 @@ import { ActionPlanModal } from '@/components/ActionPlanModal';
 import { SchemeDetailModal } from '@/components/SchemeDetailModal';
 import { ProofGraphModal } from '@/components/dag/ProofGraphModal';
 import { ShieldCheck } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n/context';
+import { LanguageToggle } from '@/components/LanguageToggle';
 
 export default function MatchesClient() {
+  const { t } = useLanguage();
   const searchParams = useSearchParams();
   const profileStr = searchParams.get('profile');
 
@@ -111,15 +114,18 @@ export default function MatchesClient() {
       <div className="max-w-4xl mx-auto px-6 py-8 md:py-12 relative z-10">
         {/* Header */}
         <div className="mb-8 animate-fade-in">
-          <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground font-bold transition-colors text-sm mb-6">
-            <ArrowLeft className="w-4 h-4" />
-            Back to Home
-          </Link>
+          <div className="flex items-center justify-between mb-6">
+            <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground font-bold transition-colors text-sm">
+              <ArrowLeft className="w-4 h-4" />
+              {t('common.back_home')}
+            </Link>
+            <LanguageToggle />
+          </div>
           <div className="flex items-center gap-3 mb-2">
             <div className="w-10 h-10 rounded-xl border-2 border-foreground bg-primary flex items-center justify-center shrink-0 shadow-[2px_2px_0px_0px_var(--foreground)]">
               <Sparkles className="w-5 h-5 text-foreground" />
             </div>
-            <h1 className="text-3xl sm:text-4xl font-black font-serif text-foreground">Your Matched Schemes</h1>
+            <h1 className="text-3xl sm:text-4xl font-black font-serif text-foreground">{t('matches.title')}</h1>
           </div>
           {profileSummary && (
             <p className="text-sm text-foreground/80 font-bold mt-2 flex items-center gap-1.5">
@@ -133,22 +139,22 @@ export default function MatchesClient() {
         {isLoading && (
           <div className="flex flex-col items-center justify-center py-20 gap-4 animate-fade-in" aria-busy="true">
             <Loader2 className="w-8 h-8 text-primary animate-spin" />
-            <p className="text-foreground font-bold">Finding your best matches...</p>
-            <p className="text-sm text-muted-foreground font-medium">Evaluating eligibility across all government schemes</p>
+            <p className="text-foreground font-bold">{t('matches.loading')}</p>
+            <p className="text-sm text-muted-foreground font-medium">{t('matches.evaluating')}</p>
           </div>
         )}
 
         {/* Empty */}
         {!isLoading && schemes.length === 0 && (
           <div className="organic-card p-12 text-center animate-fade-in bg-[#F9FFF4]" role="status">
-            <h2 className="text-xl font-black font-serif mb-2">No matches found</h2>
-            <p className="text-sm font-bold text-muted-foreground mb-6">Try the wizard again with different details, or browse by categories.</p>
+            <h2 className="text-xl font-black font-serif mb-2">{t('matches.empty_title')}</h2>
+            <p className="text-sm font-bold text-muted-foreground mb-6">{t('matches.empty_desc')}</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link href="/wizard" className="px-5 py-2.5 organic-button text-sm w-full sm:w-auto">
-                Try Wizard Again
+                {t('matches.try_again')}
               </Link>
               <Link href="/categories" className="px-5 py-2.5 rounded-full border-2 border-foreground bg-card text-foreground text-sm font-black uppercase tracking-wider hover:shadow-[4px_4px_0px_0px_var(--foreground)] hover:translate-y-[-2px] transition-all w-full sm:w-auto">
-                Browse Categories
+                {t('dash.browse_cat')}
               </Link>
             </div>
           </div>

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, Zap, Cloud, Bot, Fingerprint, Wand, Compass } from 'lucide-react';
+import { LanguageToggle } from '@/components/LanguageToggle';
 
 // A simple SVG 4-point star for decoration
 const FourPointStar = ({ className }: { className?: string }) => (
@@ -47,7 +48,8 @@ export default function Home() {
             </div>
             <span className="text-3xl font-black tracking-tight font-serif text-foreground">SchemeSaathi</span>
           </div>
-          <nav className="flex items-center gap-6">
+          <nav className="flex items-center gap-4 sm:gap-6">
+            <LanguageToggle />
             <Link 
               href="/track" 
               className="text-base font-bold text-muted-foreground hover:text-foreground transition-colors hidden sm:inline uppercase tracking-wide"
