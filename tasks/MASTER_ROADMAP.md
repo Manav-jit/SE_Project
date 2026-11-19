@@ -15,8 +15,8 @@ This folder contains the complete, actionable task specifications to elevate **S
 | **TASK-05** | [Application Database & Storage Persistence](file:///d:/SE_PROJECT2/tasks/task-05-database-and-application-persistence.md) | Dedicated storage & REST API (`/api/applications`) for profile, documents, and applied schemes | 🟢 Completed |
 | **TASK-06** | [Application Lifecycle & Status Tracker](file:///d:/SE_PROJECT2/tasks/task-06-application-lifecycle-tracker.md) | Citizen tracker UI (`/track` and Dashboard) to check submission milestones with Reference IDs | 🟢 Completed |
 | **TASK-07** | [Comprehensive Hindi/English UI Localization](file:///d:/SE_PROJECT2/tasks/task-07-full-ui-localization.md) | System-wide i18n dictionary supporting English and Hindi across all pages, modals, and wizards | 🟢 Completed |
-| **TASK-08** | [PWA & Offline Connectivity Resilience](file:///d:/SE_PROJECT2/tasks/task-08-pwa-offline-mode.md) | Web app manifest, service worker caching, and offline catalog for rural/low-connectivity areas | 🟡 In Progress |
-| **TASK-09** | [End-to-End Verification & Atomic Git Commits](file:///d:/SE_PROJECT2/tasks/task-09-final-verification-and-git-commit.md) | Complete validation of DAG engine, PDF generation, build, lint, and structured git commits | ⚪ Pending |
+| **TASK-08** | [PWA & Offline Connectivity Resilience](file:///d:/SE_PROJECT2/tasks/task-08-pwa-offline-mode.md) | Web app manifest, service worker caching, and offline catalog for rural/low-connectivity areas | 🟢 Completed |
+| **TASK-09** | [End-to-End Verification & Atomic Git Commits](file:///d:/SE_PROJECT2/tasks/task-09-final-verification-and-git-commit.md) | Complete validation of DAG engine, PDF generation, build, lint, and structured git commits | 🟡 In Progress |
 
 ---
 

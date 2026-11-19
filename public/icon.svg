@@ -1,0 +1,5 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="256" cy="256" r="220" fill="#9CD869" stroke="#2D4A22" stroke-width="24"/>
+  <text x="256" y="340" font-family="'Nunito', sans-serif" font-weight="900" font-size="240" fill="#2D4A22" text-anchor="middle">S</text>
+  <path d="M 380 140 Q 420 140 420 100 Q 420 140 460 140 Q 420 140 420 180 Q 420 140 380 140 Z" fill="#F4A21D"/>
+</svg>

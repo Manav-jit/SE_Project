@@ -1,0 +1,19 @@
+{
+  "name": "SchemeSaathi - Welfare Eligibility & Assistant",
+  "short_name": "SchemeSaathi",
+  "description": "Discover Indian government welfare schemes you qualify for with formal DAG eligibility proofs and automated application prep.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#FDFBF7",
+  "theme_color": "#2D4A22",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
