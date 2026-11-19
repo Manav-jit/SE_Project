@@ -4,6 +4,7 @@ import "./globals.css";
 import { LanguageProvider } from "@/lib/i18n/context";
 import { OfflineIndicator } from "@/components/OfflineIndicator";
 import { AccessibilityToolbar } from "@/components/AccessibilityToolbar";
+import { CscOperatorBar } from "@/components/CscOperatorBar";
 
 const nunito = Nunito({
   variable: "--font-nunito",
@@ -35,6 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <LanguageProvider>
           <AccessibilityToolbar />
           {children}
+          <CscOperatorBar />
           <OfflineIndicator />
         </LanguageProvider>
       </body>
