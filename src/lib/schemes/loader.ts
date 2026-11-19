@@ -12,7 +12,10 @@ export const SchemeSchema = z.object({
   documents_required: z.array(z.string()),
   application_process: z.array(z.string()),
   submission_url: z.string().optional(),
-  form_template_path: z.string().optional()
+  form_template_path: z.string().optional(),
+  annual_benefit_amount: z.number().optional(),
+  statutory_citation: z.string().optional(),
+  benefit_type: z.string().optional(),
 });
 
 export type Scheme = z.infer<typeof SchemeSchema>;
