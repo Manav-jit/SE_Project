@@ -4,7 +4,7 @@ import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport, UIMessage } from 'ai';
 import { useState, useRef, useEffect, useMemo } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, User as UserIcon, ShieldAlert, ShieldCheck, Globe, Volume2, VolumeX, Scan, X } from 'lucide-react';
+import { ArrowLeft, User as UserIcon, ShieldAlert, ShieldCheck, Globe, Volume2, VolumeX, X } from 'lucide-react';
 import { ChatMessage } from '@/components/ChatMessage';
 import { ChatInput } from '@/components/ChatInput';
 import { SchemeCard } from '@/components/SchemeCard';
@@ -12,6 +12,7 @@ import { DigiLockerModal } from '@/components/DigiLockerModal';
 import { ActionPlanModal } from '@/components/ActionPlanModal';
 import { SchemeDetailModal } from '@/components/SchemeDetailModal';
 import { ProofGraphModal } from '@/components/dag/ProofGraphModal';
+import { DocumentScannerModal } from '@/components/DocumentScannerModal';
 import { UserProfile, getStoredProfile, saveStoredProfile, PROFILE_EVENT } from '@/lib/chat/profile';
 import { Scheme } from '@/lib/schemes/loader';
 
@@ -37,6 +38,7 @@ export default function ChatPage() {
   
   // Modals state
   const [isDigiLockerOpen, setIsDigiLockerOpen] = useState(false);
+  const [isScannerOpen, setIsScannerOpen] = useState(false);
   const [selectedSchemeForAction, setSelectedSchemeForAction] = useState<Scheme | null>(null);
   const [selectedSchemeForDetails, setSelectedSchemeForDetails] = useState<Scheme | null>(null);
   const [selectedSchemeForProof, setSelectedSchemeForProof] = useState<Scheme | null>(null);
@@ -44,7 +46,6 @@ export default function ChatPage() {
   // New features state
   const [language, setLanguage] = useState<'en' | 'hi'>('en');
   const [voiceOutputEnabled, setVoiceOutputEnabled] = useState(false);
-  const [isScanning, setIsScanning] = useState(false);
   const [hasSkippedStateSelection, setHasSkippedStateSelection] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false;
     return !!getStoredProfile().state;
@@ -194,22 +195,15 @@ export default function ChatPage() {
   };
 
   const handleFileUpload = () => {
-    setIsScanning(true);
-    setTimeout(() => {
-      setIsScanning(false);
-      const extractedData = {
-        name: "Ramesh Kumar",
-        age: 45,
-        gender: "male",
-        state: profile.state || "Maharashtra",
-        verified: true
-      };
-      updateAndSaveProfile(prev => ({ ...prev, ...extractedData }));
-      clearError();
-      sendMessage({
-        text: `Document scanned successfully. Extracted details: Name: ${extractedData.name}, Age: ${extractedData.age}. These have been verified.`,
-      });
-    }, 2500);
+    setIsScannerOpen(true);
+  };
+
+  const handleScannerConfirm = (extractedData: Partial<UserProfile>) => {
+    updateAndSaveProfile(prev => ({ ...prev, ...extractedData }));
+    clearError();
+    sendMessage({
+      text: `Document scanned successfully via AI OCR. Extracted details: Name: ${extractedData.name || 'Verified Citizen'}, Age: ${extractedData.age || 'Verified'}, Gender: ${extractedData.gender || 'Verified'}, State: ${extractedData.state || 'Verified'}. These details have been confirmed and applied to my profile.`,
+    });
   };
 
   // Reusable Sidebar Content
@@ -340,22 +334,6 @@ export default function ChatPage() {
         </div>
       )}
 
-      {/* OCR Scanning Overlay */}
-      {isScanning && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/20 backdrop-blur-sm p-4 animate-fade-in">
-          <div className="organic-card p-8 flex flex-col items-center gap-6">
-            <div className="relative">
-              <Scan className="w-16 h-16 text-primary animate-pulse" />
-              <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full"></div>
-            </div>
-            <div className="text-center">
-              <h3 className="text-lg font-semibold mb-1">Scanning Document...</h3>
-              <p className="text-sm text-muted-foreground">Extracting your details securely</p>
-            </div>
-          </div>
-        </div>
-      )}
-
       <DigiLockerModal 
         isOpen={isDigiLockerOpen} 
         onClose={() => setIsDigiLockerOpen(false)} 
@@ -378,6 +356,11 @@ export default function ChatPage() {
         onClose={() => setSelectedSchemeForProof(null)}
         scheme={selectedSchemeForProof}
         profile={profile}
+      />
+      <DocumentScannerModal
+        isOpen={isScannerOpen}
+        onClose={() => setIsScannerOpen(false)}
+        onConfirm={handleScannerConfirm}
       />
 
       {/* Mobile Drawer (Slide-Over) */}

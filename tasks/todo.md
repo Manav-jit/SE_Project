@@ -1,7 +1,7 @@
 # SchemeSaathi: Todo List
 
 - [x] TASK-01: Resolve 58 ESLint and TypeScript issues across the codebase
-- [ ] TASK-02: Implement real client-side OCR parser and DocumentScannerModal
+- [x] TASK-02: Implement real client-side OCR parser and DocumentScannerModal
 - [ ] TASK-03: Implement interactive multi-step DigiLocker eKYC system with OTP simulation
 - [ ] TASK-04: Expand scheme catalog to 20 schemes with statutory DAG definitions
 - [ ] TASK-05: Create application persistence model and `/api/applications` REST API
