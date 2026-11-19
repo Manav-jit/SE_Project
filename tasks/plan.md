@@ -13,3 +13,4 @@ See [tasks/MASTER_ROADMAP.md](file:///d:/SE_PROJECT2/tasks/MASTER_ROADMAP.md) fo
 - [x] **TASK-09: End-to-End Verification & Atomic Git Commits** (Full build, tests, and clean git history)
 - [x] **TASK-10: Split-Pane Workspace & Citizen Entitlement Card** (LLM Council recommendation implementation)
 - [x] **TASK-11: Frontend UI/UX Modernization & Sovereign DPI Alignment** (Frontend UI engineering implementation)
+- [x] **TASK-12: Life-Event Milestone Engine, AI Pre-Scrutiny & CSC Kiosk Mode** (Estonia life-events, Haqdarshak DBT pre-scrutiny, CSC kiosk bar, and demo dock)

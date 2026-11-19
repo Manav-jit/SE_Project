@@ -19,6 +19,7 @@ This folder contains the complete, actionable task specifications to elevate **S
 | **TASK-09** | [End-to-End Verification & Atomic Git Commits](file:///d:/SE_PROJECT2/tasks/task-09-final-verification-and-git-commit.md) | Complete validation of DAG engine, PDF generation, build, lint, and structured git commits | 🟢 Completed |
 | **TASK-10** | [Split-Pane Welfare Copilot & Digital Entitlement Card](file:///d:/SE_PROJECT2/tasks/task-10-split-pane-copilot-and-welfare-card.md) | LLM Council upgrades: Split-pane living dossier, annual benefit ticker, printable PVC card, and statutory citations | 🟢 Completed |
 | **TASK-11** | [Frontend UI/UX Modernization & Sovereign DPI Alignment](file:///d:/SE_PROJECT2/tasks/task-11-frontend-ui-engineering-overhaul.md) | GIGW accessibility toolbar, circular readiness gauge, unified command hero, and sovereign design system | 🟢 Completed |
+| **TASK-12** | [Life-Event Milestone Engine, AI Pre-Scrutiny & CSC Kiosk Mode](file:///d:/SE_PROJECT2/tasks/task-12-life-events-csc-mode-and-scrutiny.md) | Estonia life-event navigator, Haqdarshak DBT pre-scrutiny, CSC operator bar, and stage demo dock | 🟢 Completed |
 
 ---
 

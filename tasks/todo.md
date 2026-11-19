@@ -11,3 +11,4 @@
 - [x] TASK-09: Run complete test suite, production build, linting, and git commit
 - [x] TASK-10: Implement LLM Council recommendations (Split-pane dossier, PVC card, Benefit ticker, Statutory citations)
 - [x] TASK-11: Execute frontend UI engineering overhaul (GIGW toolbar, circular readiness gauge, unified command hero)
+- [x] TASK-12: Implement GovTech innovations (Life-event navigator, DBT pre-scrutiny, CSC kiosk bar, floating demo dock)
