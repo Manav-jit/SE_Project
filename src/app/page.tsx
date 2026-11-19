@@ -49,6 +49,12 @@ export default function Home() {
           </div>
           <nav className="flex items-center gap-6">
             <Link 
+              href="/track" 
+              className="text-base font-bold text-muted-foreground hover:text-foreground transition-colors hidden sm:inline uppercase tracking-wide"
+            >
+              Track Status
+            </Link>
+            <Link 
               href="/dashboard" 
               className="text-base font-bold text-muted-foreground hover:text-foreground transition-colors hidden sm:inline uppercase tracking-wide"
             >
