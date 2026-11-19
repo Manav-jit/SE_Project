@@ -3,6 +3,7 @@ import { Nunito, Quicksand } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/lib/i18n/context";
 import { OfflineIndicator } from "@/components/OfflineIndicator";
+import { AccessibilityToolbar } from "@/components/AccessibilityToolbar";
 
 const nunito = Nunito({
   variable: "--font-nunito",
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <body className="min-h-full flex flex-col">
         <LanguageProvider>
+          <AccessibilityToolbar />
           {children}
           <OfflineIndicator />
         </LanguageProvider>

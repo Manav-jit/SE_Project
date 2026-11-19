@@ -38,6 +38,31 @@
   --radius-full: 9999px;
 }
 
+/* Accessibility & GIGW Support */
+html[data-font-scale="sm"] {
+  font-size: 14.5px;
+}
+html[data-font-scale="md"] {
+  font-size: 16px;
+}
+html[data-font-scale="lg"] {
+  font-size: 18px;
+}
+
+html[data-contrast="high"] {
+  --background: #000000 !important;
+  --foreground: #FFFF00 !important;
+  --card: #0A0A0A !important;
+  --card-border: #FFFF00 !important;
+  --card-foreground: #FFFF00 !important;
+  --primary: #FFFF00 !important;
+  --primary-foreground: #000000 !important;
+  --muted: #1A1A1A !important;
+  --muted-foreground: #EEEEEE !important;
+  --accent: #00FFFF !important;
+  --accent-foreground: #000000 !important;
+}
+
 body {
   background-color: var(--background);
   color: var(--foreground);
@@ -54,35 +79,34 @@ h1, h2, h3, h4, h5, h6, .font-serif {
   font-weight: 900;
 }
 
-/* Organic Flat Card */
+/* Sovereign DPI Neo-Brutalist Card */
 .organic-card {
   background: var(--card);
-  border: 2.5px solid var(--card-border);
+  border: 2px solid var(--card-border);
   border-radius: 16px;
-  box-shadow: 6px 6px 0px 0px var(--card-border);
+  box-shadow: 4px 4px 0px 0px var(--card-border);
   transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
   position: relative;
 }
 .organic-card:hover {
-  transform: translate(-3px, -3px);
-  box-shadow: 9px 9px 0px 0px var(--card-border);
-  background: #F9FFF4;
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px 0px var(--card-border);
 }
 
-/* Organic Button */
+/* Sovereign DPI Button */
 .organic-button {
   background: var(--primary);
-  border: 2.5px solid var(--foreground);
+  border: 2px solid var(--foreground);
   border-radius: 9999px;
-  box-shadow: 4px 4px 0px 0px var(--foreground);
+  box-shadow: 3px 3px 0px 0px var(--foreground);
   transition: all 0.2s ease;
   font-family: var(--font-nunito), sans-serif;
   font-weight: 900;
   color: var(--foreground);
 }
 .organic-button:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0px 0px var(--foreground);
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0px 0px var(--foreground);
 }
 .organic-button:active {
   transform: translate(2px, 2px);
