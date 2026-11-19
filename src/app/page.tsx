@@ -8,6 +8,7 @@ import {
   Search, Sparkles, Layers
 } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n/context';
+import { LifeEventNavigator } from '@/components/LifeEventNavigator';
 
 const QUICK_PERSONA_PILLS = [
   { label: '🌾 Small Farmer (1.5 ha)', query: 'I am a small farmer with 1.5 hectares of land' },
@@ -142,6 +143,9 @@ export default function Home() {
           </div>
 
         </section>
+
+        {/* Life-Event Milestone Navigator (Estonia Model) */}
+        <LifeEventNavigator />
 
         {/* Structured Tri-Panel Pathways */}
         <section aria-label="Welfare Discovery Channels" className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
