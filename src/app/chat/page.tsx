@@ -22,6 +22,7 @@ import { CitizenWelfareCardModal } from '@/components/CitizenWelfareCardModal';
 import { UserProfile, getStoredProfile, saveStoredProfile, PROFILE_EVENT } from '@/lib/chat/profile';
 import { Scheme } from '@/lib/schemes/loader';
 import { calculateBenefitSummary } from '@/lib/schemes/benefits';
+import { inspectProfileDbtScrutiny } from '@/lib/ocr/scrutiny';
 
 function getMessageText(message: UIMessage): string {
   return message.parts
@@ -240,6 +241,7 @@ function ChatContent() {
   };
 
   const benefitSummary = calculateBenefitSummary(matchedSchemes);
+  const scrutiny = inspectProfileDbtScrutiny(profile);
 
   return (
     <div className="flex flex-col h-screen bg-background overflow-hidden">
@@ -504,6 +506,29 @@ function ChatContent() {
                 <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold border ${profile.landHoldingHectares !== undefined ? 'bg-emerald-50 text-emerald-800 border-emerald-300' : 'bg-muted/50 text-muted-foreground border-foreground/20'}`}>
                   {profile.landHoldingHectares !== undefined ? <Check className="w-3 h-3 text-emerald-600" /> : '○'} Land Record (RoR)
                 </span>
+              </div>
+
+              {/* DBT Pre-Scrutiny & NPCI Linkage Status (Haqdarshak Model) */}
+              <div className="mt-3 pt-3 border-t border-foreground/15">
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-muted-foreground flex items-center gap-1">
+                    <ShieldCheck className="w-3.5 h-3.5 text-primary" />
+                    Haqdarshak-Inspired Pre-Scrutiny &amp; NPCI Seeding
+                  </span>
+                  <span className={`text-[10px] font-black px-2 py-0.5 rounded-full border ${scrutiny.dbtReady ? 'bg-emerald-100 text-emerald-800 border-emerald-400' : 'bg-amber-100 text-amber-900 border-amber-400'}`}>
+                    {scrutiny.dbtReady ? '✓ Ready for DBT' : '⚠️ Action Advised'}
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] font-bold">
+                  {scrutiny.checklist.map((item, idx) => (
+                    <div key={idx} className="flex items-center justify-between p-1.5 rounded bg-background border border-foreground/15">
+                      <span className="truncate mr-1 text-muted-foreground">{item.item}</span>
+                      <span className={`text-[10px] shrink-0 font-black ${item.passed ? 'text-emerald-700' : 'text-amber-700'}`}>
+                        {item.passed ? '✓ Validated' : '○ Pending'}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 

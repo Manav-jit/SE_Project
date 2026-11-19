@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import { X, Upload, Scan, CheckCircle2, ShieldCheck, Loader2, Sparkles, ArrowRight } from 'lucide-react';
+import { X, Upload, Scan, CheckCircle2, ShieldCheck, Loader2, Sparkles, ArrowRight, AlertTriangle } from 'lucide-react';
 import { parseDocumentImage, ParsedDocumentData } from '@/lib/ocr/parser';
 import { UserProfile } from '@/lib/chat/profile';
+import { computeNameMatchScore } from '@/lib/ocr/scrutiny';
 
 interface DocumentScannerModalProps {
   isOpen: boolean;
@@ -328,6 +329,24 @@ export function DocumentScannerModal({ isOpen, onClose, onConfirm }: DocumentSca
                   <ShieldCheck className="w-4 h-4 text-primary shrink-0" />
                   <span>Aadhaar Verified: XXXX-XXXX-{aadhaarLast4}</span>
                 </div>
+              )}
+
+              {/* Haqdarshak-Inspired Pre-Scrutiny Check */}
+              {name && extractedData?.name && (
+                (() => {
+                  const check = computeNameMatchScore(name, extractedData.name);
+                  return (
+                    <div className={`p-2.5 rounded-lg border text-xs font-bold flex items-start gap-2 ${check.status === 'EXACT' ? 'bg-emerald-50 border-emerald-300 text-emerald-900' : 'bg-amber-50 border-amber-300 text-amber-900'}`}>
+                      {check.status === 'EXACT' ? <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" /> : <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />}
+                      <div>
+                        <span className="block font-black text-[10px] uppercase tracking-wider">
+                          DBT Pre-Scrutiny ({check.score}% Match)
+                        </span>
+                        <p className="text-[11px] leading-tight mt-0.5">{check.message}</p>
+                      </div>
+                    </div>
+                  );
+                })()
               )}
 
               {/* Confirm & Save Button */}
