@@ -1,0 +1,27 @@
+{
+  "id": "ladli_behna",
+  "name": "Mukhyamantri Ladli Behna Yojana",
+  "ministry": "Department of Women and Child Development",
+  "category": "women-and-child",
+  "eligibility": {
+    "age_min": 21,
+    "age_max": 60,
+    "gender": "female",
+    "income_max": 250000,
+    "other_conditions": "Resident woman between 21 and 60 years of age. Family annual income must not exceed Rs 2.5 Lakh. Family landholding must be under 5 acres (approx 2.0 hectares)."
+  },
+  "benefits": "Direct monthly cash benefit of Rs 1,250 deposited on the 10th of every month into the Aadhaar-linked DBT bank account of the beneficiary woman for nutritional support and financial independence.",
+  "documents_required": [
+    "Samagra Family ID / Member ID",
+    "Aadhaar Card",
+    "Bank Account Passbook (Aadhaar Linked & DBT Enabled)",
+    "Passport Size Photograph"
+  ],
+  "application_process": [
+    "Apply at camps organized by Gram Panchayat or Municipal Ward office.",
+    "Submit Samagra ID and Aadhaar for biometric/eKYC verification.",
+    "Direct verification by Women & Child Development officer and DBT approval."
+  ],
+  "submission_url": "https://cmladlibahna.mp.gov.in/",
+  "form_template_path": "ladli_behna_form.pdf"
+}

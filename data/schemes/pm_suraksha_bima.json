@@ -1,0 +1,25 @@
+{
+  "id": "pm_suraksha_bima",
+  "name": "Pradhan Mantri Suraksha Bima Yojana (PMSBY)",
+  "ministry": "Ministry of Finance",
+  "category": "social-security",
+  "eligibility": {
+    "age_min": 18,
+    "age_max": 70,
+    "gender": "all",
+    "other_conditions": "Individual must have a savings bank or post office account with auto-debit consent enabled."
+  },
+  "benefits": "Accidental death and full permanent disability cover of Rs 2 Lakh, and partial disability cover of Rs 1 Lakh at an affordable premium of only Rs 20 per annum auto-debited from bank account.",
+  "documents_required": [
+    "Aadhaar Card",
+    "Bank Account Details with Auto-Debit Mandate",
+    "Nominee Details (Name, Relationship, DOB)"
+  ],
+  "application_process": [
+    "Submit PMSBY enrollment form to your bank branch or activate via internet banking / SMS.",
+    "Authorize annual auto-debit of Rs 20 in the month of May.",
+    "Bank issues policy certificate and registers risk coverage with public sector general insurance company."
+  ],
+  "submission_url": "https://financialservices.gov.in/beta/en/pmsby",
+  "form_template_path": "pm_suraksha_bima_form.pdf"
+}

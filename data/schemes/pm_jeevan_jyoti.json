@@ -1,0 +1,26 @@
+{
+  "id": "pm_jeevan_jyoti",
+  "name": "Pradhan Mantri Jeevan Jyoti Bima Yojana (PMJJBY)",
+  "ministry": "Ministry of Finance",
+  "category": "social-security",
+  "eligibility": {
+    "age_min": 18,
+    "age_max": 50,
+    "gender": "all",
+    "other_conditions": "Individual must have a savings bank or post office account with auto-debit consent enabled."
+  },
+  "benefits": "Life insurance coverage of Rs 2 Lakh payable to the designated nominee in case of death of the insured member due to any cause (natural or accidental) at an annual premium of Rs 436.",
+  "documents_required": [
+    "Aadhaar Card",
+    "Savings Bank Account Passbook",
+    "Nominee Details (Name, Address, Identity Proof)",
+    "Self-declaration of good health"
+  ],
+  "application_process": [
+    "Enroll through participating bank branch or internet banking portal.",
+    "Submit nomination and consent for auto-debit of Rs 436 annual premium.",
+    "Insurance certificate generated and linked to Aadhaar."
+  ],
+  "submission_url": "https://financialservices.gov.in/beta/en/pmjjby",
+  "form_template_path": "pm_jeevan_jyoti_form.pdf"
+}

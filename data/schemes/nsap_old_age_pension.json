@@ -1,0 +1,28 @@
+{
+  "id": "nsap_old_age_pension",
+  "name": "Indira Gandhi National Old Age Pension Scheme (IGNOAPS)",
+  "ministry": "Ministry of Rural Development",
+  "category": "social-security",
+  "eligibility": {
+    "age_min": 60,
+    "income_max": 100000,
+    "gender": "all",
+    "occupations": ["retired", "unemployed", "homemaker", "other"],
+    "other_conditions": "Applicant must belong to a household living Below the Poverty Line (BPL) as per SECC / BPL list criteria."
+  },
+  "benefits": "Monthly pension of Rs 200 - Rs 500 from Central Government, supplemented with additional state contribution (totaling Rs 1,000 to Rs 2,500/month depending on state) credited via DBT directly to bank/post office account.",
+  "documents_required": [
+    "Aadhaar Card",
+    "Age Proof (Birth Certificate / School Leaving Certificate / Voter ID)",
+    "BPL Card / Ration Card",
+    "Bank Passbook Details with IFSC Code",
+    "Passport Size Photograph"
+  ],
+  "application_process": [
+    "Obtain IGNOAPS application form from Gram Panchayat or Block Development Office (BDO) in rural areas, or Municipality in urban areas.",
+    "Submit form with BPL certificate and age proof.",
+    "District Social Welfare Officer sanctions pension and adds beneficiary to monthly DBT disbursement roll."
+  ],
+  "submission_url": "https://nsap.nic.in/",
+  "form_template_path": "nsap_old_age_form.pdf"
+}

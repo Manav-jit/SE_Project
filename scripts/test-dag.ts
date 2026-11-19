@@ -84,7 +84,7 @@ if (res4.verdict !== 'ELIGIBLE') {
   process.exit(1);
 }
 
-// Test Case 5: Verify all 12 schemes have valid DAGs
+// Test Case 5: Verify all 20 schemes have valid DAGs
 const allDags = getAllSchemeDAGs();
 console.log(`Test 5: Verify all scheme DAGs compile (${allDags.length} schemes)`);
 for (const dag of allDags) {

@@ -1,0 +1,27 @@
+{
+  "id": "stand_up_india",
+  "name": "Stand-Up India Scheme",
+  "ministry": "Ministry of Finance",
+  "category": "employment",
+  "eligibility": {
+    "age_min": 18,
+    "gender": "all",
+    "occupations": ["self-employed", "other"],
+    "other_conditions": "Applicant must be either an SC/ST individual OR a Woman entrepreneur. Loan only for greenfield (first-time) manufacturing, services, or trading enterprise."
+  },
+  "benefits": "Bank loans between Rs 10 Lakh and Rs 1 Crore to at least one SC/ST borrower and at least one Woman borrower per bank branch for setting up a greenfield enterprise.",
+  "documents_required": [
+    "Aadhaar Card",
+    "PAN Card",
+    "Caste Certificate (for SC/ST category) or Gender proof (for Women category)",
+    "Project Report with Business Plan and Cost Estimates",
+    "Proof of Business Premise Lease / Ownership"
+  ],
+  "application_process": [
+    "Register online through Stand-Up India portal (standupmitra.in) or visit nearest Scheduled Commercial Bank branch.",
+    "Submit Detailed Project Report (DPR) and statutory registrations.",
+    "Bank committee evaluates feasibility, approves loan, and sanctions credit."
+  ],
+  "submission_url": "https://www.standupmitra.in/",
+  "form_template_path": "stand_up_india_form.pdf"
+}

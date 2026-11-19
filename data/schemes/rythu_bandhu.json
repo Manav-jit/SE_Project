@@ -1,0 +1,26 @@
+{
+  "id": "rythu_bandhu",
+  "name": "Rythu Bandhu Scheme (Farmer Investment Support)",
+  "ministry": "Department of Agriculture and Farmers Welfare",
+  "category": "agriculture",
+  "eligibility": {
+    "age_min": 18,
+    "gender": "all",
+    "occupations": ["farmer"],
+    "other_conditions": "Pattadar farmer owning agricultural land in the state with a valid Pattadar Passbook."
+  },
+  "benefits": "Investment support of Rs 5,000 per acre per crop season (Rs 10,000 per acre per year) deposited directly into farmer bank accounts to buy seeds, fertilizers, pesticides, and cover field preparation costs.",
+  "documents_required": [
+    "Aadhaar Card",
+    "Pattadar Passbook / Dharani Land Record",
+    "Bank Account Details linked to Aadhaar",
+    "Voter ID Card"
+  ],
+  "application_process": [
+    "Agriculture Extension Officer (AEO) verifies land records directly via Dharani portal.",
+    "Farmer submits passbook and Aadhaar copy to Agriculture Department village desk.",
+    "Treasury issues direct DBT order each Kharif and Rabi season."
+  ],
+  "submission_url": "https://rythubandhu.telangana.gov.in/",
+  "form_template_path": "rythu_bandhu_form.pdf"
+}

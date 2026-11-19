@@ -1,0 +1,28 @@
+{
+  "id": "pm_vishwakarma",
+  "name": "PM Vishwakarma Scheme",
+  "ministry": "Ministry of Micro, Small and Medium Enterprises",
+  "category": "employment",
+  "eligibility": {
+    "age_min": 18,
+    "gender": "all",
+    "occupations": ["artisan", "craftsperson", "carpenter", "blacksmith", "potter", "sculptor", "cobbler", "mason", "tailor", "self-employed"],
+    "family_limit": 1,
+    "other_conditions": "Engaged in one of 18 recognized traditional trades using hands and tools. Minimum age 18 years. Family member should not be a government employee."
+  },
+  "benefits": "Recognition via PM Vishwakarma Certificate & ID Card, 5-7 days basic skill training with Rs 500/day stipend, Rs 15,000 modern toolkit incentive, and collateral-free enterprise credit up to Rs 3 Lakh at 5% concessional interest rate.",
+  "documents_required": [
+    "Aadhaar Card",
+    "Mobile Number linked to Aadhaar",
+    "Bank Account Passbook / Cancelled Cheque",
+    "Ration Card (for family verification)",
+    "Trade Skill Declaration"
+  ],
+  "application_process": [
+    "Biometric authentication and registration at nearest Common Service Centre (CSC).",
+    "Three-step verification: Gram Panchayat / Urban Local Body -> District Implementation Committee -> Screening Committee.",
+    "Issue of PM Vishwakarma Digital Certificate and disbursement of training stipend."
+  ],
+  "submission_url": "https://pmvishwakarma.gov.in/",
+  "form_template_path": "pm_vishwakarma_form.pdf"
+}

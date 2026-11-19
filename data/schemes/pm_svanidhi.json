@@ -1,0 +1,26 @@
+{
+  "id": "pm_svanidhi",
+  "name": "PM Street Vendor's AtmaNirbhar Nidhi (PM SVANidhi)",
+  "ministry": "Ministry of Housing and Urban Affairs",
+  "category": "employment",
+  "eligibility": {
+    "age_min": 18,
+    "gender": "all",
+    "occupations": ["street vendor", "hawker", "thelawala", "self-employed", "laborer", "other"],
+    "other_conditions": "Urban and peri-urban street vendors vending on or before March 24, 2020. Must possess Certificate of Vending or Letter of Recommendation from ULB."
+  },
+  "benefits": "Collateral-free working capital loan of initial Rs 10,000, followed by Rs 20,000 in second tranche and Rs 50,000 in third tranche on timely repayment. 7% interest subsidy credited directly to bank account and cashback on digital transactions up to Rs 1,200/year.",
+  "documents_required": [
+    "Aadhaar Card",
+    "Voter ID / Driving License",
+    "Certificate of Vending / ID Card issued by Urban Local Body (ULB)",
+    "Bank Account Details"
+  ],
+  "application_process": [
+    "Apply online via PM SVANidhi portal or through local Urban Local Body (ULB) / Common Service Centre (CSC).",
+    "Upload Certificate of Vending / Letter of Recommendation from Municipal Ward Officer.",
+    "Lending institution reviews application and directly disburses loan into bank account."
+  ],
+  "submission_url": "https://pmsvanidhi.mohua.gov.in/",
+  "form_template_path": "pm_svanidhi_form.pdf"
+}
