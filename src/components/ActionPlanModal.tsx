@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { X, FileText, CheckCircle, Download, Loader2, MapPin, ShieldCheck } from 'lucide-react';
+import Link from 'next/link';
+import { X, FileText, CheckCircle, Download, Loader2, MapPin, ShieldCheck, ArrowRight } from 'lucide-react';
 import { UserProfile } from '@/lib/chat/profile';
 import { Scheme } from '@/lib/schemes/loader';
 
@@ -14,6 +15,7 @@ interface ActionPlanModalProps {
 
 export function ActionPlanModal({ isOpen, onClose, scheme, profile, onVerifyProof, onAutoFile }: ActionPlanModalProps) {
   const [isGenerating, setIsGenerating] = useState(false);
+  const [registeredAppId, setRegisteredAppId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const handleProof = onVerifyProof || onAutoFile;
 
@@ -40,6 +42,32 @@ export function ActionPlanModal({ isOpen, onClose, scheme, profile, onVerifyProo
       a.click();
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
+
+      // Register the application in persistent storage
+      try {
+        const appRes = await fetch('/api/applications', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            schemeId: scheme.id,
+            schemeName: scheme.name,
+            category: scheme.category,
+            applicantName: profile.name || 'Citizen Beneficiary',
+            mobile: profile.mobile,
+            aadhaarLast4: profile.aadhaarLast4,
+            state: profile.state || 'National',
+            sanctionedAmount: scheme.benefits,
+          }),
+        });
+        if (appRes.ok) {
+          const appData = await appRes.json();
+          if (appData.application?.id) {
+            setRegisteredAppId(appData.application.id);
+          }
+        }
+      } catch (saveErr) {
+        console.error('Could not auto-register application:', saveErr);
+      }
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
@@ -94,6 +122,23 @@ export function ActionPlanModal({ isOpen, onClose, scheme, profile, onVerifyProo
                     {isGenerating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
                     {isGenerating ? "Generating..." : "Download Form"}
                   </button>
+
+                  {registeredAppId && (
+                    <div className="mt-3 p-3 rounded-lg bg-emerald-100 border border-emerald-600 text-emerald-950 text-xs font-bold space-y-1.5 animate-fade-in">
+                      <div className="flex items-center justify-between">
+                        <span className="font-black text-[11px] uppercase tracking-wider text-emerald-900">Application Registered</span>
+                        <span className="font-mono bg-emerald-200 text-emerald-950 px-2 py-0.5 rounded border border-emerald-500 font-black">{registeredAppId}</span>
+                      </div>
+                      <p className="text-[11px] text-emerald-900 font-medium">Record lodged in system. You can track this application in real-time.</p>
+                      <Link 
+                        href={`/track?id=${registeredAppId}`}
+                        onClick={onClose}
+                        className="inline-flex items-center gap-1 font-black underline text-emerald-950 text-[11px] hover:text-emerald-800"
+                      >
+                        Track Status in Citizen Portal <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
