@@ -2,7 +2,8 @@
 
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport, UIMessage } from 'ai';
-import { useState, useRef, useEffect, useMemo } from 'react';
+import { useState, useRef, useEffect, useMemo, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { 
   ArrowLeft, ShieldCheck, Globe, Volume2, VolumeX, X, 
@@ -43,7 +44,11 @@ const QUICK_PROMPT_CHIPS = [
   { label: '💼 Artisan / Street Vendor', text: 'I am a traditional artisan and street vendor needing working capital credit.' },
 ];
 
-export default function ChatPage() {
+function ChatContent() {
+  const searchParams = useSearchParams();
+  const initialPrompt = searchParams.get('prompt');
+  const hasSentInitialPrompt = useRef(false);
+
   const [profile, setProfile] = useState<UserProfile>(() => getStoredProfile());
   const [matchedSchemes, setMatchedSchemes] = useState<Scheme[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -149,6 +154,14 @@ export default function ChatPage() {
   });
 
   const isLoading = status === 'submitted' || status === 'streaming';
+
+  // Handle URL pre-seeded prompt
+  useEffect(() => {
+    if (initialPrompt && !hasSentInitialPrompt.current && status === 'ready') {
+      hasSentInitialPrompt.current = true;
+      sendMessage({ text: initialPrompt });
+    }
+  }, [initialPrompt, status, sendMessage]);
 
   // Text-to-Speech
   useEffect(() => {
@@ -638,5 +651,17 @@ export default function ChatPage() {
       </div>
 
     </div>
+  );
+}
+
+export default function ChatPage() {
+  return (
+    <Suspense fallback={
+      <div className="h-screen w-full flex items-center justify-center bg-background text-foreground text-sm font-black font-serif">
+        Loading Welfare Workspace...
+      </div>
+    }>
+      <ChatContent />
+    </Suspense>
   );
 }
