@@ -11,3 +11,4 @@ See [tasks/MASTER_ROADMAP.md](file:///d:/SE_PROJECT2/tasks/MASTER_ROADMAP.md) fo
 - [x] **TASK-07: Comprehensive Hindi/English UI Localization** (Global language context & translations)
 - [x] **TASK-08: PWA & Offline Connectivity Resilience** (Manifest, service worker & offline scheme caching)
 - [x] **TASK-09: End-to-End Verification & Atomic Git Commits** (Full build, tests, and clean git history)
+- [x] **TASK-10: Split-Pane Workspace & Citizen Entitlement Card** (LLM Council recommendation implementation)

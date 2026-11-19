@@ -9,3 +9,4 @@
 - [x] TASK-07: Implement bilingual UI localization (English/Hindi) with language switcher
 - [x] TASK-08: Add PWA manifest, service worker, and offline scheme caching
 - [x] TASK-09: Run complete test suite, production build, linting, and git commit
+- [x] TASK-10: Implement LLM Council recommendations (Split-pane dossier, PVC card, Benefit ticker, Statutory citations)
