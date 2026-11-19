@@ -11,6 +11,8 @@ export const UserProfileSchema = z.object({
   mobile: z.string().optional(),
   aadhaarLast4: z.string().optional(),
   verified: z.boolean().optional(),
+  digilockerId: z.string().optional(),
+  verifiedDocuments: z.array(z.string()).optional(),
 });
 
 export type UserProfile = z.infer<typeof UserProfileSchema>;
