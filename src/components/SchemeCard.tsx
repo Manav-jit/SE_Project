@@ -1,7 +1,8 @@
 import { Scheme } from '@/lib/schemes/loader';
-import { FileText, Building2, Bookmark, BookmarkCheck, ShieldCheck } from 'lucide-react';
+import { FileText, Building2, Bookmark, BookmarkCheck, ShieldCheck, Scale, Sparkles } from 'lucide-react';
 import { UserProfile } from '@/lib/chat/profile';
 import { useState } from 'react';
+import { getSchemeBenefitMeta } from '@/lib/schemes/benefits';
 
 interface SchemeCardProps {
   scheme: Scheme;
@@ -13,6 +14,7 @@ interface SchemeCardProps {
 }
 
 export function SchemeCard({ scheme, profile = {}, onGenerateForm, onViewDetails, onVerifyProof, onAutoFile }: SchemeCardProps) {
+  const meta = getSchemeBenefitMeta(scheme.id);
   const [isSaved, setIsSaved] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false;
     try {
@@ -57,15 +59,29 @@ export function SchemeCard({ scheme, profile = {}, onGenerateForm, onViewDetails
       </button>
 
       <div className="pr-8">
+        <div className="flex items-center gap-1.5 mb-1.5">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-primary/20 border border-foreground/30 text-[10px] font-black text-foreground uppercase tracking-wider">
+            <Sparkles className="w-3 h-3 text-primary" /> {meta.formattedValue}
+          </span>
+          <span className="text-[10px] font-bold text-muted-foreground truncate">
+            {meta.typeLabel}
+          </span>
+        </div>
         <h3 className="font-black font-serif text-xl text-foreground line-clamp-2">{scheme.name}</h3>
-        <div className="flex items-center gap-1.5 text-xs font-bold text-foreground/80 mt-2">
-          <Building2 className="w-3.5 h-3.5" />
+        <div className="flex items-center gap-1.5 text-xs font-bold text-foreground/80 mt-1.5">
+          <Building2 className="w-3.5 h-3.5 shrink-0" />
           <span className="truncate">{scheme.ministry}</span>
         </div>
       </div>
       
-      <div className="text-sm font-medium text-foreground/80 line-clamp-3">
+      <div className="text-sm font-medium text-foreground/80 line-clamp-2">
         {scheme.benefits}
+      </div>
+
+      {/* Statutory Citation Badge */}
+      <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#FAF6E9] border border-foreground/20 text-[10px] font-bold text-foreground/75">
+        <Scale className="w-3.5 h-3.5 text-amber-700 shrink-0" />
+        <span className="truncate font-mono">{meta.citation}</span>
       </div>
 
       {/* Eligibility Tracker */}
