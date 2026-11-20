@@ -41,4 +41,5 @@ SchemeSaathi is a modern, AI-powered platform designed to help citizens effortle
 - `/src/components`: Reusable React components (Cards, Modals, Chat Interface)
 - `/src/lib`: Core logic (AI prompts, RAG embeddings, PDF generation)
 - `/data/schemes`: JSON data containing detailed scheme eligibility and benefits
+- `/docs`: Project documentation, system architecture, and [Test Case Specification](file:///d:/SE_PROJECT2/docs/TEST_CASES.md) (Doc: T_01 format in Word & Markdown)
 - `/diagrams`: Draw.io architectural diagrams and Use Case templates
