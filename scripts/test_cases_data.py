@@ -6,7 +6,10 @@ TEST_CASES = [
         "date": "20/11/2026",
         "designed_by": "QA Engineering Group",
         "executed_by": "Automated CI / Test Lead",
-        "description": "Validate that the AI Chat interface accurately extracts demographic attributes (occupation, landholding size, state) from free-form citizen conversational inputs and updates the real-time dossier with eligible scheme matches.",
+        "type": "Positive / Functional",
+        "priority": "High",
+        "status": "Pass",
+        "description": "Validate that the AI Chat copilot accurately parses free-form natural language prompts to extract demographic attributes (occupation, landholding size, state) and dynamically renders matching welfare schemes in real time.",
         "preconditions": [
             "SchemeSaathi server is active and accessible at http://localhost:3000/chat.",
             "Groq LLM API endpoint is configured (or fallback mock chat stream is enabled).",
@@ -26,36 +29,15 @@ TEST_CASES = [
     },
     {
         "id": "TC-02",
-        "name": "Contradictory Input Sanitization & Hindi Language Switching",
-        "subsystem": "AI Chat & Conversational Discovery",
-        "date": "20/11/2026",
-        "designed_by": "QA Engineering Group",
-        "executed_by": "Automated CI / Test Lead",
-        "description": "Verify that the AI Chat copilot handles invalid/contradictory demographic inputs (age > 120, negative income) by sanitizing inputs, and seamlessly transitions conversation to Hindi upon language toggle selection.",
-        "preconditions": [
-            "Citizen is active on the /chat route.",
-            "Profile state exists with standard default values."
-        ],
-        "steps": [
-            (1, "Enter prompt: 'My age is 150 and my annual income is -50000 rupees.' and click Send.", "System sanitizes input; age > 120 and negative income are rejected by /api/chat sanitizer. Dossier leaves age and income uncorrupted.", "Pass", "Sanitizer guard active."),
-            (2, "Verify AI conversational response.", "AI responds courteously noting that the age and income values appear anomalous and prompts citizen for valid details.", "Pass", "Conversational fallback rule triggered."),
-            (3, "Click Language Toggle button in top bar, selecting 'हिंदी' (Hindi).", "Language context switches to 'hi'. Header and chat UI elements localize to Hindi.", "Pass", "i18n context event dispatched."),
-            (4, "Enter prompt in Hindi: 'मुझे फसल ऋण और कृषि सब्सिडी की जानकारी चाहिए।' and click Send.", "Request sends with { language: 'hi' }. AI copilot streams response entirely in Hindi detailing PM-KISAN and KCC benefits.", "Pass", "Multilingual prompt instruction enforced."),
-            (5, "Verify post-conditions.", "No corrupted demographic values stored; Hindi dialogue preserved in conversation history.", "Pass", "Robustness confirmed.")
-        ],
-        "postconditions": [
-            "Profile holds no invalid demographic values (age <= 120, income >= 0).",
-            "Active session language preference is saved as 'hi' in context."
-        ]
-    },
-    {
-        "id": "TC-03",
         "name": "3-Step Wizard Linear Flow for Scheme Recommendation",
         "subsystem": "Quick-Match Wizard",
         "date": "20/11/2026",
         "designed_by": "QA Engineering Group",
         "executed_by": "Automated CI / Test Lead",
-        "description": "Validate that the 3-step Quick-Match Wizard successfully collects age, gender, occupation, caste category, and state, smoothly advancing through progress milestones to matched results.",
+        "type": "Functional / Workflow",
+        "priority": "High",
+        "status": "Pass",
+        "description": "Validate that the 3-step Quick-Match Wizard successfully collects personal, socio-economic, and location attributes, smoothly advancing through progress milestones to matched results.",
         "preconditions": [
             "User navigates to http://localhost:3000/wizard.",
             "Clean browser session with no pre-existing profile cached in localStorage."
@@ -73,36 +55,16 @@ TEST_CASES = [
         ]
     },
     {
-        "id": "TC-04",
-        "name": "Wizard Mandatory Field Validation & Backward Traversal",
-        "subsystem": "Quick-Match Wizard",
-        "date": "20/11/2026",
-        "designed_by": "QA Engineering Group",
-        "executed_by": "Automated CI / Test Lead",
-        "description": "Ensure boundary validation prevents skipping required fields and backward navigation ('Previous Step') preserves previously entered data without reset.",
-        "preconditions": [
-            "User is on http://localhost:3000/wizard at Step 1."
-        ],
-        "steps": [
-            (1, "Leave Age field blank and click 'Next Step'.", "System prevents step advance or defaults safely without runtime exception; focuses on age input.", "Pass", "Client validation verified."),
-            (2, "Enter Age: '22', select Gender: 'Male', and click 'Next Step'.", "Wizard advances smoothly to Step 2.", "Pass", "Step advance permitted."),
-            (3, "Select Occupation: 'Student'. Click 'Next Step' to advance to Step 3.", "Wizard advances to Step 3.", "Pass", "Step 2 data recorded."),
-            (4, "Click 'Previous Step' button on Step 3.", "Wizard navigates back to Step 2; Occupation remains selected as 'Student' (not reset).", "Pass", "Backward state preservation verified."),
-            (5, "Change Occupation from 'Student' to 'Laborer' and click 'Next Step'.", "Wizard advances to Step 3 with updated occupation value.", "Pass", "State mutation verified."),
-            (6, "Verify post-conditions.", "Profile in memory contains occupation: 'Laborer'.", "Pass", "Verified.")
-        ],
-        "postconditions": [
-            "Profile state accurately retains mutated values across backward and forward transitions."
-        ]
-    },
-    {
-        "id": "TC-05",
+        "id": "TC-03",
         "name": "End-to-End Mock DigiLocker Authentication & Identity Injection",
         "subsystem": "DigiLocker eKYC Integration",
         "date": "20/11/2026",
         "designed_by": "QA Engineering Group",
         "executed_by": "Automated CI / Test Lead",
-        "description": "Verify that the 5-step mock DigiLocker OAuth flow authenticates the citizen, verifies credentials via OTP, gathers document consent, and injects verified Aadhaar/Ration details into the user profile.",
+        "type": "Security / eKYC",
+        "priority": "High",
+        "status": "Pass",
+        "description": "Verify that the 5-step mock DigiLocker OAuth flow authenticates the citizen, verifies credentials via OTP, gathers document consent, and injects verified Aadhaar/Ration details into the user profile with eKYC verification badges.",
         "preconditions": [
             "User is on /chat or /wizard.",
             "User profile is currently unverified (verified: false)."
@@ -121,79 +83,15 @@ TEST_CASES = [
         ]
     },
     {
-        "id": "TC-06",
-        "name": "DigiLocker OTP Timeout & Invalid Security PIN Validation",
-        "subsystem": "DigiLocker eKYC Integration",
-        "date": "20/11/2026",
-        "designed_by": "QA Engineering Group",
-        "executed_by": "Automated CI / Test Lead",
-        "description": "Verify system behavior when invalid credentials or expired OTP are submitted during the DigiLocker verification flow.",
-        "preconditions": [
-            "DigiLockerModal is open at Step 1: Credentials."
-        ],
-        "steps": [
-            (1, "Enter a 3-digit PIN '123' into the 6-digit PIN input and click 'Sign In'.", "Inline validation triggers: 'Security PIN must be 6 digits'; submit action is blocked.", "Pass", "Input length validation active."),
-            (2, "Enter valid PIN '123456', click 'Sign In' to reach Step 2 (OTP).", "Advances to OTP step; timer starts at 45s.", "Pass", "OTP step entered."),
-            (3, "Enter incorrect OTP '000000' and click 'Verify OTP'.", "Error alert appears: 'Invalid OTP. Please enter 123456 for demo verification'; user remains on OTP step.", "Pass", "Incorrect OTP trapped."),
-            (4, "Wait for countdown timer to reach 00:00.", "Countdown stops at 00:00; UI indicates OTP has expired; 'Resend OTP' button becomes active.", "Pass", "Timer expiration handled."),
-            (5, "Click 'Resend OTP'.", "Timer resets to 45s; error alert clears; new OTP cycle begins.", "Pass", "Resend flow functional.")
-        ],
-        "postconditions": [
-            "Citizen profile remains unverified (verified: false).",
-            "No invalid tokens or mock credentials are written to storage."
-        ]
-    },
-    {
-        "id": "TC-07",
-        "name": "Semantic RAG Vector Retrieval & Multi-Criteria Ranking",
-        "subsystem": "RAG Scheme Retrieval & Recommendation Engine",
-        "date": "20/11/2026",
-        "designed_by": "QA Engineering Group",
-        "executed_by": "Automated CI / Test Lead",
-        "description": "Verify that the in-memory RAG retriever computes embedding cosine similarity and applies multi-attribute filters to rank relevant welfare schemes.",
-        "preconditions": [
-            "Scheme catalog loaded from /data/schemes/ (20 schemes).",
-            "In-memory embedding vector cache initialized via src/lib/rag/embeddings.ts."
-        ],
-        "steps": [
-            (1, "Dispatch GET request to /api/schemes?profile={\"occupation\":\"farmer\",\"state\":\"Punjab\",\"landHoldingHectares\":1.5}.", "Server invokes findRelevantSchemes with the farmer demographic profile.", "Pass", "Endpoint reachable."),
-            (2, "Inspect ranked scheme results in API JSON response.", "PM-KISAN, PM Fasal Bima Yojana, and Rythu Bandhu / agricultural schemes are returned in top ranks with match confidence scores > 80%.", "Pass", "Cosine similarity verified."),
-            (3, "Inspect excluded schemes in the response payload.", "Schemes restricted exclusively to students (National Merit Scholarship) or urban street vendors (PM-SVANidhi) are down-ranked or filtered.", "Pass", "Multi-criteria filtering active."),
-            (4, "Inspect scheme payload schema.", "Every scheme object contains id, name, category, benefits, documents_required, and application_process.", "Pass", "JSON contract verified.")
-        ],
-        "postconditions": [
-            "HTTP response code is 200 OK.",
-            "Returned schemes list is strictly sorted in descending order of relevance score."
-        ]
-    },
-    {
-        "id": "TC-08",
-        "name": "Out-of-Scope Profile Filtering & Zero-Match Handling",
-        "subsystem": "RAG Scheme Retrieval & Recommendation Engine",
-        "date": "20/11/2026",
-        "designed_by": "QA Engineering Group",
-        "executed_by": "Automated CI / Test Lead",
-        "description": "Verify system resilience and user feedback when citizen demographic criteria match no active government welfare schemes.",
-        "preconditions": [
-            "User accesses Scheme Explorer or Matches page."
-        ],
-        "steps": [
-            (1, "Submit profile with Income: '₹1,00,00,000' (1 Crore INR), Occupation: 'Corporate Executive', Landholding: '0'.", "Backend RAG engine filters out all means-tested welfare schemes (BPL, EWS, Farmer, Laborer subsidies).", "Pass", "Strict income threshold check."),
-            (2, "Inspect UI display on /matches.", "Zero-state banner renders cleanly: 'No direct welfare schemes matched your high-income tier. Browse universal public services or tax incentives.'", "Pass", "Empty state UX validated."),
-            (3, "Click 'Browse All Categories' button.", "Navigates to /categories allowing manual exploration of universal programs without app crash.", "Pass", "Graceful recovery flow.")
-        ],
-        "postconditions": [
-            "System produces zero false-positive eligibility claims.",
-            "No unhandled null-reference exceptions in React rendering pipeline."
-        ]
-    },
-    {
-        "id": "TC-09",
+        "id": "TC-04",
         "name": "Deterministic DAG Rule Evaluation & Visual Proof Graph Rendering",
         "subsystem": "Eligibility Proof Graph (DAG) Engine",
         "date": "20/11/2026",
         "designed_by": "QA Engineering Group",
         "executed_by": "Automated CI / Test Lead",
+        "type": "Verification / Logic",
+        "priority": "High",
+        "status": "Pass",
         "description": "Validate that the formal Directed Acyclic Graph (DAG) evaluates multi-variable logical expressions and displays visual statutory audit trails for PM-KISAN.",
         "preconditions": [
             "User profile has { occupation: 'farmer', landHoldingHectares: 1.5, state: 'Punjab', institutional_landholder: false }.",
@@ -211,36 +109,16 @@ TEST_CASES = [
         ]
     },
     {
-        "id": "TC-10",
-        "name": "Ineligible Scheme Counterfactual Path Exploration (What-If)",
-        "subsystem": "Eligibility Proof Graph (DAG) Engine",
-        "date": "20/11/2026",
-        "designed_by": "QA Engineering Group",
-        "executed_by": "Automated CI / Test Lead",
-        "description": "Verify that when a citizen fails an eligibility criterion, the DAG identifies the exact failing leaf node and generates actionable counterfactual guidance.",
-        "preconditions": [
-            "Citizen profile has { occupation: 'farmer', landHoldingHectares: 3.5, state: 'Punjab' } (exceeds 2.0 ha ceiling).",
-            "User opens Proof Graph for PM-KISAN."
-        ],
-        "steps": [
-            (1, "Open Proof Graph Modal for PM-KISAN.", "Overall verdict displays red badge: 'VERDICT: INELIGIBLE'.", "Pass", "Ineligible verdict confirmed."),
-            (2, "Inspect failing node in the visual tree.", "Node 'landHoldingHectares <= 2.0' is highlighted in amber/red with an alert icon: Actual: 3.5 ha | Required: <= 2.0 ha.", "Pass", "Failing node isolated."),
-            (3, "Scroll to 'How You Can Become Eligible' (Counterfactual Section).", "Counterfactual card renders: 'Parameter Delta: Your land holding is 1.5 hectares above the small/marginal farmer limit. If your land holding was 2.0 hectares or less, or if parcel title is subdivided among legal heirs, you would become eligible for ₹6,000/year.'", "Pass", "Counterfactual text generated."),
-            (4, "Verify alternate scheme recommendations.", "System recommends PM Tractor Scheme or Farm Mechanization Subsidy permitting larger landholdings.", "Pass", "Alternate routing verified.")
-        ],
-        "postconditions": [
-            "Clear diagnostic explanation provided to user without bureaucratic jargon.",
-            "Counterfactual delta is computed accurately: 3.5 - 2.0 = 1.5 ha."
-        ]
-    },
-    {
-        "id": "TC-11",
+        "id": "TC-05",
         "name": "Dynamic AcroForm Application Form Generation & Download",
         "subsystem": "Smart PDF Form Generator & Action Plan",
         "date": "20/11/2026",
         "designed_by": "QA Engineering Group",
         "executed_by": "Automated CI / Test Lead",
-        "description": "Validate that the PDF generator merges citizen profile details into standard A4 government form templates with barcode, timestamp, and step-by-step checklist.",
+        "type": "Document Generation",
+        "priority": "High",
+        "status": "Pass",
+        "description": "Validate that the PDF generator merges citizen profile details into standard A4 government form templates with barcode, timestamp, and step-by-step submission checklist.",
         "preconditions": [
             "Verified citizen profile exists (Ramesh Kumar, 45, Male, Punjab, Farmer).",
             "User is on scheme details or matches page."
@@ -257,34 +135,15 @@ TEST_CASES = [
         ]
     },
     {
-        "id": "TC-12",
-        "name": "PDF Generation Exception Handling for Missing Scheme ID",
-        "subsystem": "Smart PDF Form Generator & Action Plan",
-        "date": "20/11/2026",
-        "designed_by": "QA Engineering Group",
-        "executed_by": "Automated CI / Test Lead",
-        "description": "Verify that the PDF generator API validates incoming payloads and gracefully rejects malformed requests without crashing the server.",
-        "preconditions": [
-            "API test client (fetch / curl) connected to /api/generate-pdf."
-        ],
-        "steps": [
-            (1, "Dispatch POST request to /api/generate-pdf with empty JSON payload {}.", "Server catches missing schemeId parameter.", "Pass", "Request payload validated."),
-            (2, "Inspect response HTTP status code.", "Status code is 400 Bad Request.", "Pass", "HTTP 400 verified."),
-            (3, "Inspect JSON error message.", "Response body contains { \"error\": \"Missing schemeId\" }.", "Pass", "Error message contract verified."),
-            (4, "Dispatch POST with invalid scheme ID { \"schemeId\": \"unknown_scheme_99\" }.", "Server falls back gracefully to standard generic welfare application template without unhandled crash.", "Pass", "Fallback handling verified.")
-        ],
-        "postconditions": [
-            "Server logs request error without unhandled exception crashes.",
-            "No orphaned file descriptors or memory leaks created."
-        ]
-    },
-    {
-        "id": "TC-13",
+        "id": "TC-06",
         "name": "Scheme Application Submission & Lifecycle State Transitions",
         "subsystem": "Application Persistence & Lifecycle Tracker",
         "date": "20/11/2026",
         "designed_by": "QA Engineering Group",
         "executed_by": "Automated CI / Test Lead",
+        "type": "End-to-End Workflow",
+        "priority": "High",
+        "status": "Pass",
         "description": "Validate the complete lifecycle of a welfare application from creation (DRAFT), submission (SUBMITTED), administrative scrutiny (UNDER_SCRUTINY), approval (APPROVED), through benefit disbursement (DISBURSED).",
         "preconditions": [
             "User is on /matches or /chat.",
@@ -301,73 +160,6 @@ TEST_CASES = [
         "postconditions": [
             "Application record is saved in data/applications.json and localStorage.",
             "Milestone history logs timestamps and remarks for each transition."
-        ]
-    },
-    {
-        "id": "TC-14",
-        "name": "Tracking Search Query with Non-Existent Reference ID",
-        "subsystem": "Application Persistence & Lifecycle Tracker",
-        "date": "20/11/2026",
-        "designed_by": "QA Engineering Group",
-        "executed_by": "Automated CI / Test Lead",
-        "description": "Verify that the tracking portal displays an informative error message when queried with an invalid or non-existent Reference ID.",
-        "preconditions": [
-            "User navigates to http://localhost:3000/track."
-        ],
-        "steps": [
-            (1, "In tracking search bar, enter invalid ID: 'SS-0000-INVALID' and click 'Track Status'.", "System initiates lookup to /api/applications?id=SS-0000-INVALID.", "Pass", "API lookup dispatched."),
-            (2, "Inspect UI response.", "Search spinner resolves; error banner displays: 'No application found for Reference ID \"SS-0000-INVALID\". Please check the ID or select from recent submissions.'", "Pass", "Error banner rendered."),
-            (3, "Inspect Quick Suggestions list below search bar.", "System renders list of recently submitted valid application IDs for one-click selection.", "Pass", "Recovery links displayed."),
-            (4, "Click on a suggested valid ID (e.g. 'SS-2026-1042').", "Search input updates; application record for SS-2026-1042 loads instantly with full timeline.", "Pass", "Suggestion click-through verified.")
-        ],
-        "postconditions": [
-            "Application state handles 404 cleanly without blank screen or uncaught promise rejection."
-        ]
-    },
-    {
-        "id": "TC-15",
-        "name": "Aadhaar / Ration Client-Side OCR & DBT Pre-Scrutiny",
-        "subsystem": "OCR Document Scanner & Scrutiny Engine",
-        "date": "20/11/2026",
-        "designed_by": "QA Engineering Group",
-        "executed_by": "Automated CI / Test Lead",
-        "description": "Validate that the client-side OCR engine extracts text from uploaded identity documents, performs fuzzy name matching against the profile, and flags Direct Benefit Transfer (DBT) mismatch risks.",
-        "preconditions": [
-            "User opens DocumentScannerModal from chat or dossier.",
-            "Profile has Name: 'Rameshwar Singh'."
-        ],
-        "steps": [
-            (1, "Click 'Upload Document' and select sample Aadhaar card image.", "Image preview renders; progress bar shows 'Reading document image (10%)... OCR extraction in progress (60%)...'.", "Pass", "Image loaded & parsed."),
-            (2, "Wait for OCR processing completion.", "OCR engine extracts Name: 'Rameshwar Singh', DOB: '15/08/1980', Gender: 'Male', Aadhaar: 'XXXX XXXX 4892'.", "Pass", "OCR text extraction verified."),
-            (3, "Inspect DBT Pre-Scrutiny Badge.", "Scrutiny engine computes Levenshtein distance between OCR name and profile name; score = 100%; badge displays green: 'DBT Name Match: 100% (Direct Benefit Transfer Safe)'.", "Pass", "Fuzzy match verified."),
-            (4, "Edit extracted name to 'Ramishwar Singh' (intentional typo).", "Scrutiny score adjusts to ~85% with warning: 'Minor spelling discrepancy detected. May require affidavit during bank verification.'", "Pass", "Real-time scrutiny scoring active."),
-            (5, "Click 'Confirm & Update Profile'.", "Extracted fields populate user profile; modal closes.", "Pass", "Profile updated.")
-        ],
-        "postconditions": [
-            "Profile holds verified document data and OCR match confidence score."
-        ]
-    },
-    {
-        "id": "TC-16",
-        "name": "Sovereign GIGW Accessibility Toolbar & Multilingual Toggle",
-        "subsystem": "UI / Accessibility & Localization (GIGW / WCAG 2.1 AA)",
-        "date": "20/11/2026",
-        "designed_by": "QA Engineering Group",
-        "executed_by": "Automated CI / Test Lead",
-        "description": "Verify that the accessibility toolbar supports high-contrast theme, font resizing, and screen-reader accessibility, while the language toggle translates all interface strings into Hindi.",
-        "preconditions": [
-            "User is on SchemeSaathi home page (http://localhost:3000/)."
-        ],
-        "steps": [
-            (1, "Locate Accessibility Toolbar in header. Click 'A+' (Increase Text Size).", "Root font size scales by +2pt across all headings, cards, and navigation links.", "Pass", "Font scaling verified."),
-            (2, "Click 'Contrast' toggle button (High Contrast Mode).", "Theme switches to high-contrast sovereign mode: dark background (#121212), pure white text (#FFFFFF), and high-visibility yellow/lime accents (#FBBF24). Contrast ratio >= 7:1.", "Pass", "High contrast active."),
-            (3, "Click Language Toggle button, switching from 'English' to 'हिंदी'.", "Navigation bar switches to 'योजनाएं खोजें', 'डैशबोर्ड', 'आवेदन ट्रैक करें'; hero headline switches to 'अपनी सरकारी योजनाएं खोजें'.", "Pass", "System-wide i18n switch verified."),
-            (4, "Navigate to /categories.", "Category cards render localized titles: 'कृषि एवं ग्रामीण विकास', 'स्वास्थ्य एवं परिवार कल्याण', 'शिक्षा एवं छात्रवृत्ति'.", "Pass", "Category localization verified."),
-            (5, "Verify post-conditions.", "Accessibility and language preferences persist across page navigation.", "Pass", "Verified.")
-        ],
-        "postconditions": [
-            "WCAG 2.1 AA compliance standards for contrast and font resizing are maintained.",
-            "Language preference is saved in context."
         ]
     }
 ]

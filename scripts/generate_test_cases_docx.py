@@ -80,7 +80,7 @@ def create_test_cases_document(output_path):
     sub_p = doc.add_paragraph()
     sub_p.paragraph_format.space_before = Pt(0)
     sub_p.paragraph_format.space_after = Pt(4)
-    sub_run = sub_p.add_run("System Test Case Specification Document (Doc: T_01)")
+    sub_run = sub_p.add_run("Core System Test Case Specification Document (Doc: T_01)")
     sub_run.font.name = "Arial"
     sub_run.font.size = Pt(13)
     sub_run.font.bold = True
@@ -91,7 +91,7 @@ def create_test_cases_document(output_path):
     meta_p.paragraph_format.space_after = Pt(14)
     meta_run = meta_p.add_run(
         "Standard Template: Dr. Ghazy Assassa (Doc: T_01) | Target System: SchemeSaathi (AI Welfare Platform)\n"
-        "Document Version: 2.0 | Date: 20 November 2026 | Status: Complete / Verified"
+        "Document Version: 2.1 | Scope: 6 High-Impact Core Test Cases | Status: Complete / Verified"
     )
     meta_run.font.name = "Calibri"
     meta_run.font.size = Pt(9.5)
@@ -233,7 +233,7 @@ def create_test_cases_document(output_path):
     sec2_p = doc.add_paragraph()
     sec2_p.paragraph_format.space_before = Pt(0)
     sec2_p.paragraph_format.space_after = Pt(4)
-    sec2_run = sec2_p.add_run("2. SchemeSaathi System Test Suite & Traceability Matrix")
+    sec2_run = sec2_p.add_run("2. SchemeSaathi Core Test Suite & Traceability Matrix")
     sec2_run.font.name = "Arial"
     sec2_run.font.size = Pt(14)
     sec2_run.font.bold = True
@@ -242,30 +242,16 @@ def create_test_cases_document(output_path):
     desc_matrix = doc.add_paragraph()
     desc_matrix.paragraph_format.space_after = Pt(8)
     dm_run = desc_matrix.add_run(
-        "The following matrix outlines the 16 comprehensive test cases developed specifically for SchemeSaathi. "
-        "Each test case maps directly to a core subsystem, addressing positive workflows, boundary conditions, "
-        "security/eKYC validations, accessibility, and automated lifecycle tracking:"
+        "The following matrix outlines the 6 core high-impact test cases covering the critical subsystems of SchemeSaathi: "
+        "AI conversational discovery, 3-step rapid profiling, official DigiLocker eKYC authentication, formal eligibility verification (DAG), "
+        "pre-filled government PDF document generation, and end-to-end lifecycle status tracking:"
     )
     dm_run.font.name = "Calibri"
     dm_run.font.size = Pt(10)
 
     matrix_data = [
-        ("TC-01", "AI Chat & Discovery", "Guided Citizen Profile Elicitation via Natural Language", "Positive", "High", "Pass"),
-        ("TC-02", "AI Chat & Discovery", "Contradictory Input Sanitization & Hindi Language Switching", "Boundary / Neg", "High", "Pass"),
-        ("TC-03", "Quick-Match Wizard", "3-Step Wizard Linear Flow for Scheme Recommendation", "Functional", "High", "Pass"),
-        ("TC-04", "Quick-Match Wizard", "Wizard Mandatory Field Validation & Backward Traversal", "Boundary / State", "Medium", "Pass"),
-        ("TC-05", "DigiLocker eKYC", "End-to-End Mock DigiLocker Authentication & Identity Injection", "Security / eKYC", "High", "Pass"),
-        ("TC-06", "DigiLocker eKYC", "DigiLocker OTP Timeout & Invalid Security PIN Validation", "Exception", "Medium", "Pass"),
-        ("TC-07", "RAG & Recommendation", "Semantic Embedding Search & Multi-Criteria Ranking", "Algorithmic", "High", "Pass"),
-        ("TC-08", "RAG & Recommendation", "Out-of-Scope Profile Filtering & Zero-Match Handling", "Boundary", "Medium", "Pass"),
-        ("TC-09", "DAG Eligibility Engine", "Deterministic Rule Evaluation & Visual Proof Graph Rendering", "Verification", "High", "Pass"),
-        ("TC-10", "DAG Eligibility Engine", "Ineligible Scheme Counterfactual Path Exploration (What-If)", "Analytical", "High", "Pass"),
-        ("TC-11", "Smart PDF Generator", "Dynamic AcroForm Application Form Generation & Download", "Document Gen", "High", "Pass"),
-        ("TC-12", "Smart PDF Generator", "PDF Generation Exception Handling for Missing Scheme ID", "API Validation", "Medium", "Pass"),
-        ("TC-13", "Lifecycle Tracker", "Scheme Application Submission & Lifecycle State Transitions", "End-to-End", "High", "Pass"),
-        ("TC-14", "Lifecycle Tracker", "Tracking Search Query with Non-Existent Reference ID", "Exception", "Medium", "Pass"),
-        ("TC-15", "OCR & Pre-Scrutiny", "Aadhaar / Ration Client-Side OCR & DBT Pre-Scrutiny", "OCR / Scrutiny", "High", "Pass"),
-        ("TC-16", "Accessibility & i18n", "Sovereign GIGW Accessibility Toolbar & Multilingual Toggle", "A11y / Compliance", "High", "Pass"),
+        (tc["id"], tc["subsystem"], tc["name"], tc.get("type", "Functional"), tc.get("priority", "High"), tc.get("status", "Pass"))
+        for tc in TEST_CASES
     ]
 
     mat_table = doc.add_table(rows=len(matrix_data) + 1, cols=6)
@@ -310,7 +296,7 @@ def create_test_cases_document(output_path):
 
     doc.add_page_break()
 
-    # Section 3: The 16 Test Cases
+    # Section 3: The 6 Test Cases
     sec3_p = doc.add_paragraph()
     sec3_p.paragraph_format.space_before = Pt(0)
     sec3_p.paragraph_format.space_after = Pt(4)
@@ -471,7 +457,7 @@ def generate_markdown_spec(output_md_path):
         "**Document Code**: Doc: T_01  ",
         "**Standard Template**: Dr. Ghazy Assassa Test Case Specification Standard  ",
         "**System**: SchemeSaathi (AI-Powered Citizen Welfare Discovery Platform)  ",
-        "**Date**: 20 November 2026 | **Version**: 2.0 | **Status**: Verified  ",
+        "**Date**: 20 November 2026 | **Version**: 2.1 | **Scope**: 6 Core High-Impact Test Cases | **Status**: Verified  ",
         "",
         "---",
         "",
@@ -498,32 +484,24 @@ def generate_markdown_spec(output_md_path):
         "",
         "---",
         "",
-        "## 2. Test Suite & Traceability Matrix",
+        "## 2. Core Test Suite & Traceability Matrix",
         "",
         "| Test # | Subsystem | Test Case Name | Type | Priority | Status |",
         "|---|---|---|---|---|---|",
-        "| **TC-01** | AI Chat & Discovery | Guided Citizen Profile Elicitation via Natural Language | Positive | High | 🟢 Pass |",
-        "| **TC-02** | AI Chat & Discovery | Contradictory Input Sanitization & Hindi Language Switching | Boundary / Neg | High | 🟢 Pass |",
-        "| **TC-03** | Quick-Match Wizard | 3-Step Wizard Linear Flow for Scheme Recommendation | Functional | High | 🟢 Pass |",
-        "| **TC-04** | Quick-Match Wizard | Wizard Mandatory Field Validation & Backward Traversal | Boundary / State | Medium | 🟢 Pass |",
-        "| **TC-05** | DigiLocker eKYC | End-to-End Mock DigiLocker Authentication & Identity Injection | Security / eKYC | High | 🟢 Pass |",
-        "| **TC-06** | DigiLocker eKYC | DigiLocker OTP Timeout & Invalid Security PIN Validation | Exception | Medium | 🟢 Pass |",
-        "| **TC-07** | RAG & Recommendation | Semantic Embedding Search & Multi-Criteria Ranking | Algorithmic | High | 🟢 Pass |",
-        "| **TC-08** | RAG & Recommendation | Out-of-Scope Profile Filtering & Zero-Match Handling | Boundary | Medium | 🟢 Pass |",
-        "| **TC-09** | DAG Eligibility Engine | Deterministic Rule Evaluation & Visual Proof Graph Rendering | Verification | High | 🟢 Pass |",
-        "| **TC-10** | DAG Eligibility Engine | Ineligible Scheme Counterfactual Path Exploration (What-If) | Analytical | High | 🟢 Pass |",
-        "| **TC-11** | Smart PDF Generator | Dynamic AcroForm Application Form Generation & Download | Document Gen | High | 🟢 Pass |",
-        "| **TC-12** | Smart PDF Generator | PDF Generation Exception Handling for Missing Scheme ID | API Validation | Medium | 🟢 Pass |",
-        "| **TC-13** | Lifecycle Tracker | Scheme Application Submission & Lifecycle State Transitions | End-to-End | High | 🟢 Pass |",
-        "| **TC-14** | Lifecycle Tracker | Tracking Search Query with Non-Existent Reference ID | Exception | Medium | 🟢 Pass |",
-        "| **TC-15** | OCR & Pre-Scrutiny | Aadhaar / Ration Client-Side OCR & DBT Pre-Scrutiny | OCR / Scrutiny | High | 🟢 Pass |",
-        "| **TC-16** | Accessibility & i18n | Sovereign GIGW Accessibility Toolbar & Multilingual Toggle | A11y / Compliance | High | 🟢 Pass |",
+    ]
+
+    for tc in TEST_CASES:
+        t_type = tc.get("type", "Functional")
+        prio = tc.get("priority", "High")
+        lines.append(f"| **{tc['id']}** | {tc['subsystem']} | {tc['name']} | {t_type} | {prio} | 🟢 Pass |")
+
+    lines.extend([
         "",
         "---",
         "",
         "## 3. Comprehensive SchemeSaathi Test Case Specifications",
         ""
-    ]
+    ])
 
     for tc in TEST_CASES:
         lines.append(f"### {tc['id']}: {tc['name']}")
