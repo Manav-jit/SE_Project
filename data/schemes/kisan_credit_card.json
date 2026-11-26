@@ -1,0 +1,30 @@
+{
+  "id": "kisan_credit_card",
+  "name": "Kisan Credit Card (KCC) Scheme",
+  "ministry": "Ministry of Agriculture and Farmers Welfare",
+  "category": "agriculture",
+  "eligibility": {
+    "age_min": 18,
+    "age_max": 75,
+    "gender": "all",
+    "occupations": ["farmer", "self-employed"],
+    "citizenship": "Indian",
+    "other_conditions": "Individual/Joint owner cultivators, tenant farmers, oral lessees, sharecroppers, and SHGs of farmers including animal husbandry and fisheries."
+  },
+  "benefits": "Short-term institutional crop loan and working capital credit up to Rs. 3 Lakhs at a concessional interest rate of 7%, further subsidized down to 4% upon prompt timely repayment (Interest Subvention Scheme). Includes RuPay debit card and personal accident insurance.",
+  "documents_required": [
+    "Aadhaar Card",
+    "Land ownership record (RoR/Khasra/Khatauni) or lease agreement",
+    "Passport size photographs",
+    "Bank Account details with no prior default certificate"
+  ],
+  "application_process": [
+    "Fill simplified 1-page KCC application form at nearest commercial, regional rural, or cooperative bank branch.",
+    "Branch verifies land records and issues sanction within 14 working days under simplified RBI norms.",
+    "Receive RuPay KCC card for ATM withdrawals and POS purchases of agricultural inputs."
+  ],
+  "submission_url": "https://kcc.gov.in/",
+  "annual_benefit_amount": 21000,
+  "statutory_citation": "RBI Master Circular FIDD.CO.FSD.BC.No.6/05.05.010/2022-23 (Kisan Credit Card Scheme)",
+  "benefit_type": "Institutional Working Capital Credit & Subvention"
+}

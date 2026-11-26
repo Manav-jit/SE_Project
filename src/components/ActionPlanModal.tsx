@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { X, FileText, CheckCircle, Download, Loader2, MapPin, ShieldCheck, ArrowRight } from 'lucide-react';
 import { UserProfile } from '@/lib/chat/profile';
 import { Scheme } from '@/lib/schemes/loader';
+import { queueOfflineSubmission } from '@/lib/storage/offlineQueue';
 
 interface ActionPlanModalProps {
   isOpen: boolean;
@@ -43,30 +44,43 @@ export function ActionPlanModal({ isOpen, onClose, scheme, profile, onVerifyProo
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
 
-      // Register the application in persistent storage
+      // Register the application in persistent storage (or offline queue if disconnected)
+      const submissionPayload = {
+        schemeId: scheme.id,
+        schemeName: scheme.name,
+        category: scheme.category,
+        applicantName: profile.name || 'Citizen Beneficiary',
+        mobile: profile.mobile,
+        aadhaarLast4: profile.aadhaarLast4,
+        state: profile.state || 'National',
+        submissionMode: 'ONLINE' as const,
+        sanctionedAmount: scheme.benefits,
+      };
+
       try {
-        const appRes = await fetch('/api/applications', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            schemeId: scheme.id,
-            schemeName: scheme.name,
-            category: scheme.category,
-            applicantName: profile.name || 'Citizen Beneficiary',
-            mobile: profile.mobile,
-            aadhaarLast4: profile.aadhaarLast4,
-            state: profile.state || 'National',
-            sanctionedAmount: scheme.benefits,
-          }),
-        });
-        if (appRes.ok) {
-          const appData = await appRes.json();
-          if (appData.application?.id) {
-            setRegisteredAppId(appData.application.id);
+        if (typeof navigator !== 'undefined' && !navigator.onLine) {
+          const queued = queueOfflineSubmission(submissionPayload);
+          setRegisteredAppId(queued.tempId);
+        } else {
+          const appRes = await fetch('/api/applications', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(submissionPayload),
+          });
+          if (appRes.ok) {
+            const appData = await appRes.json();
+            if (appData.application?.id) {
+              setRegisteredAppId(appData.application.id);
+            }
+          } else {
+            const queued = queueOfflineSubmission(submissionPayload);
+            setRegisteredAppId(queued.tempId);
           }
         }
       } catch (saveErr) {
-        console.error('Could not auto-register application:', saveErr);
+        console.warn('Network offline, queueing application locally:', saveErr);
+        const queued = queueOfflineSubmission(submissionPayload);
+        setRegisteredAppId(queued.tempId);
       }
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "An error occurred");
@@ -80,7 +94,7 @@ export function ActionPlanModal({ isOpen, onClose, scheme, profile, onVerifyProo
       <div className="relative w-full max-w-md organic-card overflow-hidden flex flex-col max-h-[90vh]">
         
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b-2 border-foreground bg-[#F9FFF4]">
+        <div className="flex items-center justify-between p-6 border-b-2 border-foreground bg-secondary/40">
           <div className="flex items-center gap-2">
             <FileText className="w-6 h-6 text-foreground" />
             <span className="font-black font-serif text-xl text-foreground">Action Plan</span>
@@ -103,9 +117,9 @@ export function ActionPlanModal({ isOpen, onClose, scheme, profile, onVerifyProo
             {/* Step 1 */}
             <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
               <div className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-foreground bg-primary shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-[2px_2px_0px_0px_var(--foreground)] z-10">
-                <CheckCircle className="w-6 h-6 text-foreground" />
+                <CheckCircle className="w-6 h-6 text-primary-foreground" />
               </div>
-              <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-[#F9FFF4] border-2 border-foreground shadow-[4px_4px_0px_0px_var(--foreground)] p-4 rounded-xl">
+              <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-card border-2 border-foreground shadow-[4px_4px_0px_0px_var(--foreground)] p-4 rounded-xl">
                 <div className="flex flex-col">
                   <span className="font-black text-sm text-foreground uppercase tracking-wide">Step 1: Get Pre-filled Form</span>
                   <span className="text-xs font-bold text-foreground/80 mt-1">

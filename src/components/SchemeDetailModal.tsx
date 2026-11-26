@@ -15,7 +15,7 @@ export function SchemeDetailModal({ isOpen, onClose, scheme }: SchemeDetailModal
       <div className="relative w-full max-w-2xl organic-card overflow-hidden flex flex-col max-h-[90vh]">
         
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b-2 border-foreground bg-[#F9FFF4]">
+        <div className="flex items-center justify-between p-6 border-b-2 border-foreground bg-secondary/40">
           <div>
             <h2 className="text-2xl font-black font-serif text-foreground">{scheme.name}</h2>
             <div className="flex items-center gap-1.5 text-sm font-bold text-foreground/80 mt-2">

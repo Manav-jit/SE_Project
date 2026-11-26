@@ -63,12 +63,12 @@ export function AccessibilityToolbar() {
   return (
     <aside 
       aria-label="National Accessibility & Language Toolbar"
-      className="w-full bg-[#1F3318] text-[#F5F3E7] text-[11px] font-bold py-1 px-4 sm:px-8 flex flex-wrap items-center justify-between gap-2 border-b border-foreground/30 z-30"
+      className="w-full bg-[#0F291E] text-slate-100 text-[11px] font-bold py-1 px-4 sm:px-8 flex flex-wrap items-center justify-between gap-2 border-b border-foreground/30 z-30"
     >
       {/* Sovereign DPI Label */}
       <div className="flex items-center gap-2 tracking-wider">
-        <Shield className="w-3.5 h-3.5 text-[#9CD869]" />
-        <span className="uppercase text-[10px] sm:text-[11px] opacity-90">
+        <Shield className="w-3.5 h-3.5 text-emerald-400" />
+        <span className="uppercase text-[10px] sm:text-[11px] opacity-90 text-slate-200">
           Digital Public Infrastructure · Govt. of India Gazette Aligned
         </span>
       </div>
@@ -80,7 +80,7 @@ export function AccessibilityToolbar() {
         <button
           type="button"
           onClick={handleReadPage}
-          className={`flex items-center gap-1 px-2 py-0.5 rounded transition-colors ${isReadingAloud ? 'bg-[#9CD869] text-[#1F3318]' : 'hover:bg-white/10 text-[#F5F3E7]'}`}
+          className={`flex items-center gap-1 px-2 py-0.5 rounded transition-colors ${isReadingAloud ? 'bg-emerald-600 text-white font-bold' : 'hover:bg-white/10 text-slate-200'}`}
           title="Listen to page (Suniye)"
           aria-label={isReadingAloud ? 'Stop audio' : 'Listen to page summary'}
         >
@@ -95,7 +95,7 @@ export function AccessibilityToolbar() {
           <button
             type="button"
             onClick={() => handleFontScale('sm')}
-            className={`px-1.5 py-0.5 rounded text-[10px] ${fontScale === 'sm' ? 'bg-[#9CD869] text-[#1F3318]' : 'hover:bg-white/10'}`}
+            className={`px-1.5 py-0.5 rounded text-[10px] transition-colors ${fontScale === 'sm' ? 'bg-emerald-600 text-white font-bold' : 'hover:bg-white/10 text-slate-200'}`}
             title="Smaller text"
           >
             A-
@@ -103,7 +103,7 @@ export function AccessibilityToolbar() {
           <button
             type="button"
             onClick={() => handleFontScale('md')}
-            className={`px-1.5 py-0.5 rounded text-[11px] ${fontScale === 'md' ? 'bg-[#9CD869] text-[#1F3318]' : 'hover:bg-white/10'}`}
+            className={`px-1.5 py-0.5 rounded text-[11px] transition-colors ${fontScale === 'md' ? 'bg-emerald-600 text-white font-bold' : 'hover:bg-white/10 text-slate-200'}`}
             title="Normal text"
           >
             A
@@ -111,7 +111,7 @@ export function AccessibilityToolbar() {
           <button
             type="button"
             onClick={() => handleFontScale('lg')}
-            className={`px-1.5 py-0.5 rounded text-[12px] font-black ${fontScale === 'lg' ? 'bg-[#9CD869] text-[#1F3318]' : 'hover:bg-white/10'}`}
+            className={`px-1.5 py-0.5 rounded text-[12px] font-black transition-colors ${fontScale === 'lg' ? 'bg-emerald-600 text-white' : 'hover:bg-white/10 text-slate-200'}`}
             title="Larger text"
           >
             A+
@@ -124,7 +124,7 @@ export function AccessibilityToolbar() {
         <button
           type="button"
           onClick={handleToggleContrast}
-          className={`flex items-center gap-1 px-1.5 py-0.5 rounded transition-colors ${isHighContrast ? 'bg-yellow-400 text-black' : 'hover:bg-white/10'}`}
+          className={`flex items-center gap-1 px-1.5 py-0.5 rounded transition-colors ${isHighContrast ? 'bg-yellow-400 text-black font-black' : 'hover:bg-white/10 text-slate-200'}`}
           title="Toggle High-Contrast mode"
           aria-label="Toggle high contrast accessibility view"
         >
@@ -139,14 +139,14 @@ export function AccessibilityToolbar() {
           <button
             type="button"
             onClick={() => setLanguage('en')}
-            className={`px-1.5 py-0.5 rounded transition-colors ${language === 'en' ? 'bg-[#9CD869] text-[#1F3318]' : 'hover:bg-white/10'}`}
+            className={`px-1.5 py-0.5 rounded transition-colors ${language === 'en' ? 'bg-emerald-600 text-white font-bold' : 'hover:bg-white/10 text-slate-200'}`}
           >
             English
           </button>
           <button
             type="button"
             onClick={() => setLanguage('hi')}
-            className={`px-1.5 py-0.5 rounded transition-colors ${language === 'hi' ? 'bg-[#9CD869] text-[#1F3318]' : 'hover:bg-white/10'}`}
+            className={`px-1.5 py-0.5 rounded transition-colors ${language === 'hi' ? 'bg-emerald-600 text-white font-bold' : 'hover:bg-white/10 text-slate-200'}`}
           >
             हिन्दी
           </button>

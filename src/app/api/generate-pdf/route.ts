@@ -1,22 +1,45 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { generateFilledForm } from '@/lib/pdf/generator';
+import { generateFilledForm, generateAcknowledgementReceipt } from '@/lib/pdf/generator';
+import { getApplicationById } from '@/lib/storage/applications';
 
 export async function POST(req: NextRequest) {
   try {
-    const { profile, schemeId } = await req.json();
-    
+    const body = await req.json();
+    const { type, profile, schemeId, applicationId } = body;
+
+    // 1. Generate Acknowledgement Receipt for submitted application
+    if (type === 'receipt' || applicationId) {
+      const idToLookup = applicationId || body.id;
+      if (!idToLookup) {
+        return NextResponse.json({ error: "Missing applicationId" }, { status: 400 });
+      }
+
+      const application = await getApplicationById(idToLookup);
+      if (!application) {
+        return NextResponse.json({ error: "Application not found in tracking registry" }, { status: 404 });
+      }
+
+      const receiptBytes = await generateAcknowledgementReceipt(application);
+      return new NextResponse(receiptBytes as unknown as BodyInit, {
+        headers: {
+          'Content-Type': 'application/pdf',
+          'Content-Disposition': `attachment; filename="acknowledgement_${application.id}.pdf"`,
+        },
+      });
+    }
+
+    // 2. Generate Standardized Welfare Application Form
     if (!schemeId) {
       return NextResponse.json({ error: "Missing schemeId" }, { status: 400 });
     }
 
-    const pdfBytes = await generateFilledForm(profile, schemeId);
+    const pdfBytes = await generateFilledForm(profile || {}, schemeId);
 
-    // Return as downloadable PDF
     return new NextResponse(pdfBytes as unknown as BodyInit, {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="${schemeId}_application.pdf"`,
-      }
+      },
     });
 
   } catch (error: unknown) {

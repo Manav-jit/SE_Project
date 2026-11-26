@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { X, ShieldCheck, Loader2, CheckCircle2, FileCheck, ArrowRight, Smartphone, KeyRound, CheckSquare, Square } from 'lucide-react';
-import { UserProfile } from '@/lib/chat/profile';
+import { X, ShieldCheck, Loader2, CheckCircle2, FileCheck, ArrowRight, Smartphone, KeyRound, CheckSquare, Square, Fingerprint } from 'lucide-react';
+import { UserProfile, getStoredProfile } from '@/lib/chat/profile';
 
 interface DigiLockerModalProps {
   isOpen: boolean;
@@ -25,8 +25,17 @@ export function DigiLockerModal({ isOpen, onClose, onVerify }: DigiLockerModalPr
   const [identifier, setIdentifier] = useState('9876543210');
   const [securityPin, setSecurityPin] = useState('123456');
   const [otp, setOtp] = useState('');
-  const [timer, setTimer] = useState(45);
+  const [generatedOtp, setGeneratedOtp] = useState('839201');
+  const [sessionId, setSessionId] = useState('');
+  const [timer, setTimer] = useState(60);
   const [errorMsg, setErrorMsg] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Editable citizen fields for consent
+  const [citizenName, setCitizenName] = useState(() => getStoredProfile().name || 'Rameshwar Singh');
+  const [citizenState, setCitizenState] = useState(() => getStoredProfile().state || 'Uttar Pradesh');
+  const [citizenAge, setCitizenAge] = useState<number>(() => getStoredProfile().age || 44);
+  const [citizenGender, setCitizenGender] = useState<'male' | 'female' | 'other'>(() => (getStoredProfile().gender as 'male' | 'female' | 'other') || 'male');
 
   // Consent Documents
   const [documents, setDocuments] = useState<DigiDoc[]>([
@@ -36,8 +45,8 @@ export function DigiLockerModal({ isOpen, onClose, onVerify }: DigiLockerModalPr
     { id: 'domicile', name: 'Domicile / Caste Certificate', issuer: 'Tahsildar Office', docNumber: 'DOM-782190', selected: false },
   ]);
 
-  // Verified Data Preview
-  const [verifiedData] = useState<Partial<UserProfile>>({
+  // Verified Data
+  const [verifiedData, setVerifiedData] = useState<Partial<UserProfile>>({
     name: "Rameshwar Singh",
     age: 44,
     gender: "male",
@@ -60,40 +69,127 @@ export function DigiLockerModal({ isOpen, onClose, onVerify }: DigiLockerModalPr
 
   if (!isOpen) return null;
 
-  const handleStep1Submit = (e: React.FormEvent) => {
+  const handleStep1Submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg('');
     if (identifier.length < 10) {
-      setErrorMsg('Please enter a valid 10-digit Mobile or 12-digit Aadhaar number');
+      setErrorMsg('Please enter a valid 10-digit Mobile or 12-digit Aadhaar number.');
       return;
     }
-    if (securityPin.length < 6) {
-      setErrorMsg('PIN must be 6 digits');
+    if (securityPin.length < 4) {
+      setErrorMsg('PIN must be at least 4-6 digits.');
       return;
     }
-    setStep('otp');
-    setTimer(45);
+
+    setIsLoading(true);
+    try {
+      const res = await fetch('/api/ekyc/digilocker', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'send-otp',
+          identifier,
+          pin: securityPin,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        setErrorMsg(data.error || 'Failed to initiate DigiLocker session.');
+        return;
+      }
+
+      setSessionId(data.sessionId);
+      if (data.sandboxOtp) {
+        setGeneratedOtp(data.sandboxOtp);
+      }
+      setStep('otp');
+      setTimer(data.expiresInSeconds || 60);
+    } catch {
+      setErrorMsg('Could not connect to DigiLocker verification gateway.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleVerifyOtp = (e: React.FormEvent) => {
+  const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg('');
-    if (otp !== '839201' && otp.length !== 6) {
-      setErrorMsg('Invalid OTP. Please enter the 6-digit code or click Auto-fill.');
+    if (!otp || otp.length < 6) {
+      setErrorMsg('Please enter the 6-digit OTP.');
       return;
     }
-    setStep('consent');
+
+    setIsLoading(true);
+    try {
+      const res = await fetch('/api/ekyc/digilocker', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'verify-otp',
+          sessionId,
+          otp,
+          identifier,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        setErrorMsg(data.error || 'Invalid OTP code.');
+        return;
+      }
+
+      if (Array.isArray(data.documents) && data.documents.length > 0) {
+        setDocuments(data.documents);
+      }
+      setStep('consent');
+    } catch {
+      setErrorMsg('Verification failed. Please retry.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const toggleDoc = (id: string) => {
     setDocuments(docs => docs.map(d => d.id === id ? { ...d, selected: !d.selected } : d));
   };
 
-  const handleConsentSubmit = () => {
+  const handleConsentSubmit = async () => {
     setStep('verifying');
-    setTimeout(() => {
+    setIsLoading(true);
+    setErrorMsg('');
+
+    try {
+      const selectedNames = documents.filter(d => d.selected).map(d => `${d.name} (${d.issuer})`);
+      const res = await fetch('/api/ekyc/digilocker', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'fetch-credentials',
+          sessionId,
+          selectedDocs: selectedNames,
+          citizenName,
+          state: citizenState,
+          age: citizenAge,
+          gender: citizenGender,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        setStep('consent');
+        setErrorMsg(data.error || 'Failed to issue digital eKYC certificate.');
+        return;
+      }
+
+      setVerifiedData(data.verifiedData);
       setStep('success');
-    }, 1800);
+    } catch {
+      setStep('consent');
+      setErrorMsg('Service error while synchronizing digital certificates.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleFinalConfirm = () => {
@@ -111,14 +207,14 @@ export function DigiLockerModal({ isOpen, onClose, onVerify }: DigiLockerModalPr
       <div className="relative w-full max-w-lg organic-card overflow-hidden my-auto bg-card shadow-[8px_8px_0px_0px_var(--foreground)]">
         
         {/* Header with DigiLocker Official Identity */}
-        <div className="flex items-center justify-between p-6 border-b-2 border-foreground bg-[#F9FFF4]">
+        <div className="flex items-center justify-between p-6 border-b-2 border-foreground bg-secondary/40">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-primary/20 border-2 border-foreground flex items-center justify-center shadow-[2px_2px_0px_0px_var(--foreground)]">
               <ShieldCheck className="w-6 h-6 text-foreground" />
             </div>
             <div>
               <span className="font-black font-serif text-xl text-foreground block leading-tight">DigiLocker</span>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Digital India • Verified Citizen Service</span>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Digital India • Verified Citizen eKYC Gateway</span>
             </div>
           </div>
           <button 
@@ -189,15 +285,25 @@ export function DigiLockerModal({ isOpen, onClose, onVerify }: DigiLockerModalPr
 
               <button 
                 type="submit"
-                className="w-full organic-button py-3 mt-4 flex items-center justify-center gap-2 text-xs font-black uppercase tracking-wider"
+                disabled={isLoading}
+                className="w-full organic-button py-3 mt-4 flex items-center justify-center gap-2 text-xs font-black uppercase tracking-wider disabled:opacity-50"
               >
-                Proceed to Secure Verification
-                <ArrowRight className="w-4 h-4" />
+                {isLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Connecting to DigiLocker...
+                  </>
+                ) : (
+                  <>
+                    Proceed to Secure Verification
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
               </button>
 
               <div className="text-[11px] text-center font-bold text-muted-foreground flex items-center justify-center gap-1.5 pt-2">
                 <ShieldCheck className="w-4 h-4 text-emerald-700" />
-                <span>256-bit encrypted sandbox • UIDAI &amp; MeitY compliance</span>
+                <span>256-bit encrypted gateway • UIDAI &amp; MeitY compliant</span>
               </div>
             </form>
           )}
@@ -208,17 +314,17 @@ export function DigiLockerModal({ isOpen, onClose, onVerify }: DigiLockerModalPr
               <div className="text-center space-y-1">
                 <p className="text-sm font-black text-foreground">One-Time Password (OTP) Sent</p>
                 <p className="text-xs font-bold text-muted-foreground">
-                  A 6-digit OTP has been sent to your registered mobile ending in <strong>{identifier.slice(-4)}</strong>.
+                  A 6-digit OTP has been dispatched to mobile ending in <strong>{identifier.slice(-4)}</strong>.
                 </p>
               </div>
 
               {/* Convenience Auto-fill Pill */}
               <button
                 type="button"
-                onClick={() => setOtp('839201')}
+                onClick={() => setOtp(generatedOtp)}
                 className="w-full py-2 rounded-lg border border-dashed border-emerald-600 bg-emerald-50 text-emerald-900 text-xs font-mono font-bold flex items-center justify-center gap-1.5 hover:bg-emerald-100 transition-colors"
               >
-                <span>🔑 Simulated OTP: <strong>839201</strong> (Click to Auto-fill)</span>
+                <span>🔑 Dynamic Sandbox OTP: <strong>{generatedOtp}</strong> (Click to Auto-fill)</span>
               </button>
 
               <div className="space-y-1.5">
@@ -237,7 +343,15 @@ export function DigiLockerModal({ isOpen, onClose, onVerify }: DigiLockerModalPr
               <div className="flex justify-between items-center text-xs font-bold text-muted-foreground">
                 <span>{timer > 0 ? `Resend OTP in ${timer}s` : 'Did not receive OTP?'}</span>
                 {timer === 0 && (
-                  <button type="button" onClick={() => setTimer(45)} className="text-primary font-black underline">
+                  <button 
+                    type="button" 
+                    onClick={() => {
+                      setTimer(60);
+                      const newOtp = Math.floor(100000 + Math.random() * 900000).toString();
+                      setGeneratedOtp(newOtp);
+                    }} 
+                    className="text-primary font-black underline"
+                  >
                     Resend OTP
                   </button>
                 )}
@@ -245,25 +359,80 @@ export function DigiLockerModal({ isOpen, onClose, onVerify }: DigiLockerModalPr
 
               <button 
                 type="submit"
-                className="w-full organic-button py-3 mt-4 flex items-center justify-center gap-2 text-xs font-black uppercase tracking-wider"
+                disabled={isLoading}
+                className="w-full organic-button py-3 mt-4 flex items-center justify-center gap-2 text-xs font-black uppercase tracking-wider disabled:opacity-50"
               >
-                Validate OTP &amp; Fetch Documents
-                <ArrowRight className="w-4 h-4" />
+                {isLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Validating OTP...
+                  </>
+                ) : (
+                  <>
+                    Validate OTP &amp; Fetch Documents
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
               </button>
             </form>
           )}
 
-          {/* STEP 3: DOCUMENT SELECTION & CONSENT */}
+          {/* STEP 3: DOCUMENT SELECTION & PROFILE VERIFICATION */}
           {step === 'consent' && (
             <div className="space-y-4 animate-fade-in">
               <div className="space-y-1">
-                <p className="text-sm font-black text-foreground">Select Documents to Share</p>
+                <p className="text-sm font-black text-foreground">Authenticated DigiLocker Certificates</p>
                 <p className="text-xs font-bold text-muted-foreground">
-                  The following authenticated documents were found in your DigiLocker. Choose which ones to link:
+                  The following cryptographically authenticated documents were found. Review and select:
                 </p>
               </div>
 
-              <div className="space-y-2.5 max-h-60 overflow-y-auto">
+              {/* Citizen Demographic confirmation */}
+              <div className="p-3 bg-secondary/30 rounded-xl border border-foreground/20 grid grid-cols-2 gap-2 text-xs">
+                <div>
+                  <label className="text-[10px] font-black uppercase text-muted-foreground block">Beneficiary Name</label>
+                  <input
+                    type="text"
+                    value={citizenName}
+                    onChange={(e) => setCitizenName(e.target.value)}
+                    className="w-full bg-background border border-foreground/30 rounded px-2 py-1 text-xs font-bold"
+                  />
+                </div>
+                <div>
+                  <label className="text-[10px] font-black uppercase text-muted-foreground block">Domicile State</label>
+                  <input
+                    type="text"
+                    value={citizenState}
+                    onChange={(e) => setCitizenState(e.target.value)}
+                    className="w-full bg-background border border-foreground/30 rounded px-2 py-1 text-xs font-bold"
+                  />
+                </div>
+                <div>
+                  <label className="text-[10px] font-black uppercase text-muted-foreground block">Age (Years)</label>
+                  <input
+                    type="number"
+                    min={18}
+                    max={120}
+                    value={citizenAge}
+                    onChange={(e) => setCitizenAge(parseInt(e.target.value, 10) || 44)}
+                    className="w-full bg-background border border-foreground/30 rounded px-2 py-1 text-xs font-bold"
+                  />
+                </div>
+                <div>
+                  <label className="text-[10px] font-black uppercase text-muted-foreground block">Gender</label>
+                  <select
+                    value={citizenGender}
+                    onChange={(e) => setCitizenGender(e.target.value as 'male' | 'female' | 'other')}
+                    className="w-full bg-background border border-foreground/30 rounded px-2 py-1 text-xs font-bold"
+                  >
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="space-y-2.5 max-h-52 overflow-y-auto">
                 {documents.map((doc) => (
                   <div
                     key={doc.id}
@@ -289,17 +458,27 @@ export function DigiLockerModal({ isOpen, onClose, onVerify }: DigiLockerModalPr
               <div className="p-3 rounded-lg bg-background border border-foreground/20 text-[11px] font-bold text-muted-foreground flex items-start gap-2">
                 <ShieldCheck className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                 <span>
-                  I grant consent to fetch my verified demographic and income credentials for automated welfare scheme evaluation under Digital India standards.
+                  I grant sovereign consent to bind my authenticated credentials for automated welfare scheme evaluation under Digital India standards.
                 </span>
               </div>
 
               <button 
                 type="button"
                 onClick={handleConsentSubmit}
-                className="w-full organic-button py-3 mt-4 flex items-center justify-center gap-2 text-xs font-black uppercase tracking-wider"
+                disabled={isLoading}
+                className="w-full organic-button py-3 mt-4 flex items-center justify-center gap-2 text-xs font-black uppercase tracking-wider disabled:opacity-50"
               >
-                Authorize &amp; Synchronize Credentials
-                <ArrowRight className="w-4 h-4" />
+                {isLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Issuing eKYC Certificate...
+                  </>
+                ) : (
+                  <>
+                    Authorize &amp; Synchronize Credentials
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
               </button>
             </div>
           )}
@@ -310,7 +489,7 @@ export function DigiLockerModal({ isOpen, onClose, onVerify }: DigiLockerModalPr
               <Loader2 className="w-12 h-12 text-primary animate-spin" />
               <div className="space-y-1">
                 <p className="text-base font-black font-serif text-foreground">Cryptographically Verifying Credentials...</p>
-                <p className="text-xs font-bold text-muted-foreground">Issuing DigiLocker eKYC Attestation Token</p>
+                <p className="text-xs font-bold text-muted-foreground">Generating SHA-256 DigiLocker eKYC Attestation Token</p>
               </div>
             </div>
           )}
@@ -318,7 +497,7 @@ export function DigiLockerModal({ isOpen, onClose, onVerify }: DigiLockerModalPr
           {/* STEP 4: SUCCESS SUMMARY */}
           {step === 'success' && (
             <div className="space-y-4 animate-fade-in">
-              <div className="p-4 rounded-xl border-2 border-foreground bg-[#F9FFF4] shadow-[4px_4px_0px_0px_var(--foreground)] space-y-3">
+              <div className="p-4 rounded-xl border-2 border-foreground bg-secondary/30 shadow-[4px_4px_0px_0px_var(--foreground)] space-y-3">
                 <div className="flex items-center justify-between border-b border-foreground/15 pb-2">
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="w-5 h-5 text-emerald-700" />
@@ -345,6 +524,14 @@ export function DigiLockerModal({ isOpen, onClose, onVerify }: DigiLockerModalPr
                     <span className="text-foreground font-mono">XXXX-XXXX-{verifiedData.aadhaarLast4}</span>
                   </div>
                 </div>
+
+                {/* Digital Signature Fingerprint */}
+                {verifiedData.digitalSignature && (
+                  <div className="p-2 rounded bg-background border border-foreground/20 text-[10px] font-mono text-muted-foreground flex items-center gap-1.5">
+                    <Fingerprint className="w-3.5 h-3.5 text-primary shrink-0" />
+                    <span className="truncate">Signature: {verifiedData.digitalSignature}</span>
+                  </div>
+                )}
 
                 <div className="pt-2 border-t border-foreground/15">
                   <span className="text-[10px] font-black uppercase text-muted-foreground block mb-1">Linked Verified Documents</span>

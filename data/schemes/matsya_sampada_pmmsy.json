@@ -1,0 +1,32 @@
+{
+  "id": "matsya_sampada_pmmsy",
+  "name": "Pradhan Mantri Matsya Sampada Yojana (PMMSY)",
+  "ministry": "MINISTRY OF FISHERIES, ANIMAL HUSBANDRY AND DAIRYING",
+  "category": "agriculture",
+  "eligibility": {
+    "age_min": 18,
+    "age_max": 65,
+    "gender": "all",
+    "occupations": [
+      "farmer",
+      "laborer"
+    ],
+    "income_max": 300000,
+    "citizenship": "Indian"
+  },
+  "benefits": "Direct capital subsidy of 40% for General category and up to 60% for Women and SC/ST beneficiaries for aquaculture ponds, biofloc units, modern fishing vessels, and cold chain infrastructure",
+  "documents_required": [
+    "Aadhaar Card",
+    "Bank Account Details (Aadhaar linked)",
+    "Land Ownership Record (RoR)",
+    "Income Certificate",
+    "Caste Certificate"
+  ],
+  "application_process": [
+    "Apply online via the official portal (https://pmmsy.dof.gov.in/) or nearest Common Service Centre (CSC).",
+    "Submit authenticated Aadhaar and requisite KYC documents.",
+    "Verification and direct benefit transfer (DBT) credit by departmental officers."
+  ],
+  "submission_url": "https://pmmsy.dof.gov.in/",
+  "statutory_citation": "Gazette Notification No"
+}

@@ -159,6 +159,20 @@ export async function getApplicationById(id: string): Promise<ApplicationRecord 
   return all.find(a => a.id.toLowerCase() === id.toLowerCase()) || null;
 }
 
+export async function searchApplications(query: string): Promise<ApplicationRecord[]> {
+  const all = await getAllApplications();
+  const q = query.trim().toLowerCase();
+  if (!q) return all;
+
+  return all.filter(a => 
+    a.id.toLowerCase().includes(q) ||
+    (a.mobile && a.mobile.includes(q)) ||
+    (a.aadhaarLast4 && a.aadhaarLast4.includes(q)) ||
+    a.applicantName.toLowerCase().includes(q) ||
+    a.schemeName.toLowerCase().includes(q)
+  );
+}
+
 export async function createApplication(
   data: Omit<ApplicationRecord, 'id' | 'appliedAt' | 'updatedAt' | 'trackingMilestones' | 'status'>
 ): Promise<ApplicationRecord> {

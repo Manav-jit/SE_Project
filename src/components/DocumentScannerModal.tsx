@@ -51,30 +51,26 @@ export function DocumentScannerModal({ isOpen, onClose, onConfirm }: DocumentSca
       });
 
       setExtractedData(data);
-      setName(data.name || 'Suresh Kumar');
-      setAge(data.age || 42);
+      setName(data.name || '');
+      setAge(data.age || '');
       setGender(data.gender || 'male');
-      setState(data.state || 'Maharashtra');
-      setAadhaarLast4(data.aadhaarLast4 || '4921');
+      setState(data.state || 'Uttar Pradesh');
+      setAadhaarLast4(data.aadhaarLast4 || '');
     } catch (err) {
       console.error('OCR processing error:', err);
-      // Fallback extraction
       const fallback: ParsedDocumentData = {
-        name: 'Ramesh Patel',
-        age: 45,
-        gender: 'male',
-        state: 'Gujarat',
-        aadhaarLast4: '7823',
-        documentType: 'Aadhaar Card',
-        confidence: 88,
-        rawText: 'Government of India Unique Identification Authority of India',
+        name: '',
+        documentType: 'Identity Document',
+        confidence: 0,
+        rawText: '',
       };
       setExtractedData(fallback);
-      setName(fallback.name || '');
-      setAge(fallback.age || 45);
-      setGender(fallback.gender || 'male');
-      setState(fallback.state || 'Gujarat');
-      setAadhaarLast4(fallback.aadhaarLast4 || '7823');
+      setName('');
+      setAge('');
+      setGender('male');
+      setState('Uttar Pradesh');
+      setAadhaarLast4('');
+      setStatusText('Text recognition encountered an error. Please fill details manually below.');
     } finally {
       setIsProcessing(false);
       setProgress(100);
@@ -99,24 +95,24 @@ export function DocumentScannerModal({ isOpen, onClose, onConfirm }: DocumentSca
       ctx.fillRect(0, 372, 600, 8);
 
       // Card border
-      ctx.strokeStyle = '#2D4A22';
+      ctx.strokeStyle = '#166534';
       ctx.lineWidth = 4;
       ctx.strokeRect(4, 4, 592, 372);
 
       // Text Header
-      ctx.fillStyle = '#2D4A22';
+      ctx.fillStyle = '#166534';
       ctx.font = 'bold 20px sans-serif';
       ctx.fillText('Government of India - UIDAI', 150, 40);
       ctx.font = '14px sans-serif';
       ctx.fillText('Unique Identification Authority of India', 160, 60);
 
       // Photo placeholder
-      ctx.fillStyle = '#E2F1C1';
+      ctx.fillStyle = '#DCFCE7';
       ctx.fillRect(40, 90, 110, 140);
-      ctx.strokeStyle = '#2D4A22';
+      ctx.strokeStyle = '#166534';
       ctx.lineWidth = 2;
       ctx.strokeRect(40, 90, 110, 140);
-      ctx.fillStyle = '#2D4A22';
+      ctx.fillStyle = '#166534';
       ctx.font = '12px sans-serif';
       ctx.fillText('PHOTO', 75, 165);
 
@@ -166,7 +162,7 @@ export function DocumentScannerModal({ isOpen, onClose, onConfirm }: DocumentSca
       <div className="relative w-full max-w-xl organic-card overflow-hidden my-auto bg-card">
         
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b-2 border-foreground bg-[#F9FFF4]">
+        <div className="flex items-center justify-between p-6 border-b-2 border-foreground bg-secondary/40">
           <div className="flex items-center gap-2">
             <Scan className="w-6 h-6 text-foreground" />
             <h2 className="font-black font-serif text-xl text-foreground">AI Document Scanner (OCR)</h2>
@@ -234,7 +230,7 @@ export function DocumentScannerModal({ isOpen, onClose, onConfirm }: DocumentSca
                 
                 {isProcessing && (
                   <div className="absolute inset-0 bg-primary/10 backdrop-blur-[1px] flex flex-col items-center justify-center">
-                    <div className="w-full h-1 bg-primary absolute top-0 animate-pulse shadow-[0_0_8px_#9cd869]" />
+                    <div className="w-full h-1 bg-primary absolute top-0 animate-pulse shadow-[0_0_8px_#16a34a]" />
                     <Loader2 className="w-8 h-8 text-foreground animate-spin mb-2" />
                     <p className="text-xs font-black text-foreground bg-card/90 px-3 py-1 rounded-full border border-foreground shadow-sm">
                       {statusText} ({progress}%)
@@ -323,11 +319,18 @@ export function DocumentScannerModal({ isOpen, onClose, onConfirm }: DocumentSca
                 </div>
               </div>
 
-              {/* Aadhaar Last 4 */}
+              {/* Aadhaar Last 4 and Verhoeff Checksum Badge */}
               {aadhaarLast4 && (
-                <div className="flex items-center gap-2 p-2.5 rounded-lg bg-primary/10 border-2 border-foreground/30 text-xs font-mono font-bold text-foreground">
-                  <ShieldCheck className="w-4 h-4 text-primary shrink-0" />
-                  <span>Aadhaar Verified: XXXX-XXXX-{aadhaarLast4}</span>
+                <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 rounded-lg bg-primary/10 border-2 border-foreground/30 text-xs font-mono font-bold text-foreground">
+                  <div className="flex items-center gap-2">
+                    <ShieldCheck className="w-4 h-4 text-primary shrink-0" />
+                    <span>Aadhaar: XXXX-XXXX-{aadhaarLast4}</span>
+                  </div>
+                  {extractedData.isVerhoeffValid !== undefined && (
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-sans font-bold border ${extractedData.isVerhoeffValid ? 'bg-emerald-100 border-emerald-500 text-emerald-800' : 'bg-amber-100 border-amber-500 text-amber-800'}`}>
+                      {extractedData.isVerhoeffValid ? 'UIDAI Verhoeff: Valid ✓' : 'Checksum: Manual Verification'}
+                    </span>
+                  )}
                 </div>
               )}
 

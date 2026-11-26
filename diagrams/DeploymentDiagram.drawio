@@ -1,208 +1,75 @@
-<mxfile host="app.diagrams.net" pages="1">
+<mxfile host="app.diagrams.net" version="24.4.13" pages="1">
   <diagram id="deployment-diagram" name="Deployment Diagram">
     <mxGraphModel dx="1600" dy="1100" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1000" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
 
-        <!-- ==================== TITLE ==================== -->
-        <mxCell id="title" value="Deployment Diagram" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=22;fontStyle=1;fontFamily=Helvetica;" vertex="1" parent="1">
-          <mxGeometry x="500" y="15" width="280" height="40" as="geometry" />
+        <mxCell id="title" value="SchemeSaathi — Production Deployment Diagram" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontStyle=1;fontColor=#166534;" vertex="1" parent="1">
+          <mxGeometry x="430" y="15" width="520" height="36" as="geometry" />
         </mxCell>
 
-        <!-- ==================== INTERNET CLOUD ==================== -->
-        <mxCell id="cloud_internet" value="Internet" style="shape=cloud;whiteSpace=wrap;html=1;fillColor=#C0C0C0;strokeColor=#808080;fontSize=13;fontStyle=1;verticalAlign=middle;align=center;" vertex="1" parent="1">
-          <mxGeometry x="540" y="70" width="180" height="100" as="geometry" />
+        <mxCell id="cloud_internet" value="&lt;b&gt;HTTPS / Internet&lt;/b&gt;" style="shape=cloud;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#64748B;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="560" y="70" width="180" height="95" as="geometry" />
         </mxCell>
 
-        <!-- ==================== TOP ROW — CLIENT BROWSER ==================== -->
-        <mxCell id="node_client" value="«device»&lt;br&gt;&lt;b&gt;Client Browser&lt;/b&gt;&lt;br&gt;&lt;i&gt;(Chrome / Firefox / Safari)&lt;/i&gt;" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=10;fontSize=11;verticalAlign=middle;align=center;" vertex="1" parent="1">
-          <mxGeometry x="140" y="90" width="190" height="90" as="geometry" />
+        <!-- Client Browser PWA -->
+        <mxCell id="node_client" value="«device»&lt;br&gt;&lt;b&gt;Citizen / CSC Browser (PWA)&lt;/b&gt;&lt;hr&gt;&lt;i&gt;Service Worker (public/sw.js)&lt;br&gt;Tesseract.js WASM OCR + Verhoeff&lt;br&gt;Client DAG Evaluator + Scrutiny&lt;br&gt;localStorage Offline Queue&lt;/i&gt;" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=10;fontSize=11;fillColor=#DCFCE7;strokeColor=#166534;" vertex="1" parent="1">
+          <mxGeometry x="80" y="70" width="270" height="145" as="geometry" />
         </mxCell>
 
-        <!-- ==================== TOP ROW — EXTERNAL SERVICES ==================== -->
-        <mxCell id="node_groq" value="«cloud service»&lt;br&gt;&lt;b&gt;Groq LLM API&lt;/b&gt;&lt;br&gt;&lt;i&gt;(api.groq.com)&lt;/i&gt;" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=10;fontSize=11;verticalAlign=middle;align=center;" vertex="1" parent="1">
-          <mxGeometry x="950" y="70" width="180" height="80" as="geometry" />
+        <!-- External Cloud Services -->
+        <mxCell id="node_groq" value="«cloud service»&lt;br&gt;&lt;b&gt;Groq Inference Cloud&lt;/b&gt;&lt;br&gt;&lt;i&gt;api.groq.com (openai/gpt-oss-20b)&lt;/i&gt;" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=10;fontSize=11;fillColor=#EFF6FF;strokeColor=#1D4ED8;" vertex="1" parent="1">
+          <mxGeometry x="960" y="65" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="node_hf" value="«cloud service»&lt;br&gt;&lt;b&gt;Hugging Face Hub&lt;/b&gt;&lt;br&gt;&lt;i&gt;Xenova/all-MiniLM-L6-v2 (Quantized)&lt;/i&gt;" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=10;fontSize=11;fillColor=#EFF6FF;strokeColor=#1D4ED8;" vertex="1" parent="1">
+          <mxGeometry x="960" y="165" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="node_gov" value="«external sources»&lt;br&gt;&lt;b&gt;Govt Portals / Gazette&lt;/b&gt;&lt;br&gt;&lt;i&gt;myScheme · india.gov.in · data.gov.in&lt;/i&gt;" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=10;fontSize=11;fillColor=#F3E8FF;strokeColor=#6D28D9;" vertex="1" parent="1">
+          <mxGeometry x="960" y="265" width="240" height="80" as="geometry" />
         </mxCell>
 
-        <mxCell id="node_digilocker" value="«cloud service»&lt;br&gt;&lt;b&gt;DigiLocker API&lt;/b&gt;&lt;br&gt;&lt;i&gt;(Govt. Document Vault)&lt;/i&gt;" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=10;fontSize=11;verticalAlign=middle;align=center;" vertex="1" parent="1">
-          <mxGeometry x="950" y="180" width="190" height="80" as="geometry" />
+        <!-- App Host -->
+        <mxCell id="node_vercel" value="«executionEnvironment»&lt;br&gt;&lt;b&gt;Next.js 16.3.5 App Router — Node.js Runtime&lt;/b&gt;" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=10;fontSize=12;verticalAlign=top;spacingTop=8;fillColor=#E0F2FE;strokeColor=#0369A1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="250" width="540" height="80" as="geometry" />
         </mxCell>
 
-        <mxCell id="node_hf" value="«cloud service»&lt;br&gt;&lt;b&gt;Hugging Face Hub&lt;/b&gt;&lt;br&gt;&lt;i&gt;(Model Download)&lt;/i&gt;" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=10;fontSize=11;verticalAlign=middle;align=center;" vertex="1" parent="1">
-          <mxGeometry x="950" y="290" width="190" height="80" as="geometry" />
+        <!-- Internal Bus -->
+        <mxCell id="node_bus" value="«network»  Internal Server Modules &amp; Data Bus" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0369A1;fontSize=12;fontStyle=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="100" y="385" width="1100" height="36" as="geometry" />
         </mxCell>
 
-        <!-- Connection: Client → Internet -->
-        <mxCell id="conn_client_internet" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeWidth=2;strokeColor=#0000FF;" edge="1" parent="1" source="node_client" target="cloud_internet">
-          <mxGeometry relative="1" as="geometry" />
+        <!-- Server Artifacts -->
+        <mxCell id="node_api" value="«artifact»&lt;br&gt;&lt;b&gt;API Route Handlers&lt;/b&gt;&lt;hr&gt;&lt;i&gt;/api/chat · /api/schemes&lt;br&gt;/api/schemes/ingest&lt;br&gt;/api/ekyc/digilocker&lt;br&gt;/api/applications · /api/generate-pdf&lt;/i&gt;" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=10;fontSize=11;fillColor=#FFFFFF;strokeColor=#0369A1;" vertex="1" parent="1">
+          <mxGeometry x="90" y="475" width="230" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="node_rag_dag" value="«artifact»&lt;br&gt;&lt;b&gt;RAG &amp; Statutory DAG&lt;/b&gt;&lt;hr&gt;&lt;i&gt;rag/retriever.ts &amp; embeddings.ts&lt;br&gt;dag/rules.ts &amp; evaluator.ts&lt;br&gt;dag/counterfactual.ts&lt;br&gt;schemes/ingest.ts &amp; lifeEvents.ts&lt;/i&gt;" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=10;fontSize=11;fillColor=#FFFFFF;strokeColor=#0369A1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="475" width="240" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="node_pdf" value="«artifact»&lt;br&gt;&lt;b&gt;PDF &amp; eKYC Services&lt;/b&gt;&lt;hr&gt;&lt;i&gt;pdf/generator.ts (pdf-lib)&lt;br&gt;A4 Welfare Forms &amp; DBT Receipts&lt;br&gt;SHA-256 Attestation &amp; OTP Store&lt;/i&gt;" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=10;fontSize=11;fillColor=#FFFFFF;strokeColor=#0369A1;" vertex="1" parent="1">
+          <mxGeometry x="640" y="475" width="230" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="node_datastore" value="«dataStore»&lt;br&gt;&lt;b&gt;File-Backed JSON Registry&lt;/b&gt;&lt;hr&gt;&lt;i&gt;data/schemes/*.json (26+ Schemes)&lt;br&gt;data/applications.json (Tracking DB)&lt;br&gt;data/templates/ (PDF Assets)&lt;/i&gt;" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=10;fontSize=11;fillColor=#FEF9C3;strokeColor=#CA8A04;" vertex="1" parent="1">
+          <mxGeometry x="910" y="475" width="250" height="145" as="geometry" />
         </mxCell>
 
-        <!-- Connection: Groq → Internet -->
-        <mxCell id="conn_groq_internet" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeWidth=2;strokeColor=#0000FF;" edge="1" parent="1" source="node_groq" target="cloud_internet">
-          <mxGeometry relative="1" as="geometry" />
+        <!-- Frontend Routes Box -->
+        <mxCell id="node_routes" value="«artifact»  &lt;b&gt;Next.js App Pages (SSR + CSR)&lt;/b&gt; :  / (Home &amp; Life Events)  |  /chat (Split-Pane Co-Pilot)  |  /wizard (3-Step Match)  |  /matches  |  /categories  |  /dashboard  |  /track (5-Stage Tracker)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#166534;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="90" y="675" width="1070" height="55" as="geometry" />
         </mxCell>
 
-        <!-- Connection: DigiLocker → Internet -->
-        <mxCell id="conn_digi_internet" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeWidth=2;strokeColor=#0000FF;" edge="1" parent="1" source="node_digilocker" target="cloud_internet">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-
-        <!-- Connection: HF → Internet -->
-        <mxCell id="conn_hf_internet" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeWidth=2;strokeColor=#0000FF;" edge="1" parent="1" source="node_hf" target="cloud_internet">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-
-        <!-- ==================== VERCEL / APP HOST NODE ==================== -->
-        <mxCell id="node_vercel" value="«device»&lt;br&gt;&lt;b&gt;Vercel / Node.js Host&lt;/b&gt;" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=10;fontSize=12;fontStyle=0;verticalAlign=top;align=center;spacingTop=2;" vertex="1" parent="1">
-          <mxGeometry x="300" y="230" width="570" height="100" as="geometry" />
-        </mxCell>
-
-        <!-- Next.js Runtime inside Vercel -->
-        <mxCell id="node_nextjs" value="«executionEnvironment»&lt;br&gt;&lt;b&gt;Next.js 16 (App Router) — Node.js Runtime&lt;/b&gt;" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=8;fontSize=10;verticalAlign=middle;align=center;" vertex="1" parent="1">
-          <mxGeometry x="340" y="270" width="490" height="50" as="geometry" />
-        </mxCell>
-
-        <!-- Connection: Internet → Vercel host -->
-        <mxCell id="conn_internet_vercel" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeWidth=2;strokeColor=#0000FF;" edge="1" parent="1" source="cloud_internet" target="node_vercel">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-
-        <!-- ==================== NETWORK BAR ==================== -->
-        <mxCell id="node_network" value="«network»  internal application bus" style="shape=mxgraph.cisco.misc.apertus;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=11;fontStyle=1;verticalAlign=middle;align=center;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="140" y="395" width="900" height="40" as="geometry" />
-        </mxCell>
-
-        <!-- Simpler network bar as a flat rectangle -->
-        <mxCell id="node_network2" value="«network»  Internal Application Network" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=12;fontStyle=1;verticalAlign=middle;align=center;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="120" y="390" width="940" height="35" as="geometry" />
-        </mxCell>
-
-        <!-- Connection: Vercel → Network -->
-        <mxCell id="conn_vercel_network" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeWidth=2;strokeColor=#0000FF;" edge="1" parent="1" source="node_vercel" target="node_network2">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-
-        <!-- ==================== BOTTOM ROW — SERVER COMPONENTS (3D cubes) ==================== -->
-
-        <!-- API Server -->
-        <mxCell id="node_api_server" value="«processor»&lt;br&gt;&lt;b&gt;API Server&lt;/b&gt;&lt;br&gt;&lt;hr&gt;&lt;i&gt;/api/chat&lt;br&gt;/api/schemes&lt;br&gt;/api/generate-pdf&lt;/i&gt;" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=10;fontSize=11;verticalAlign=middle;align=center;" vertex="1" parent="1">
-          <mxGeometry x="100" y="490" width="180" height="130" as="geometry" />
-        </mxCell>
-
-        <!-- RAG Engine -->
-        <mxCell id="node_rag" value="«processor»&lt;br&gt;&lt;b&gt;RAG Engine&lt;/b&gt;&lt;br&gt;&lt;hr&gt;&lt;i&gt;retriever.ts&lt;br&gt;embeddings.ts&lt;br&gt;(Xenova/MiniLM-L6-v2)&lt;/i&gt;" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=10;fontSize=11;verticalAlign=middle;align=center;" vertex="1" parent="1">
-          <mxGeometry x="340" y="490" width="190" height="130" as="geometry" />
-        </mxCell>
-
-        <!-- PDF Service -->
-        <mxCell id="node_pdf" value="«processor»&lt;br&gt;&lt;b&gt;PDF Service&lt;/b&gt;&lt;br&gt;&lt;hr&gt;&lt;i&gt;pdf/generator.ts&lt;br&gt;(pdf-lib)&lt;/i&gt;" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=10;fontSize=11;verticalAlign=middle;align=center;" vertex="1" parent="1">
-          <mxGeometry x="590" y="490" width="170" height="130" as="geometry" />
-        </mxCell>
-
-        <!-- Data Store -->
-        <mxCell id="node_datastore" value="«dataStore»&lt;br&gt;&lt;b&gt;Scheme Data&lt;/b&gt;&lt;br&gt;&lt;hr&gt;&lt;i&gt;data/schemes/*.json&lt;br&gt;(6 JSON files)&lt;br&gt;data/templates/&lt;/i&gt;" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=10;fontSize=11;verticalAlign=middle;align=center;" vertex="1" parent="1">
-          <mxGeometry x="820" y="490" width="180" height="130" as="geometry" />
-        </mxCell>
-
-        <!-- Connections: Network → Bottom row nodes -->
-        <mxCell id="conn_net_api" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeWidth=2;strokeColor=#0000FF;" edge="1" parent="1" source="node_network2" target="node_api_server">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-
-        <mxCell id="conn_net_rag" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeWidth=2;strokeColor=#0000FF;" edge="1" parent="1" source="node_network2" target="node_rag">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-
-        <mxCell id="conn_net_pdf" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeWidth=2;strokeColor=#0000FF;" edge="1" parent="1" source="node_network2" target="node_pdf">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-
-        <mxCell id="conn_net_data" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeWidth=2;strokeColor=#0000FF;" edge="1" parent="1" source="node_network2" target="node_datastore">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-
-        <!-- ==================== BOTTOM ROW — FRONTEND PAGES (3D cube) ==================== -->
-        <mxCell id="node_frontend" value="«processor»&lt;br&gt;&lt;b&gt;Frontend (SSR + CSR)&lt;/b&gt;&lt;br&gt;&lt;hr&gt;&lt;i&gt;page.tsx (Home)&lt;br&gt;chat/page.tsx&lt;br&gt;wizard/page.tsx&lt;br&gt;dashboard/page.tsx&lt;br&gt;matches/page.tsx&lt;/i&gt;" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=10;fontSize=11;verticalAlign=middle;align=center;" vertex="1" parent="1">
-          <mxGeometry x="100" y="680" width="180" height="160" as="geometry" />
-        </mxCell>
-
-        <!-- UI Components -->
-        <mxCell id="node_components" value="«processor»&lt;br&gt;&lt;b&gt;UI Components&lt;/b&gt;&lt;br&gt;&lt;hr&gt;&lt;i&gt;SchemeCard.tsx&lt;br&gt;ChatInput.tsx&lt;br&gt;ChatMessage.tsx&lt;br&gt;DigiLockerModal.tsx&lt;br&gt;ActionPlanModal.tsx&lt;/i&gt;" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=10;fontSize=11;verticalAlign=middle;align=center;" vertex="1" parent="1">
-          <mxGeometry x="340" y="680" width="190" height="160" as="geometry" />
-        </mxCell>
-
-        <!-- Chat Service (prompts + profile) -->
-        <mxCell id="node_chat_service" value="«processor»&lt;br&gt;&lt;b&gt;Chat Service&lt;/b&gt;&lt;br&gt;&lt;hr&gt;&lt;i&gt;chat/prompts.ts&lt;br&gt;chat/profile.ts&lt;br&gt;(System + Extraction)&lt;/i&gt;" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=10;fontSize=11;verticalAlign=middle;align=center;" vertex="1" parent="1">
-          <mxGeometry x="590" y="680" width="180" height="150" as="geometry" />
-        </mxCell>
-
-        <!-- Scheme Loader -->
-        <mxCell id="node_loader" value="«processor»&lt;br&gt;&lt;b&gt;Scheme Loader&lt;/b&gt;&lt;br&gt;&lt;hr&gt;&lt;i&gt;schemes/loader.ts&lt;br&gt;(JSON → Scheme[])&lt;/i&gt;" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=10;fontSize=11;verticalAlign=middle;align=center;" vertex="1" parent="1">
-          <mxGeometry x="830" y="690" width="170" height="120" as="geometry" />
-        </mxCell>
-
-        <!-- Connection: API → Frontend -->
-        <mxCell id="conn_api_frontend" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeWidth=2;strokeColor=#0000FF;" edge="1" parent="1" source="node_api_server" target="node_frontend">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-
-        <!-- Connection: API → Components -->
-        <mxCell id="conn_api_components" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeWidth=2;strokeColor=#0000FF;" edge="1" parent="1" source="node_api_server" target="node_components">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-
-        <!-- Connection: RAG → Chat Service -->
-        <mxCell id="conn_rag_chat" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeWidth=2;strokeColor=#0000FF;" edge="1" parent="1" source="node_rag" target="node_chat_service">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-
-        <!-- Connection: Data → Loader -->
-        <mxCell id="conn_data_loader" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeWidth=2;strokeColor=#0000FF;" edge="1" parent="1" source="node_datastore" target="node_loader">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-
-        <!-- ==================== ANNOTATION LABELS (red, like the reference) ==================== -->
-
-        <!-- "connection" label -->
-        <mxCell id="label_connection" value="&lt;font color=&quot;#FF0000&quot;&gt;&lt;b&gt;connection&lt;/b&gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=11;" vertex="1" parent="1">
-          <mxGeometry x="370" y="115" width="80" height="30" as="geometry" />
-        </mxCell>
-
-        <!-- Arrow from "connection" label to the conn line -->
-        <mxCell id="label_conn_arrow" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=open;endFill=0;strokeWidth=1;strokeColor=#FF0000;curved=1;dashed=0;" edge="1" parent="1" source="label_connection" target="conn_client_internet">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-
-        <!-- "node" label near Groq -->
-        <mxCell id="label_node1" value="&lt;font color=&quot;#FF0000&quot;&gt;&lt;b&gt;node&lt;/b&gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=11;" vertex="1" parent="1">
-          <mxGeometry x="1150" y="90" width="50" height="30" as="geometry" />
-        </mxCell>
-
-        <!-- Arrow from "node" label to Groq cube -->
-        <mxCell id="label_node1_arrow" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=open;endFill=0;strokeWidth=1;strokeColor=#FF0000;curved=1;" edge="1" parent="1" source="label_node1" target="node_groq">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-
-        <!-- "A piece of hardware" label -->
-        <mxCell id="label_hardware" value="&lt;font color=&quot;#FF0000&quot;&gt;&lt;b&gt;A piece of&lt;br&gt;hardware&lt;/b&gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=11;" vertex="1" parent="1">
-          <mxGeometry x="1060" y="500" width="80" height="50" as="geometry" />
-        </mxCell>
-
-        <!-- Arrow from "hardware" label to a bottom node -->
-        <mxCell id="label_hw_arrow" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=open;endFill=0;strokeWidth=1;strokeColor=#FF0000;curved=1;" edge="1" parent="1" source="label_hardware" target="node_datastore">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-
-        <!-- "node" label near bottom -->
-        <mxCell id="label_node2" value="&lt;font color=&quot;#FF0000&quot;&gt;&lt;b&gt;node&lt;/b&gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=11;" vertex="1" parent="1">
-          <mxGeometry x="1080" y="560" width="50" height="30" as="geometry" />
-        </mxCell>
-
-        <mxCell id="label_node2_arrow" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=open;endFill=0;strokeWidth=1;strokeColor=#FF0000;curved=1;" edge="1" parent="1" source="label_node2" target="node_loader">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-
+        <!-- Connections -->
+        <mxCell id="c1" edge="1" parent="1" source="node_client" target="cloud_internet" style="endArrow=none;strokeWidth=2;strokeColor=#166534;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="c2" edge="1" parent="1" source="cloud_internet" target="node_groq" style="endArrow=none;strokeWidth=2;strokeColor=#1D4ED8;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="c3" edge="1" parent="1" source="cloud_internet" target="node_hf" style="endArrow=none;strokeWidth=2;strokeColor=#1D4ED8;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="c4" edge="1" parent="1" source="cloud_internet" target="node_gov" style="endArrow=none;strokeWidth=2;strokeColor=#6D28D9;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="c5" edge="1" parent="1" source="cloud_internet" target="node_vercel" style="endArrow=none;strokeWidth=2;strokeColor=#0369A1;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="c6" edge="1" parent="1" source="node_vercel" target="node_bus" style="endArrow=none;strokeWidth=2;strokeColor=#0369A1;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="c7" edge="1" parent="1" source="node_bus" target="node_api" style="endArrow=none;strokeWidth=2;strokeColor=#0369A1;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="c8" edge="1" parent="1" source="node_bus" target="node_rag_dag" style="endArrow=none;strokeWidth=2;strokeColor=#0369A1;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="c9" edge="1" parent="1" source="node_bus" target="node_pdf" style="endArrow=none;strokeWidth=2;strokeColor=#0369A1;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="c10" edge="1" parent="1" source="node_bus" target="node_datastore" style="endArrow=none;strokeWidth=2;strokeColor=#CA8A04;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="c11" edge="1" parent="1" source="node_api" target="node_routes" style="endArrow=none;strokeWidth=2;strokeColor=#166534;"><mxGeometry relative="1" as="geometry" /></mxCell>
       </root>
     </mxGraphModel>
   </diagram>

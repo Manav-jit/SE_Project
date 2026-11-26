@@ -136,7 +136,7 @@ export default function DashboardClient({ schemes }: { schemes: Scheme[] }) {
 
       {activeTab === 'saved' ? (
         savedSchemes.length === 0 ? (
-          <div className="organic-card p-12 flex flex-col items-center justify-center text-center animate-fade-in relative z-10 bg-[#F9FFF4]">
+          <div className="organic-card p-12 flex flex-col items-center justify-center text-center animate-fade-in relative z-10 bg-card">
             <div className="w-20 h-20 bg-primary/20 rounded-full border-2 border-foreground flex items-center justify-center mb-6 shadow-[2px_2px_0px_0px_var(--foreground)]">
               <Bookmark className="w-10 h-10 text-foreground" />
             </div>
@@ -171,7 +171,7 @@ export default function DashboardClient({ schemes }: { schemes: Scheme[] }) {
         /* Applications Tab */
         <div className="space-y-4 animate-fade-in relative z-10">
           {applications.length === 0 ? (
-            <div className="organic-card p-12 flex flex-col items-center justify-center text-center bg-[#F9FFF4]">
+            <div className="organic-card p-12 flex flex-col items-center justify-center text-center bg-card">
               <FileCheck className="w-12 h-12 text-muted-foreground mb-4" />
               <h2 className="text-xl font-black font-serif mb-2">No Applications Submitted Yet</h2>
               <p className="text-xs font-bold text-muted-foreground max-w-sm mb-6">

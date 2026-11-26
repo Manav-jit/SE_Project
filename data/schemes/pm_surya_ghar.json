@@ -1,0 +1,31 @@
+{
+  "id": "pm_surya_ghar",
+  "name": "PM Surya Ghar: Muft Bijli Yojana",
+  "ministry": "Ministry of New and Renewable Energy",
+  "category": "energy",
+  "eligibility": {
+    "age_min": 18,
+    "age_max": 90,
+    "gender": "all",
+    "occupations": ["farmer", "laborer", "self-employed", "homemaker", "retired", "private sector", "government employee", "other"],
+    "income_max": 1500000,
+    "citizenship": "Indian",
+    "other_conditions": "Must own a residential house with suitable rooftop space and an active domestic electricity connection."
+  },
+  "benefits": "Direct Central Financial Assistance (CFA) subsidy of up to Rs. 78,000 for installing rooftop solar systems, providing up to 300 units of free green electricity every month.",
+  "documents_required": [
+    "Aadhaar Card",
+    "Recent Electricity Bill",
+    "Bank Account Details (linked to Aadhaar for DBT)",
+    "Rooftop Ownership Document"
+  ],
+  "application_process": [
+    "Register on National Portal for Rooftop Solar (pmsuryaghar.gov.in) with electricity consumer number.",
+    "Apply for rooftop solar plant and choose a registered DISCOM vendor.",
+    "Commission system, complete net-metering inspection, and receive DBT subsidy in bank account."
+  ],
+  "submission_url": "https://pmsuryaghar.gov.in/",
+  "annual_benefit_amount": 78000,
+  "statutory_citation": "MNRE Notification No. 318/17/2024-GCRT (National Solar Mission Directive)",
+  "benefit_type": "Capital Subsidy & Recurring Power Savings"
+}

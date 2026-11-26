@@ -5,10 +5,67 @@ export interface ParsedDocumentData {
   age?: number;
   gender?: string;
   state?: string;
+  pincode?: string;
+  aadhaarNumber?: string;
   aadhaarLast4?: string;
-  documentType: 'Aadhaar Card' | 'Ration Card' | 'Voter ID' | 'Income Certificate' | 'Identity Document';
+  isVerhoeffValid?: boolean;
+  documentType: 'Aadhaar Card' | 'Ration Card' | 'Voter ID' | 'Income Certificate' | 'PAN Card' | 'Identity Document';
   confidence: number;
   rawText: string;
+}
+
+// Official Verhoeff multiplication, permutation, and inverse tables
+const VERHOEFF_D: number[][] = [
+  [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+  [1, 2, 3, 4, 0, 6, 7, 8, 9, 5],
+  [2, 3, 4, 0, 1, 7, 8, 9, 5, 6],
+  [3, 4, 0, 1, 2, 8, 9, 5, 6, 7],
+  [4, 0, 1, 2, 3, 9, 5, 6, 7, 8],
+  [5, 9, 8, 7, 6, 0, 4, 3, 2, 1],
+  [6, 5, 9, 8, 7, 1, 0, 4, 3, 2],
+  [7, 6, 5, 9, 8, 2, 1, 0, 4, 3],
+  [8, 7, 6, 5, 9, 3, 2, 1, 0, 4],
+  [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+];
+
+const VERHOEFF_P: number[][] = [
+  [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+  [1, 5, 7, 6, 2, 8, 3, 0, 9, 4],
+  [5, 8, 0, 3, 7, 9, 6, 1, 4, 2],
+  [8, 9, 1, 6, 0, 4, 3, 5, 2, 7],
+  [9, 4, 5, 3, 1, 2, 6, 8, 7, 0],
+  [4, 2, 8, 6, 5, 7, 3, 9, 0, 1],
+  [2, 7, 9, 3, 8, 0, 6, 4, 1, 5],
+  [7, 0, 4, 6, 9, 1, 3, 2, 5, 8]
+];
+
+const VERHOEFF_INV: number[] = [0, 4, 3, 2, 1, 5, 6, 7, 8, 9];
+
+/**
+ * Validates a number string using the Verhoeff checksum algorithm (used by UIDAI Aadhaar)
+ */
+export function validateVerhoeff(numStr: string): boolean {
+  const clean = numStr.replace(/\s+/g, '');
+  if (!/^\d+$/.test(clean) || clean.length < 2) return false;
+  let c = 0;
+  const invertedArray = clean.split('').map(Number).reverse();
+  for (let i = 0; i < invertedArray.length; i++) {
+    c = VERHOEFF_D[c][VERHOEFF_P[i % 8][invertedArray[i]]];
+  }
+  return c === 0;
+}
+
+/**
+ * Generates the Verhoeff check digit for an 11-digit base number to form a valid 12-digit Aadhaar
+ */
+export function generateVerhoeffCheckDigit(numStr: string): string {
+  const clean = numStr.replace(/\s+/g, '');
+  let c = 0;
+  const invertedArray = clean.split('').map(Number).reverse();
+  for (let i = 0; i < invertedArray.length; i++) {
+    c = VERHOEFF_D[c][VERHOEFF_P[(i + 1) % 8][invertedArray[i]]];
+  }
+  return VERHOEFF_INV[c].toString();
 }
 
 const INDIAN_STATES = [
@@ -18,56 +75,88 @@ const INDIAN_STATES = [
   "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal", "Delhi", "Jammu and Kashmir", "Ladakh"
 ];
 
-export async function parseDocumentImage(
-  imageSource: string | File | Blob,
-  onProgress?: (progress: number, status: string) => void
-): Promise<ParsedDocumentData> {
-  onProgress?.(10, 'Initializing OCR engine...');
-
-  let rawText = '';
-  let confidence = 85;
-
-  try {
-    const worker = await createWorker('eng');
-    onProgress?.(40, 'Scanning document image...');
-    
-    const ret = await worker.recognize(imageSource);
-    rawText = ret.data.text || '';
-    confidence = Math.round(ret.data.confidence || 85);
-    await worker.terminate();
-  } catch (err) {
-    console.warn('Tesseract recognition fallback:', err);
-    // Graceful fallback for environments where WebAssembly or worker fails
-    rawText = typeof imageSource === 'string' ? imageSource : '';
+/**
+ * Pre-processes an image via HTML5 Canvas (grayscale + contrast stretch) for superior OCR accuracy
+ */
+export async function preprocessImageForOcr(imageSource: string | File | Blob): Promise<string | File | Blob> {
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    return imageSource;
   }
 
-  onProgress?.(80, 'Extracting demographic fields...');
+  try {
+    const img = new Image();
+    const url = typeof imageSource === 'string' ? imageSource : URL.createObjectURL(imageSource);
+    
+    await new Promise((resolve, reject) => {
+      img.onload = resolve;
+      img.onerror = reject;
+      img.src = url;
+    });
 
+    const canvas = document.createElement('canvas');
+    canvas.width = img.width;
+    canvas.height = img.height;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return imageSource;
+
+    ctx.drawImage(img, 0, 0);
+    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const d = imgData.data;
+
+    // Grayscale and simple contrast enhancement
+    for (let i = 0; i < d.length; i += 4) {
+      const avg = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+      // Contrast stretch
+      const adjusted = avg > 128 ? Math.min(255, avg * 1.15) : Math.max(0, avg * 0.85);
+      d[i] = adjusted;
+      d[i + 1] = adjusted;
+      d[i + 2] = adjusted;
+    }
+
+    ctx.putImageData(imgData, 0, 0);
+    return canvas.toDataURL('image/png');
+  } catch {
+    return imageSource;
+  }
+}
+
+/**
+ * Parses raw text extracted from an Indian Identity Document into structured demographic fields
+ */
+export function parseDocumentText(rawText: string, confidence: number = 85): ParsedDocumentData {
   const normalized = rawText.replace(/\r/g, '\n');
   const lines = normalized.split('\n').map(l => l.trim()).filter(Boolean);
 
+  // 1. Determine Document Type
   let docType: ParsedDocumentData['documentType'] = 'Identity Document';
-  if (/aadhaar|uidai|unique identification/i.test(rawText)) {
+  if (/aadhaar|uidai|unique identification|मेरा आधार|पहचान/i.test(rawText)) {
     docType = 'Aadhaar Card';
-  } else if (/ration|food security|pds/i.test(rawText)) {
+  } else if (/ration|food security|pds|खाद्य|राशन कार्ड/i.test(rawText)) {
     docType = 'Ration Card';
-  } else if (/election commission|voter|epic/i.test(rawText)) {
+  } else if (/election commission|voter|epic|निर्वाचन आयोग|मतदाता/i.test(rawText)) {
     docType = 'Voter ID';
-  } else if (/income certificate|tahsildar|revenue/i.test(rawText)) {
+  } else if (/income certificate|tahsildar|revenue|आय प्रमाण पत्र/i.test(rawText)) {
     docType = 'Income Certificate';
+  } else if (/income tax department|permanent account number|pan card/i.test(rawText)) {
+    docType = 'PAN Card';
   }
 
-  // 1. Extract Aadhaar number (12 digits)
+  // 2. Extract Aadhaar number (12 digits) & validate Verhoeff
+  let aadhaarNumber: string | undefined;
   let aadhaarLast4: string | undefined;
-  const aadhaarMatch = rawText.match(/\b\d{4}\s\d{4}\s(\d{4})\b/) || rawText.match(/\b\d{12}\b/);
+  let isVerhoeffValid: boolean | undefined;
+
+  const aadhaarMatch = rawText.match(/\b\d{4}\s\d{4}\s\d{4}\b/) || rawText.match(/\b\d{12}\b/);
   if (aadhaarMatch) {
     const full = aadhaarMatch[0].replace(/\s/g, '');
+    aadhaarNumber = full;
     aadhaarLast4 = full.slice(-4);
+    isVerhoeffValid = validateVerhoeff(full);
   }
 
-  // 2. Extract Gender
+  // 3. Extract Gender
   let gender: string | undefined;
-  if (/\b(?:female|महिला)\b/i.test(rawText)) {
+  if (/\b(?:female|महिला|स्त्री)\b/i.test(rawText)) {
     gender = 'female';
   } else if (/\b(?:male|पुरुष)\b/i.test(rawText)) {
     gender = 'male';
@@ -75,10 +164,11 @@ export async function parseDocumentImage(
     gender = 'other';
   }
 
-  // 3. Extract DOB / Year of Birth and Age
+  // 4. Extract DOB / Year of Birth and Age
   let age: number | undefined;
-  const dobMatch = rawText.match(/(?:DOB|D\.O\.B|Date of Birth|Year of Birth|जन्म तिथि|जन्म वर्ष)[:\s]*([0-9]{2}[/-][0-9]{2}[/-][0-9]{4}|[0-9]{4})/i);
   const currentYear = new Date().getFullYear();
+  const dobMatch = rawText.match(/(?:DOB|D\.O\.B|Date of Birth|Year of Birth|जन्म तिथि|जन्म वर्ष)[:\s]*([0-9]{2}[/-][0-9]{2}[/-][0-9]{4}|[0-9]{4})/i)
+    || rawText.match(/\b([0-9]{2}[/-][0-9]{2}[/-][12][90][0-9]{2})\b/);
 
   if (dobMatch && dobMatch[1]) {
     const dateStr = dobMatch[1];
@@ -96,7 +186,7 @@ export async function parseDocumentImage(
     }
   }
 
-  // 4. Extract State
+  // 5. Extract State
   let state: string | undefined;
   for (const s of INDIAN_STATES) {
     if (new RegExp(`\\b${s}\\b`, 'i').test(rawText)) {
@@ -105,35 +195,88 @@ export async function parseDocumentImage(
     }
   }
 
-  // 5. Extract Candidate Name (look for lines with 2-3 capitalized words before DOB or after "To / श्री")
+  // 6. Extract PIN Code (6 digits starting with 1-9)
+  let pincode: string | undefined;
+  const pinMatch = rawText.match(/\b([1-9][0-9]{5})\b/);
+  if (pinMatch) {
+    pincode = pinMatch[1];
+  }
+
+  // 7. Extract Name with heuristic filters
   let name: string | undefined;
+  const ignoredWordsRegex = /government|india|uidai|father|address|help|www|enrollment|enrolment|download|unique|authority|identification|card|republic|state|department|commission|aadhaar|pehchan|mera|meri/i;
+
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    // Filter out common header words
-    if (/government|india|uidai|father|address|help|www|enrollment|download/i.test(line)) continue;
+    const line = lines[i].replace(/[^\w\s]/g, '').trim();
+    if (ignoredWordsRegex.test(line)) continue;
     
-    // Check if line looks like an Indian full name (2 to 4 words of alphabets only)
+    // Look for capitalized name formats (2 to 4 words of English letters)
     if (/^[A-Z][a-z]+(\s[A-Z][a-z]+){1,3}$/.test(line)) {
       name = line;
       break;
     }
   }
 
-  // Fallback defaults if scanning partial sample document
-  if (!name && (docType === 'Aadhaar Card' || rawText.length > 0)) {
-    name = lines.find(l => /^[a-zA-Z\s]{3,30}$/.test(l) && !/india|government|card|male|female|dob/i.test(l));
+  // Secondary name extraction if primary regex missed
+  if (!name) {
+    for (const line of lines) {
+      if (ignoredWordsRegex.test(line)) continue;
+      if (/^[a-zA-Z\s]{4,35}$/.test(line) && !/male|female|dob|year|birth|pincode|number/i.test(line)) {
+        const words = line.split(/\s+/).filter(Boolean);
+        if (words.length >= 2 && words.length <= 4) {
+          name = words.map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+          break;
+        }
+      }
+    }
   }
-
-  onProgress?.(100, 'Verification complete!');
 
   return {
     name: name || undefined,
     age: age || undefined,
     gender: gender || undefined,
     state: state || undefined,
+    pincode: pincode || undefined,
+    aadhaarNumber: aadhaarNumber || undefined,
     aadhaarLast4: aadhaarLast4 || undefined,
+    isVerhoeffValid: isVerhoeffValid ?? false,
     documentType: docType,
-    confidence: Math.max(confidence, 75),
+    confidence: Math.round(confidence),
     rawText,
   };
+}
+
+/**
+ * End-to-end OCR processing with Tesseract.js and pre-processing
+ */
+export async function parseDocumentImage(
+  imageSource: string | File | Blob,
+  onProgress?: (progress: number, status: string) => void
+): Promise<ParsedDocumentData> {
+  onProgress?.(10, 'Initializing OCR engine...');
+
+  let rawText = '';
+  let confidence = 85;
+
+  try {
+    const processedSource = await preprocessImageForOcr(imageSource);
+    onProgress?.(25, 'Loading Tesseract models...');
+    
+    const worker = await createWorker('eng');
+    onProgress?.(50, 'Scanning document image...');
+    
+    const ret = await worker.recognize(processedSource);
+    rawText = ret.data.text || '';
+    confidence = Math.round(ret.data.confidence || 85);
+    await worker.terminate();
+  } catch (err) {
+    console.warn('Tesseract recognition fallback:', err);
+    rawText = typeof imageSource === 'string' ? imageSource : '';
+  }
+
+  onProgress?.(85, 'Extracting demographic fields...');
+  const result = parseDocumentText(rawText, confidence);
+  onProgress?.(100, 'Verification complete!');
+
+  return result;
 }

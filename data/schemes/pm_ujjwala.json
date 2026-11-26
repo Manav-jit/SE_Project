@@ -1,0 +1,31 @@
+{
+  "id": "pm_ujjwala",
+  "name": "Pradhan Mantri Ujjwala Yojana 2.0 (PMUY)",
+  "ministry": "Ministry of Petroleum and Natural Gas",
+  "category": "women",
+  "eligibility": {
+    "age_min": 18,
+    "age_max": 90,
+    "gender": "female",
+    "income_max": 250000,
+    "occupations": ["homemaker", "laborer", "farmer", "self-employed", "other"],
+    "citizenship": "Indian",
+    "other_conditions": "Must be an adult woman belonging to a BPL, SC/ST, PMAY, or poor household. No existing LPG connection in the family."
+  },
+  "benefits": "Free LPG gas connection with deposit-free cylinder, pressure regulator, and safety hose. First refill and stove provided free of cost, plus ongoing targeted subsidy of Rs. 300 per cylinder for up to 12 refills/year.",
+  "documents_required": [
+    "Aadhaar Card of adult female applicant",
+    "Ration Card or BPL Certificate showing family composition",
+    "Bank Account Passbook (Aadhaar Seeded)",
+    "Declaration of no existing LPG connection"
+  ],
+  "application_process": [
+    "Submit simplified KYC form online or at nearest LPG distributor (Indane, BharatGas, HP Gas).",
+    "Distributor validates family deduplication across national OMC database.",
+    "Issue of gas connection voucher and delivery of cylinder."
+  ],
+  "submission_url": "https://pmuy.gov.in/",
+  "annual_benefit_amount": 3600,
+  "statutory_citation": "MoPNG Order P-20019/18/2021-LPG (Ujjwala 2.0 Guidelines)",
+  "benefit_type": "Connection Kit & Clean Fuel Subsidy"
+}

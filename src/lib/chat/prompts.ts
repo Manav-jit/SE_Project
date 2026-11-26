@@ -22,11 +22,12 @@ Extract the user's demographic and financial information from the conversation a
 {
   "name": "string (optional)",
   "age": "number (optional)",
-  "gender": "string (optional)",
+  "gender": "string (optional: male, female, other)",
   "occupation": "string (optional)",
-  "income": "number (annual, optional)",
-  "state": "string (optional)",
-  "caste": "string (optional)"
+  "income": "number (annual in rupees, optional)",
+  "landHoldingHectares": "number (cultivable land in hectares, optional)",
+  "state": "string (Indian state, optional)",
+  "caste": "string (General, OBC, SC, ST, optional)"
 }
 
 Conversation:

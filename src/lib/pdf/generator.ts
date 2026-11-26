@@ -2,9 +2,18 @@ import { PDFDocument, StandardFonts, rgb, PDFFont } from 'pdf-lib';
 import { loadSchemes } from '../schemes/loader';
 import { UserProfile } from '../chat/profile';
 
+// Helper to clean non-WinAnsi characters (such as ₹ symbol) to avoid PDF encoding crashes
+function cleanPdfText(text: string): string {
+  if (!text) return '';
+  return text
+    .replace(/₹/g, 'Rs. ')
+    .replace(/[^\x20-\x7E\n]/g, ' ')
+    .trim();
+}
+
 // Helper to wrap text into multiple lines given a max width and font size
 function wrapText(text: string, maxWidth: number, font: PDFFont, fontSize: number): string[] {
-  const words = text.split(' ');
+  const words = cleanPdfText(text).split(' ');
   const lines: string[] = [];
   let currentLine = '';
 
@@ -41,14 +50,14 @@ export async function generateFilledForm(profile: UserProfile, schemeId: string)
   const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
   const fontRegular = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
-  // Palette: Dark green theme matching SchemeSaathi
-  const darkGreen = rgb(0.18, 0.29, 0.13); // #2D4A22
-  const limeGreen = rgb(0.61, 0.85, 0.41); // #9CD869
-  const lightBg = rgb(0.96, 0.98, 0.94);   // #F4F8F0
-  const borderGray = rgb(0.75, 0.8, 0.73);
-  const darkGray = rgb(0.3, 0.35, 0.3);
+  // Palette: Sovereign Emerald theme matching SchemeSaathi DPI
+  const darkGreen = rgb(0.09, 0.4, 0.2);   // #166534 Sovereign Emerald
+  const mintBg = rgb(0.86, 0.99, 0.91);     // #DCFCE7 Soft Mint Badge
+  const lightBg = rgb(0.97, 0.98, 0.99);   // #F8FAFC Clean Slate
+  const borderGray = rgb(0.8, 0.85, 0.82);
+  const darkGray = rgb(0.18, 0.24, 0.2);
   const white = rgb(1, 1, 1);
-  const verifiedGreen = rgb(0.13, 0.6, 0.2);
+  const verifiedGreen = rgb(0.09, 0.4, 0.2);
 
   const margin = 40;
   const contentWidth = 595.28 - (margin * 2);
@@ -117,7 +126,7 @@ export async function generateFilledForm(profile: UserProfile, schemeId: string)
     y: y - 2,
     width: catWidth + 16,
     height: 18,
-    color: limeGreen,
+    color: mintBg,
     borderColor: darkGreen,
     borderWidth: 1,
   });
@@ -389,6 +398,301 @@ export async function generateFilledForm(profile: UserProfile, schemeId: string)
   });
   page.drawText("Page 1 of 1", {
     x: margin + contentWidth - 45,
+    y: 24,
+    size: 7.5,
+    font: fontRegular,
+    color: darkGray,
+  });
+
+  return await pdfDoc.save();
+}
+
+import { ApplicationRecord } from '../storage/applications';
+
+export async function generateAcknowledgementReceipt(application: ApplicationRecord): Promise<Uint8Array> {
+  const pdfDoc = await PDFDocument.create();
+  const page = pdfDoc.addPage([595.28, 841.89]); // A4 Size
+  const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+  const fontRegular = await pdfDoc.embedFont(StandardFonts.Helvetica);
+
+  const darkGreen = rgb(0.09, 0.4, 0.2);   // #166534 Sovereign Emerald
+  const softGreen = rgb(0.86, 0.99, 0.91);  // #DCFCE7 Mint
+  const slateBg = rgb(0.97, 0.98, 0.99);    // #F8FAFC Clean Slate
+  const borderGray = rgb(0.8, 0.85, 0.82);
+  const darkGray = rgb(0.18, 0.24, 0.2);
+  const white = rgb(1, 1, 1);
+
+  const margin = 40;
+  const contentWidth = 595.28 - (margin * 2);
+  let y = 805;
+
+  // 1. Top Decorative Bar
+  page.drawRectangle({
+    x: margin,
+    y: y,
+    width: contentWidth,
+    height: 8,
+    color: darkGreen,
+  });
+  y -= 25;
+
+  // 2. Official Header
+  page.drawText("GOVERNMENT OF INDIA • CITIZEN WELFARE REGISTRY", {
+    x: margin,
+    y,
+    size: 9,
+    font: fontBold,
+    color: darkGray,
+  });
+
+  const printDate = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+  const dateText = `Issued: ${printDate}`;
+  const dateWidth = fontRegular.widthOfTextAtSize(dateText, 9);
+  page.drawText(dateText, {
+    x: margin + contentWidth - dateWidth,
+    y,
+    size: 9,
+    font: fontRegular,
+    color: darkGray,
+  });
+  y -= 28;
+
+  // Title: Official Acknowledgement Receipt
+  page.drawText("OFFICIAL APPLICATION SUBMISSION RECEIPT", {
+    x: margin,
+    y,
+    size: 16,
+    font: fontBold,
+    color: darkGreen,
+  });
+  y -= 14;
+  page.drawText("Direct Benefit Transfer (DBT) National Tracking Registry Acknowledgement Slip", {
+    x: margin,
+    y,
+    size: 9,
+    font: fontRegular,
+    color: darkGray,
+  });
+  y -= 25;
+
+  // 3. Application Summary Banner
+  page.drawRectangle({
+    x: margin,
+    y: y - 50,
+    width: contentWidth,
+    height: 50,
+    color: softGreen,
+    borderColor: darkGreen,
+    borderWidth: 1.5,
+  });
+
+  page.drawText("REFERENCE ID:", { x: margin + 14, y: y - 18, size: 8, font: fontBold, color: darkGreen });
+  page.drawText(application.id, { x: margin + 14, y: y - 36, size: 14, font: fontBold, color: darkGreen });
+
+  page.drawText("CURRENT STATUS:", { x: margin + 200, y: y - 18, size: 8, font: fontBold, color: darkGreen });
+  page.drawText(application.status, { x: margin + 200, y: y - 34, size: 12, font: fontBold, color: darkGreen });
+
+  page.drawText("SUBMISSION MODE:", { x: margin + 350, y: y - 18, size: 8, font: fontBold, color: darkGreen });
+  page.drawText(application.submissionMode, { x: margin + 350, y: y - 34, size: 11, font: fontBold, color: darkGray });
+
+  y -= 70;
+
+  // 4. Scheme & Beneficiary Particulars Table
+  page.drawRectangle({
+    x: margin,
+    y: y - 140,
+    width: contentWidth,
+    height: 140,
+    color: slateBg,
+    borderColor: borderGray,
+    borderWidth: 1,
+  });
+
+  // Table Header
+  page.drawRectangle({
+    x: margin,
+    y: y - 24,
+    width: contentWidth,
+    height: 24,
+    color: darkGreen,
+  });
+  page.drawText("BENEFICIARY & SCHEME PARTICULARS", {
+    x: margin + 12,
+    y: y - 16,
+    size: 9,
+    font: fontBold,
+    color: white,
+  });
+
+  const rowY1 = y - 46;
+  page.drawText("Scheme Name:", { x: margin + 14, y: rowY1, size: 8.5, font: fontBold, color: darkGray });
+  const schemeNameLines = wrapText(application.schemeName, 340, fontRegular, 8.5);
+  page.drawText(schemeNameLines[0] || application.schemeName, { x: margin + 120, y: rowY1, size: 8.5, font: fontRegular, color: darkGreen });
+
+  const rowY2 = y - 68;
+  page.drawText("Applicant Name:", { x: margin + 14, y: rowY2, size: 8.5, font: fontBold, color: darkGray });
+  page.drawText(cleanPdfText(application.applicantName), { x: margin + 120, y: rowY2, size: 8.5, font: fontRegular, color: darkGray });
+
+  page.drawText("Mobile:", { x: margin + 320, y: rowY2, size: 8.5, font: fontBold, color: darkGray });
+  page.drawText(cleanPdfText(application.mobile ? `+91 ${application.mobile}` : "Not Disclosed"), { x: margin + 390, y: rowY2, size: 8.5, font: fontRegular, color: darkGray });
+
+  const rowY3 = y - 90;
+  page.drawText("Aadhaar (Last 4):", { x: margin + 14, y: rowY3, size: 8.5, font: fontBold, color: darkGray });
+  page.drawText(cleanPdfText(application.aadhaarLast4 ? `XXXX-XXXX-${application.aadhaarLast4}` : "Verified eKYC Token"), { x: margin + 120, y: rowY3, size: 8.5, font: fontRegular, color: darkGray });
+
+  page.drawText("Domicile State:", { x: margin + 320, y: rowY3, size: 8.5, font: fontBold, color: darkGray });
+  page.drawText(cleanPdfText(application.state), { x: margin + 390, y: rowY3, size: 8.5, font: fontRegular, color: darkGray });
+
+  const rowY4 = y - 112;
+  page.drawText("Submission Date:", { x: margin + 14, y: rowY4, size: 8.5, font: fontBold, color: darkGray });
+  page.drawText(new Date(application.appliedAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }), { x: margin + 120, y: rowY4, size: 8.5, font: fontRegular, color: darkGray });
+
+  page.drawText("CSC Center:", { x: margin + 320, y: rowY4, size: 8.5, font: fontBold, color: darkGray });
+  page.drawText(cleanPdfText(application.cscCenter || "Direct Digital Seva Hub"), { x: margin + 390, y: rowY4, size: 8.5, font: fontRegular, color: darkGray });
+
+  const rowY5 = y - 130;
+  page.drawText("Sanctioned Benefit:", { x: margin + 14, y: rowY5, size: 8.5, font: fontBold, color: darkGray });
+  const benefitLines = wrapText(application.sanctionedAmount || "Direct Statutory Benefit under Scheme Guidelines", 380, fontBold, 8.5);
+  page.drawText(benefitLines[0] || "Direct Statutory Benefit", { x: margin + 120, y: rowY5, size: 8.5, font: fontBold, color: darkGreen });
+
+  y -= 160;
+
+  // 5. Tracking Milestones Stepper Box
+  const milestones = application.trackingMilestones || [];
+  const milestoneBoxHeight = Math.max(140, (milestones.length * 32) + 40);
+
+  page.drawRectangle({
+    x: margin,
+    y: y - milestoneBoxHeight,
+    width: contentWidth,
+    height: milestoneBoxHeight,
+    color: white,
+    borderColor: borderGray,
+    borderWidth: 1,
+  });
+
+  page.drawRectangle({
+    x: margin,
+    y: y - 24,
+    width: contentWidth,
+    height: 24,
+    color: darkGreen,
+  });
+  page.drawText("VERIFIED SCRUTINY & DISBURSEMENT MILESTONES", {
+    x: margin + 12,
+    y: y - 16,
+    size: 9,
+    font: fontBold,
+    color: white,
+  });
+
+  let mileY = y - 48;
+  milestones.forEach((m, idx) => {
+    const isCompleted = m.status === 'COMPLETED';
+    const isProgress = m.status === 'IN_PROGRESS';
+
+    // Badge Circle
+    page.drawCircle({
+      x: margin + 20,
+      y: mileY + 3,
+      size: 7,
+      color: isCompleted ? darkGreen : isProgress ? rgb(0.85, 0.6, 0.1) : borderGray,
+    });
+
+    page.drawText(`${idx + 1}. ${cleanPdfText(m.stage)}`, {
+      x: margin + 36,
+      y: mileY,
+      size: 8.5,
+      font: fontBold,
+      color: isCompleted ? darkGreen : darkGray,
+    });
+
+    const statusBadge = `[${m.status}]`;
+    const statusW = fontBold.widthOfTextAtSize(statusBadge, 7.5);
+    page.drawText(statusBadge, {
+      x: margin + contentWidth - statusW - 14,
+      y: mileY,
+      size: 7.5,
+      font: fontBold,
+      color: isCompleted ? darkGreen : isProgress ? rgb(0.85, 0.6, 0.1) : borderGray,
+    });
+
+    if (m.officerRemark) {
+      page.drawText(cleanPdfText(`Officer Remark: ${m.officerRemark}`), {
+        x: margin + 36,
+        y: mileY - 12,
+        size: 7.5,
+        font: fontRegular,
+        color: rgb(0.4, 0.45, 0.4),
+      });
+    }
+
+    mileY -= 32;
+  });
+
+  y -= (milestoneBoxHeight + 20);
+
+  // 6. Security Attestation & Official QR Seal Block
+  page.drawRectangle({
+    x: margin,
+    y: y - 75,
+    width: contentWidth,
+    height: 75,
+    color: rgb(0.98, 0.98, 0.96),
+    borderColor: darkGreen,
+    borderWidth: 1,
+  });
+
+  page.drawText("AUTHENTIC DIGITAL RECEIPT ATTESTATION", {
+    x: margin + 12,
+    y: y - 16,
+    size: 8.5,
+    font: fontBold,
+    color: darkGreen,
+  });
+
+  const legalNotice = "This electronic acknowledgement confirms the formal lodgement of application in the Government of India Direct Benefit Transfer (DBT) scheme repository. Retain this Reference ID for all future grievance redressal and tracking.";
+  const legalLines = wrapText(legalNotice, contentWidth - 110, fontRegular, 7.5);
+  let ly = y - 30;
+  for (const line of legalLines) {
+    page.drawText(line, { x: margin + 12, y: ly, size: 7.5, font: fontRegular, color: darkGray });
+    ly -= 10;
+  }
+
+  // QR / Verification Code Placeholder Block
+  page.drawRectangle({
+    x: margin + contentWidth - 85,
+    y: y - 68,
+    width: 60,
+    height: 60,
+    color: white,
+    borderColor: darkGreen,
+    borderWidth: 1.5,
+  });
+  page.drawText("VERIFIED", {
+    x: margin + contentWidth - 78,
+    y: y - 35,
+    size: 8,
+    font: fontBold,
+    color: darkGreen,
+  });
+  page.drawText("GOVT DBT", {
+    x: margin + contentWidth - 79,
+    y: y - 48,
+    size: 7.5,
+    font: fontBold,
+    color: darkGreen,
+  });
+
+  // Footer
+  page.drawLine({
+    start: { x: margin, y: 35 },
+    end: { x: margin + contentWidth, y: 35 },
+    thickness: 0.8,
+    color: borderGray,
+  });
+  page.drawText("SchemeSaathi Sovereign DBT Registry • Validated Citizen Document • Reference: " + application.id, {
+    x: margin,
     y: 24,
     size: 7.5,
     font: fontRegular,

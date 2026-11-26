@@ -132,7 +132,7 @@ export default function WizardPage() {
         </div>
 
         {/* Steps */}
-        <div className="organic-card p-6 sm:p-8 min-h-[360px] flex flex-col bg-[#F9FFF4]">
+        <div className="organic-card p-6 sm:p-8 min-h-[360px] flex flex-col bg-card">
           {isSubmitting ? (
             <div className="flex-1 flex flex-col items-center justify-center gap-4 animate-fade-in">
               <Loader2 className="w-8 h-8 text-primary animate-spin" />
@@ -267,7 +267,7 @@ export default function WizardPage() {
                   <button
                     type="button"
                     onClick={() => setIsDigiLockerOpen(true)}
-                    className="flex items-center gap-1.5 px-5 py-2.5 rounded-full border-2 border-foreground bg-[#FFE5B4] text-foreground text-sm font-black uppercase tracking-wider hover:shadow-[4px_4px_0px_0px_var(--foreground)] hover:translate-y-[-2px] transition-all"
+                    className="flex items-center gap-1.5 px-5 py-2.5 rounded-full border-2 border-foreground bg-amber-100 text-amber-950 text-sm font-black uppercase tracking-wider hover:shadow-[4px_4px_0px_0px_var(--foreground)] hover:translate-y-[-2px] transition-all"
                   >
                     <ShieldCheck className="w-4 h-4" /> Use DigiLocker
                   </button>

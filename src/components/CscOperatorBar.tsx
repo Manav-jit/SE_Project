@@ -119,7 +119,7 @@ export function CscOperatorBar() {
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-4 left-4 z-40 px-3.5 py-2 rounded-xl border-2 border-foreground bg-[#FFE5B4] text-foreground text-xs font-black uppercase tracking-wider shadow-[3px_3px_0px_0px_var(--foreground)] hover:shadow-[5px_5px_0px_0px_var(--foreground)] hover:translate-y-[-1px] transition-all flex items-center gap-2"
+        className="fixed bottom-4 left-4 z-40 px-3.5 py-2 rounded-xl border-2 border-foreground bg-amber-100 text-amber-950 text-xs font-black uppercase tracking-wider shadow-[3px_3px_0px_0px_var(--foreground)] hover:shadow-[5px_5px_0px_0px_var(--foreground)] hover:translate-y-[-1px] transition-all flex items-center gap-2"
         title="Activate Common Service Centre (CSC) Operator Mode"
       >
         <Building2 className="w-4 h-4 text-amber-800" />

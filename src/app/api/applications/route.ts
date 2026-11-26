@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { 
   getAllApplications, 
   getApplicationById, 
+  searchApplications,
   createApplication, 
   advanceApplicationStatus,
   ApplicationStatus
@@ -11,6 +12,7 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get('id');
+    const query = searchParams.get('query') || searchParams.get('q');
 
     if (id) {
       const app = await getApplicationById(id);
@@ -18,6 +20,11 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ error: 'Application reference not found' }, { status: 404 });
       }
       return NextResponse.json({ application: app });
+    }
+
+    if (query) {
+      const matches = await searchApplications(query);
+      return NextResponse.json({ applications: matches });
     }
 
     const all = await getAllApplications();

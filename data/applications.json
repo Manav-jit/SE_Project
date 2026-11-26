@@ -1,5 +1,284 @@
 [
   {
+    "id": "SS-2026-6770",
+    "schemeId": "pm_svanidhi",
+    "schemeName": "PM Street Vendor's AtmaNirbhar Nidhi (PM SVANidhi)",
+    "category": "employment",
+    "applicantName": "Sunil Verma",
+    "mobile": "9812345678",
+    "aadhaarLast4": "5512",
+    "state": "Uttar Pradesh",
+    "submissionMode": "ONLINE",
+    "sanctionedAmount": "Rs. 10,000 working capital loan",
+    "status": "UNDER_VERIFICATION",
+    "appliedAt": "2026-11-26T05:25:55.495Z",
+    "updatedAt": "2026-11-26T05:25:55.502Z",
+    "trackingMilestones": [
+      {
+        "stage": "Application Submitted",
+        "description": "Generated pre-filled application form & checklist prepared for submission",
+        "status": "COMPLETED",
+        "timestamp": "2026-11-26T05:25:55.495Z",
+        "officerRemark": "Application registered via SchemeSaathi Preparation Engine."
+      },
+      {
+        "stage": "Document Verification",
+        "description": "Verification of applicant credentials and required documents",
+        "status": "COMPLETED",
+        "timestamp": "2026-11-26T05:25:55.502Z",
+        "officerRemark": "Documents validated by CSC operator."
+      },
+      {
+        "stage": "Departmental Inspection",
+        "description": "Field verification by statutory block/ward officers",
+        "status": "IN_PROGRESS"
+      },
+      {
+        "stage": "Sanction Order",
+        "description": "Official sanction and issuance of beneficiary entitlement letter",
+        "status": "PENDING"
+      },
+      {
+        "stage": "Direct Benefit Transfer (DBT)",
+        "description": "Disbursement credited directly to Aadhaar-seeded bank account",
+        "status": "PENDING"
+      }
+    ]
+  },
+  {
+    "id": "SS-2026-1517",
+    "schemeId": "ayushman_bharat",
+    "schemeName": "Ayushman Bharat Pradhan Mantri Jan Arogya Yojana (AB-PMJAY)",
+    "category": "healthcare",
+    "applicantName": "Rameshwar Singh",
+    "mobile": "9876543210",
+    "aadhaarLast4": "4892",
+    "state": "Uttar Pradesh",
+    "submissionMode": "ONLINE",
+    "cscCenter": "Common Service Centre - District Hub",
+    "sanctionedAmount": "Health insurance cover of up to Rs. 5 lakhs per family per year for secondary and tertiary care hospitalization.",
+    "status": "SUBMITTED",
+    "appliedAt": "2026-11-24T09:13:47.488Z",
+    "updatedAt": "2026-11-24T09:13:47.488Z",
+    "trackingMilestones": [
+      {
+        "stage": "Application Submitted",
+        "description": "Generated pre-filled application form & checklist prepared for submission",
+        "status": "COMPLETED",
+        "timestamp": "2026-11-24T09:13:47.488Z",
+        "officerRemark": "Application registered via SchemeSaathi Preparation Engine."
+      },
+      {
+        "stage": "Document Verification",
+        "description": "Verification of applicant credentials and required documents",
+        "status": "IN_PROGRESS",
+        "timestamp": "2026-11-24T09:13:47.488Z",
+        "officerRemark": "Awaiting physical submission at CSC or online portal verification."
+      },
+      {
+        "stage": "Departmental Inspection",
+        "description": "Field verification by statutory block/ward officers",
+        "status": "PENDING"
+      },
+      {
+        "stage": "Sanction Order",
+        "description": "Official sanction and issuance of beneficiary entitlement letter",
+        "status": "PENDING"
+      },
+      {
+        "stage": "Direct Benefit Transfer (DBT)",
+        "description": "Disbursement credited directly to Aadhaar-seeded bank account",
+        "status": "PENDING"
+      }
+    ]
+  },
+  {
+    "id": "SS-2026-8549",
+    "schemeId": "pm_svanidhi",
+    "schemeName": "PM Street Vendor's AtmaNirbhar Nidhi (PM SVANidhi)",
+    "category": "employment",
+    "applicantName": "Sunil Verma",
+    "mobile": "9812345678",
+    "aadhaarLast4": "5512",
+    "state": "Uttar Pradesh",
+    "submissionMode": "ONLINE",
+    "sanctionedAmount": "Rs. 10,000 working capital loan",
+    "status": "UNDER_VERIFICATION",
+    "appliedAt": "2026-11-24T08:26:02.943Z",
+    "updatedAt": "2026-11-24T08:26:02.958Z",
+    "trackingMilestones": [
+      {
+        "stage": "Application Submitted",
+        "description": "Generated pre-filled application form & checklist prepared for submission",
+        "status": "COMPLETED",
+        "timestamp": "2026-11-24T08:26:02.943Z",
+        "officerRemark": "Application registered via SchemeSaathi Preparation Engine."
+      },
+      {
+        "stage": "Document Verification",
+        "description": "Verification of applicant credentials and required documents",
+        "status": "COMPLETED",
+        "timestamp": "2026-11-24T08:26:02.958Z",
+        "officerRemark": "Documents validated by CSC operator."
+      },
+      {
+        "stage": "Departmental Inspection",
+        "description": "Field verification by statutory block/ward officers",
+        "status": "IN_PROGRESS"
+      },
+      {
+        "stage": "Sanction Order",
+        "description": "Official sanction and issuance of beneficiary entitlement letter",
+        "status": "PENDING"
+      },
+      {
+        "stage": "Direct Benefit Transfer (DBT)",
+        "description": "Disbursement credited directly to Aadhaar-seeded bank account",
+        "status": "PENDING"
+      }
+    ]
+  },
+  {
+    "id": "SS-2026-2465",
+    "schemeId": "pm_svanidhi",
+    "schemeName": "PM Street Vendor's AtmaNirbhar Nidhi (PM SVANidhi)",
+    "category": "employment",
+    "applicantName": "Sunil Verma",
+    "mobile": "9812345678",
+    "aadhaarLast4": "5512",
+    "state": "Uttar Pradesh",
+    "submissionMode": "ONLINE",
+    "sanctionedAmount": "Rs. 10,000 working capital loan",
+    "status": "UNDER_VERIFICATION",
+    "appliedAt": "2026-11-24T08:16:13.779Z",
+    "updatedAt": "2026-11-24T08:16:13.794Z",
+    "trackingMilestones": [
+      {
+        "stage": "Application Submitted",
+        "description": "Generated pre-filled application form & checklist prepared for submission",
+        "status": "COMPLETED",
+        "timestamp": "2026-11-24T08:16:13.779Z",
+        "officerRemark": "Application registered via SchemeSaathi Preparation Engine."
+      },
+      {
+        "stage": "Document Verification",
+        "description": "Verification of applicant credentials and required documents",
+        "status": "COMPLETED",
+        "timestamp": "2026-11-24T08:16:13.794Z",
+        "officerRemark": "Documents validated by CSC operator."
+      },
+      {
+        "stage": "Departmental Inspection",
+        "description": "Field verification by statutory block/ward officers",
+        "status": "IN_PROGRESS"
+      },
+      {
+        "stage": "Sanction Order",
+        "description": "Official sanction and issuance of beneficiary entitlement letter",
+        "status": "PENDING"
+      },
+      {
+        "stage": "Direct Benefit Transfer (DBT)",
+        "description": "Disbursement credited directly to Aadhaar-seeded bank account",
+        "status": "PENDING"
+      }
+    ]
+  },
+  {
+    "id": "SS-2026-2827",
+    "schemeId": "ayushman_bharat",
+    "schemeName": "Ayushman Bharat Pradhan Mantri Jan Arogya Yojana (AB-PMJAY)",
+    "category": "healthcare",
+    "applicantName": "Rameshwar Singh",
+    "mobile": "9876543210",
+    "aadhaarLast4": "4892",
+    "state": "Uttar Pradesh",
+    "submissionMode": "CSC_OFFLINE",
+    "cscCenter": "Common Service Centre - District Hub",
+    "sanctionedAmount": "Health insurance cover of up to Rs. 5 lakhs per family per year for secondary and tertiary care hospitalization.",
+    "status": "SUBMITTED",
+    "appliedAt": "2026-11-20T05:08:53.815Z",
+    "updatedAt": "2026-11-20T05:08:53.815Z",
+    "trackingMilestones": [
+      {
+        "stage": "Application Submitted",
+        "description": "Generated pre-filled application form & checklist prepared for submission",
+        "status": "COMPLETED",
+        "timestamp": "2026-11-20T05:08:53.815Z",
+        "officerRemark": "Application registered via SchemeSaathi Preparation Engine."
+      },
+      {
+        "stage": "Document Verification",
+        "description": "Verification of applicant credentials and required documents",
+        "status": "IN_PROGRESS",
+        "timestamp": "2026-11-20T05:08:53.815Z",
+        "officerRemark": "Awaiting physical submission at CSC or online portal verification."
+      },
+      {
+        "stage": "Departmental Inspection",
+        "description": "Field verification by statutory block/ward officers",
+        "status": "PENDING"
+      },
+      {
+        "stage": "Sanction Order",
+        "description": "Official sanction and issuance of beneficiary entitlement letter",
+        "status": "PENDING"
+      },
+      {
+        "stage": "Direct Benefit Transfer (DBT)",
+        "description": "Disbursement credited directly to Aadhaar-seeded bank account",
+        "status": "PENDING"
+      }
+    ]
+  },
+  {
+    "id": "SS-2026-8172",
+    "schemeId": "ayushman_bharat",
+    "schemeName": "Ayushman Bharat Pradhan Mantri Jan Arogya Yojana (AB-PMJAY)",
+    "category": "healthcare",
+    "applicantName": "Rameshwar Singh",
+    "mobile": "9876543210",
+    "aadhaarLast4": "4892",
+    "state": "Uttar Pradesh",
+    "submissionMode": "CSC_OFFLINE",
+    "cscCenter": "Common Service Centre - District Hub",
+    "sanctionedAmount": "Health insurance cover of up to Rs. 5 lakhs per family per year for secondary and tertiary care hospitalization.",
+    "status": "SUBMITTED",
+    "appliedAt": "2026-11-20T05:03:46.704Z",
+    "updatedAt": "2026-11-20T05:03:46.704Z",
+    "trackingMilestones": [
+      {
+        "stage": "Application Submitted",
+        "description": "Generated pre-filled application form & checklist prepared for submission",
+        "status": "COMPLETED",
+        "timestamp": "2026-11-20T05:03:46.704Z",
+        "officerRemark": "Application registered via SchemeSaathi Preparation Engine."
+      },
+      {
+        "stage": "Document Verification",
+        "description": "Verification of applicant credentials and required documents",
+        "status": "IN_PROGRESS",
+        "timestamp": "2026-11-20T05:03:46.704Z",
+        "officerRemark": "Awaiting physical submission at CSC or online portal verification."
+      },
+      {
+        "stage": "Departmental Inspection",
+        "description": "Field verification by statutory block/ward officers",
+        "status": "PENDING"
+      },
+      {
+        "stage": "Sanction Order",
+        "description": "Official sanction and issuance of beneficiary entitlement letter",
+        "status": "PENDING"
+      },
+      {
+        "stage": "Direct Benefit Transfer (DBT)",
+        "description": "Disbursement credited directly to Aadhaar-seeded bank account",
+        "status": "PENDING"
+      }
+    ]
+  },
+  {
     "id": "SS-2026-1125",
     "schemeId": "pm_suraksha_bima",
     "schemeName": "Pradhan Mantri Suraksha Bima Yojana (PMSBY)",

@@ -146,7 +146,7 @@ export default function MatchesClient() {
 
         {/* Empty */}
         {!isLoading && schemes.length === 0 && (
-          <div className="organic-card p-12 text-center animate-fade-in bg-[#F9FFF4]" role="status">
+          <div className="organic-card p-12 text-center animate-fade-in bg-card" role="status">
             <h2 className="text-xl font-black font-serif mb-2">{t('matches.empty_title')}</h2>
             <p className="text-sm font-bold text-muted-foreground mb-6">{t('matches.empty_desc')}</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -235,7 +235,7 @@ export default function MatchesClient() {
                       </button>
                       <Link
                         href="/chat"
-                        className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full border-2 border-foreground bg-[#F9FFF4] text-foreground text-xs font-black uppercase tracking-wider hover:shadow-[4px_4px_0px_0px_var(--foreground)] hover:translate-y-[-2px] transition-all"
+                        className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full border-2 border-foreground bg-secondary text-foreground text-xs font-black uppercase tracking-wider hover:shadow-[4px_4px_0px_0px_var(--foreground)] hover:translate-y-[-2px] transition-all"
                       >
                         Ask AI Assistant
                       </Link>

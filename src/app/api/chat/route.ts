@@ -3,7 +3,7 @@ import { createOpenAI } from '@ai-sdk/openai';
 import { streamText, generateText, convertToModelMessages, UIMessage } from 'ai';
 import { findRelevantSchemes } from "@/lib/rag/retriever";
 import { SYSTEM_PROMPT, EXTRACTION_PROMPT } from "@/lib/chat/prompts";
-import { UserProfile, formatProfileForPrompt } from "@/lib/chat/profile";
+import { UserProfile, formatProfileForPrompt, extractProfileHeuristics } from "@/lib/chat/profile";
 
 const groq = createOpenAI({
   baseURL: 'https://api.groq.com/openai/v1',
@@ -36,8 +36,10 @@ export async function POST(req: NextRequest) {
       .map((m) => `${m.role}: ${getMessageText(m)}`)
       .join('\n');
 
-    // 1. Extract info safely
-    let extractedData: Partial<UserProfile> = {};
+    // 1. Extract info safely using LLM + deterministic heuristics
+    const heuristicData = extractProfileHeuristics(latestMessage);
+    let extractedData: Partial<UserProfile> = { ...heuristicData };
+
     try {
       const extractionPrompt = EXTRACTION_PROMPT
         .replace('{history}', history)
@@ -76,16 +78,22 @@ export async function POST(req: NextRequest) {
             sanitized.income = parsedIncome;
           }
         }
+        if (rawParsed.landHoldingHectares !== undefined && rawParsed.landHoldingHectares !== null) {
+          const parsedLand = parseFloat(String(rawParsed.landHoldingHectares));
+          if (!isNaN(parsedLand) && parsedLand >= 0) {
+            sanitized.landHoldingHectares = parsedLand;
+          }
+        }
         if (rawParsed.state && typeof rawParsed.state === 'string') {
           sanitized.state = rawParsed.state.trim();
         }
         if (rawParsed.caste && typeof rawParsed.caste === 'string') {
           sanitized.caste = rawParsed.caste.trim();
         }
-        extractedData = sanitized;
+        extractedData = { ...extractedData, ...sanitized };
       }
     } catch (e) {
-      console.warn("Extraction failed or returned invalid JSON format", e);
+      console.warn("Extraction fallback used heuristics due to LLM parsing exception:", e);
     }
 
     const mergedProfile: UserProfile = { ...currentProfile, ...extractedData };

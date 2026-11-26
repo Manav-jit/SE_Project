@@ -760,10 +760,248 @@ export const SCHEME_DAGS: Record<string, SchemeDAGDefinition> = {
       ],
     },
   },
+
+  pm_surya_ghar: {
+    schemeId: 'pm_surya_ghar',
+    schemeName: 'PM Surya Ghar: Muft Bijli Yojana',
+    category: 'energy',
+    ministry: 'Ministry of New and Renewable Energy',
+    rootRule: {
+      id: 'pmsurya_root',
+      type: 'LOGICAL',
+      operator: 'AND',
+      label: 'PM Surya Ghar Rooftop Solar Criteria',
+      children: [
+        {
+          id: 'pmsurya_age',
+          type: 'COMPARISON',
+          field: 'age',
+          operator: '>=',
+          value: 18,
+          label: 'Applicant Age',
+          unit: 'years',
+        },
+        {
+          id: 'pmsurya_income',
+          type: 'COMPARISON',
+          field: 'income',
+          operator: '<=',
+          value: 1500000,
+          label: 'Annual Household Income',
+          unit: '₹/year',
+        },
+      ],
+    },
+  },
+
+  pmay_gramin: {
+    schemeId: 'pmay_gramin',
+    schemeName: 'Pradhan Mantri Awas Yojana - Gramin (PMAY-G)',
+    category: 'housing',
+    ministry: 'Ministry of Rural Development',
+    rootRule: {
+      id: 'pmayg_root',
+      type: 'LOGICAL',
+      operator: 'AND',
+      label: 'PMAY-G Rural Housing Criteria',
+      children: [
+        {
+          id: 'pmayg_age',
+          type: 'COMPARISON',
+          field: 'age',
+          operator: '>=',
+          value: 18,
+          label: 'Head of Family Age',
+          unit: 'years',
+        },
+        {
+          id: 'pmayg_income',
+          type: 'COMPARISON',
+          field: 'income',
+          operator: '<=',
+          value: 300000,
+          label: 'Annual Family Income Ceiling',
+          unit: '₹/year',
+        },
+      ],
+    },
+  },
+
+  pm_ujjwala: {
+    schemeId: 'pm_ujjwala',
+    schemeName: 'Pradhan Mantri Ujjwala Yojana 2.0 (PMUY)',
+    category: 'women',
+    ministry: 'Ministry of Petroleum and Natural Gas',
+    rootRule: {
+      id: 'pmuy_root',
+      type: 'LOGICAL',
+      operator: 'AND',
+      label: 'PM Ujjwala Clean Cooking Fuel Criteria',
+      children: [
+        {
+          id: 'pmuy_gender',
+          type: 'COMPARISON',
+          field: 'gender',
+          operator: '==',
+          value: 'female',
+          label: 'Target Demographic (Adult Woman)',
+        },
+        {
+          id: 'pmuy_age',
+          type: 'COMPARISON',
+          field: 'age',
+          operator: '>=',
+          value: 18,
+          label: 'Minimum Age',
+          unit: 'years',
+        },
+        {
+          id: 'pmuy_income',
+          type: 'COMPARISON',
+          field: 'income',
+          operator: '<=',
+          value: 250000,
+          label: 'BPL / Economically Weaker Threshold',
+          unit: '₹/year',
+        },
+      ],
+    },
+  },
+
+  kisan_credit_card: {
+    schemeId: 'kisan_credit_card',
+    schemeName: 'Kisan Credit Card (KCC) Scheme',
+    category: 'agriculture',
+    ministry: 'Ministry of Agriculture and Farmers Welfare',
+    rootRule: {
+      id: 'kcc_root',
+      type: 'LOGICAL',
+      operator: 'AND',
+      label: 'Kisan Credit Card Institutional Loan Criteria',
+      children: [
+        {
+          id: 'kcc_age',
+          type: 'COMPARISON',
+          field: 'age',
+          operator: '>=',
+          value: 18,
+          label: 'Farmer Age',
+          unit: 'years',
+        },
+        {
+          id: 'kcc_occ',
+          type: 'COMPARISON',
+          field: 'occupation',
+          operator: 'IN',
+          value: ['farmer', 'self-employed'],
+          label: 'Cultivator / Agri Allied Occupation',
+        },
+      ],
+    },
+  },
+
+  pm_poshan: {
+    schemeId: 'pm_poshan',
+    schemeName: 'PM POSHAN (Pradhan Mantri Poshan Shakti Nirman)',
+    category: 'education',
+    ministry: 'Ministry of Education',
+    rootRule: {
+      id: 'pmposhan_root',
+      type: 'LOGICAL',
+      operator: 'AND',
+      label: 'PM POSHAN School Nutritional Entitlement',
+      children: [
+        {
+          id: 'pmposhan_age_min',
+          type: 'COMPARISON',
+          field: 'age',
+          operator: '>=',
+          value: 5,
+          label: 'Primary School Age Minimum',
+          unit: 'years',
+        },
+        {
+          id: 'pmposhan_age_max',
+          type: 'COMPARISON',
+          field: 'age',
+          operator: '<=',
+          value: 14,
+          label: 'Upper Primary School Age Ceiling',
+          unit: 'years',
+        },
+        {
+          id: 'pmposhan_occ',
+          type: 'COMPARISON',
+          field: 'occupation',
+          operator: 'IN',
+          value: ['student'],
+          label: 'Student Status',
+        },
+      ],
+    },
+  },
+
+  matsya_sampada_pmmsy: {
+    schemeId: 'matsya_sampada_pmmsy',
+    schemeName: 'Pradhan Mantri Matsya Sampada Yojana (PMMSY)',
+    category: 'agriculture',
+    ministry: 'Ministry of Fisheries, Animal Husbandry and Dairying',
+    rootRule: {
+      id: 'pmmsy_root',
+      type: 'LOGICAL',
+      operator: 'AND',
+      label: 'PMMSY Fisheries & Aquaculture Criteria',
+      children: [
+        {
+          id: 'pmmsy_age',
+          type: 'COMPARISON',
+          field: 'age',
+          operator: '>=',
+          value: 18,
+          label: 'Applicant Age',
+          unit: 'years',
+        },
+        {
+          id: 'pmmsy_occ',
+          type: 'COMPARISON',
+          field: 'occupation',
+          operator: 'IN',
+          value: ['farmer', 'self-employed', 'laborer'],
+          label: 'Occupational Eligibility',
+        },
+      ],
+    },
+  },
 };
 
 export function getSchemeDAG(schemeId: string): SchemeDAGDefinition | null {
-  return SCHEME_DAGS[schemeId] || null;
+  if (SCHEME_DAGS[schemeId]) {
+    return SCHEME_DAGS[schemeId];
+  }
+  // Synthesize dynamic DAG rule tree for any newly ingested scheme
+  return {
+    schemeId,
+    schemeName: schemeId.replace(/_/g, ' ').toUpperCase(),
+    category: 'welfare',
+    ministry: 'Government of India',
+    rootRule: {
+      id: `${schemeId}_root`,
+      type: 'LOGICAL',
+      operator: 'AND',
+      label: 'Statutory Scheme Guidelines',
+      children: [
+        {
+          id: `${schemeId}_age`,
+          type: 'COMPARISON',
+          field: 'age',
+          operator: '>=',
+          value: 18,
+          label: 'Adult Applicant Age',
+          unit: 'years',
+        },
+      ],
+    },
+  };
 }
 
 export function getAllSchemeDAGs(): SchemeDAGDefinition[] {

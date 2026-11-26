@@ -1,0 +1,28 @@
+{
+  "id": "pm_poshan",
+  "name": "PM POSHAN (Pradhan Mantri Poshan Shakti Nirman)",
+  "ministry": "Ministry of Education",
+  "category": "education",
+  "eligibility": {
+    "age_min": 5,
+    "age_max": 14,
+    "gender": "all",
+    "occupations": ["student"],
+    "citizenship": "Indian",
+    "other_conditions": "Children enrolled in government and government-aided primary (Classes I-V) and upper primary (Classes VI-VIII) schools."
+  },
+  "benefits": "Free hot cooked nutritious meals conforming to minimum nutritional standards (450 calories & 12g protein for primary, 700 calories & 20g protein for upper primary) every school working day, plus regular nutritional health screening and iron-folic acid supplementation.",
+  "documents_required": [
+    "Student School Enrollment / Admission Number",
+    "Aadhaar Card (or birth certificate registration)",
+    "Bank Account Details of parent/guardian (for direct cooking cost component where applicable)"
+  ],
+  "application_process": [
+    "Automatic entitlement upon admission to any eligible government or government-aided school.",
+    "No separate complex application form required; managed via National PM POSHAN MIS portal by school headmaster."
+  ],
+  "submission_url": "https://pmposhan.education.gov.in/",
+  "annual_benefit_amount": 7500,
+  "statutory_citation": "National Food Security Act (NFSA) 2013 Section 5(1)(b) & Ministry of Education OM 1-1/2021-Desk(MDM)",
+  "benefit_type": "Daily Nutritional In-Kind Support & Child Health"
+}

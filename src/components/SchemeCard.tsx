@@ -100,7 +100,7 @@ export function SchemeCard({ scheme, profile = {}, onGenerateForm, onViewDetails
       </p>
 
       {/* Circular Readiness Gauge Card */}
-      <div className="flex items-center gap-3 p-3 rounded-xl bg-[#F9FFF4] border border-foreground/20">
+      <div className="flex items-center gap-3 p-3 rounded-xl bg-secondary/40 border border-foreground/15">
         <div className="relative w-12 h-12 shrink-0 flex items-center justify-center">
           <svg className="w-12 h-12 -rotate-90" viewBox="0 0 44 44">
             <circle
@@ -155,7 +155,7 @@ export function SchemeCard({ scheme, profile = {}, onGenerateForm, onViewDetails
       {isExpanded && (
         <div className="space-y-3 pt-1 animate-fade-in text-xs">
           {/* Statutory Citation Box */}
-          <div className="p-2.5 rounded-lg bg-[#FAF6E9] border border-foreground/20 text-[11px] font-bold text-foreground/80 flex items-start gap-2">
+          <div className="p-2.5 rounded-lg bg-amber-50/80 border border-amber-300 text-[11px] font-bold text-amber-950 flex items-start gap-2">
             <Scale className="w-3.5 h-3.5 text-amber-700 shrink-0 mt-0.5" />
             <div>
               <span className="text-[9px] font-mono text-muted-foreground block uppercase">Official Legal Authority</span>

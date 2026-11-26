@@ -357,10 +357,10 @@ function ChatContent() {
       <div className="flex-1 flex overflow-hidden">
         
         {/* LEFT PANE (58%): Living Citizen Entitlement Dossier & Application Canvas */}
-        <div className={`w-full lg:w-[58%] border-r-2 border-foreground bg-[#FDFBF7] flex-col overflow-y-auto ${mobileTab === 'dossier' ? 'flex' : 'hidden lg:flex'}`}>
+        <div className={`w-full lg:w-[58%] border-r-2 border-foreground bg-background flex-col overflow-y-auto ${mobileTab === 'dossier' ? 'flex' : 'hidden lg:flex'}`}>
           
           {/* Top Sticky Benefit Ticker Bar */}
-          <div className="sticky top-0 z-10 bg-primary/20 backdrop-blur-md border-b-2 border-foreground p-4 md:p-6 shadow-[0px_4px_0px_0px_rgba(0,0,0,0.05)]">
+          <div className="sticky top-0 z-10 bg-secondary/70 backdrop-blur-md border-b-2 border-foreground p-4 md:p-6 shadow-[0px_4px_0px_0px_rgba(0,0,0,0.05)]">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <div className="flex items-center gap-2">
@@ -386,7 +386,7 @@ function ChatContent() {
                 <button
                   type="button"
                   onClick={() => setIsCardModalOpen(true)}
-                  className="px-3 py-2 rounded-xl border-2 border-foreground bg-accent text-foreground text-xs font-black uppercase tracking-wider shadow-[2px_2px_0px_0px_var(--foreground)] hover:translate-y-[-1px] transition-all flex items-center gap-1.5"
+                  className="px-3 py-2 rounded-xl border-2 border-foreground bg-accent text-accent-foreground text-xs font-black uppercase tracking-wider shadow-[2px_2px_0px_0px_var(--foreground)] hover:translate-y-[-1px] transition-all flex items-center gap-1.5"
                   title="View and download your official Citizen Welfare Card"
                 >
                   <Award className="w-4 h-4" />
@@ -404,7 +404,7 @@ function ChatContent() {
                 <button
                   type="button"
                   onClick={() => setIsDigiLockerOpen(true)}
-                  className="px-3 py-2 rounded-xl border-2 border-foreground bg-[#FFE5B4] text-foreground text-xs font-black uppercase tracking-wider shadow-[2px_2px_0px_0px_var(--foreground)] hover:translate-y-[-1px] transition-all flex items-center gap-1.5"
+                  className="px-3 py-2 rounded-xl border-2 border-foreground bg-amber-100 text-amber-950 text-xs font-black uppercase tracking-wider shadow-[2px_2px_0px_0px_var(--foreground)] hover:translate-y-[-1px] transition-all flex items-center gap-1.5"
                   title="Connect official DigiLocker account"
                 >
                   <ShieldCheck className="w-4 h-4 text-emerald-700" />
@@ -454,37 +454,37 @@ function ChatContent() {
 
               {/* Form Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs mb-4">
-                <div className="p-2.5 rounded-xl border border-foreground/20 bg-[#F9FFF4]">
+                <div className="p-2.5 rounded-xl border border-foreground/20 bg-secondary/30">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">Full Legal Name</span>
                   <span className="font-bold text-foreground block truncate">
                     {profile.name || 'Not Declared (Pending)'}
                   </span>
                 </div>
-                <div className="p-2.5 rounded-xl border border-foreground/20 bg-[#F9FFF4]">
+                <div className="p-2.5 rounded-xl border border-foreground/20 bg-secondary/30">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">Age & Gender</span>
                   <span className="font-bold text-foreground block">
                     {profile.age ? `${profile.age} Yrs` : '--'} · {profile.gender || '--'}
                   </span>
                 </div>
-                <div className="p-2.5 rounded-xl border border-foreground/20 bg-[#F9FFF4]">
+                <div className="p-2.5 rounded-xl border border-foreground/20 bg-secondary/30">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">Domicile State</span>
                   <span className="font-bold text-foreground block truncate">
                     {profile.state || 'Not Declared'}
                   </span>
                 </div>
-                <div className="p-2.5 rounded-xl border border-foreground/20 bg-[#F9FFF4]">
+                <div className="p-2.5 rounded-xl border border-foreground/20 bg-secondary/30">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">Primary Occupation</span>
                   <span className="font-bold text-foreground block truncate">
                     {profile.occupation || 'Not Declared'}
                   </span>
                 </div>
-                <div className="p-2.5 rounded-xl border border-foreground/20 bg-[#F9FFF4]">
+                <div className="p-2.5 rounded-xl border border-foreground/20 bg-secondary/30">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">Landholding</span>
                   <span className="font-bold text-foreground block">
                     {profile.landHoldingHectares !== undefined ? `${profile.landHoldingHectares} ha` : '--'}
                   </span>
                 </div>
-                <div className="p-2.5 rounded-xl border border-foreground/20 bg-[#F9FFF4]">
+                <div className="p-2.5 rounded-xl border border-foreground/20 bg-secondary/30">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">Annual Income</span>
                   <span className="font-bold text-foreground block">
                     {(profile.annualIncome || profile.income) ? `₹${(profile.annualIncome || profile.income)?.toLocaleString('en-IN')}` : '--'}
@@ -539,7 +539,7 @@ function ChatContent() {
                   <h3 className="text-xl font-black font-serif text-foreground">
                     Pre-Qualified Government Schemes
                   </h3>
-                  <span className="text-xs font-black px-2.5 py-0.5 rounded-full bg-primary border-2 border-foreground">
+                  <span className="text-xs font-black px-2.5 py-0.5 rounded-full bg-primary text-primary-foreground border-2 border-foreground">
                     {matchedSchemes.length}
                   </span>
                 </div>
@@ -609,7 +609,7 @@ function ChatContent() {
               <button
                 type="button"
                 onClick={() => setVoiceOutputEnabled(!voiceOutputEnabled)}
-                className={`p-1.5 rounded-lg border-2 transition-colors ${voiceOutputEnabled ? 'bg-primary border-foreground text-foreground shadow-[2px_2px_0px_0px_var(--foreground)]' : 'border-card-border/40 text-muted-foreground hover:bg-card/50'}`}
+                className={`p-1.5 rounded-lg border-2 transition-colors ${voiceOutputEnabled ? 'bg-primary border-foreground text-primary-foreground shadow-[2px_2px_0px_0px_var(--foreground)]' : 'border-card-border/40 text-muted-foreground hover:bg-card/50'}`}
                 title="Toggle vernacular voice output"
               >
                 {voiceOutputEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
@@ -649,7 +649,7 @@ function ChatContent() {
             ))}
             {isLoading && messages[messages.length - 1].role === 'user' && (
               <div className="flex w-full justify-start animate-fade-in">
-                <div className="bg-[#F9FFF4] border-2 border-foreground rounded-[16px] rounded-tl-[4px] shadow-[4px_4px_0px_0px_var(--foreground)] p-4 flex items-center gap-2">
+                <div className="bg-card border-2 border-foreground rounded-[16px] rounded-tl-[4px] shadow-[4px_4px_0px_0px_var(--foreground)] p-4 flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-primary animate-pulse-soft"></div>
                   <div className="w-2 h-2 rounded-full bg-primary animate-pulse-soft" style={{ animationDelay: '0.2s' }}></div>
                   <div className="w-2 h-2 rounded-full bg-primary animate-pulse-soft" style={{ animationDelay: '0.4s' }}></div>

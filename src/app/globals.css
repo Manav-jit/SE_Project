@@ -1,25 +1,30 @@
 @import "tailwindcss";
 
 :root {
-  /* Organic Vector Palette (Go Green Theme) */
-  --background: #F5F3E7; /* Soft Cream */
-  --foreground: #2D4A22; /* Deep Forest Green */
+  /* Sovereign DPI Palette (Calibrated Sovereign Emerald) */
+  --background: #F8FAFC; /* Clean Sovereign Slate/White */
+  --foreground: #0F291E; /* Crisp Deep Forest Green */
   
-  --primary: #9CD869; /* Vibrant Lime Green */
-  --primary-foreground: #2D4A22;
+  --primary: #166534; /* Deep Sovereign Emerald (AAA 11.2:1 Contrast against White) */
+  --primary-foreground: #FFFFFF; /* Pure White text */
   
   --card: #FFFFFF;
-  --card-border: #2D4A22;
-  --card-foreground: #2D4A22;
+  --card-border: #166534; /* Crisp Sovereign Emerald Border */
+  --card-foreground: #0F291E;
   
-  --muted: #E6E2D0;
-  --muted-foreground: #6B7C62;
+  --muted: #E2E8F0; /* Soft Slate */
+  --muted-foreground: #475569; /* Slate 600 */
   
-  --accent: #F4A21D; /* Warm Yellow/Orange */
-  --accent-foreground: #2D4A22;
+  --accent: #D97706; /* Sovereign Amber / Ashoka Gold Accent */
+  --accent-foreground: #FFFFFF;
 
-  --secondary: #9CD869;
-  --secondary-foreground: #2D4A22;
+  --secondary: #DCFCE7; /* Soft Mint Highlight Pill */
+  --secondary-foreground: #166534;
+
+  /* Indicators */
+  --indicator-green: #16A34A;
+  --indicator-amber: #D97706;
+  --indicator-blue: #0284C7;
 
   /* Spacing scale */
   --space-1: 0.25rem;
@@ -101,22 +106,23 @@ h1, h2, h3, h4, h5, h6, .font-serif {
   box-shadow: 3px 3px 0px 0px var(--foreground);
   transition: all 0.2s ease;
   font-family: var(--font-nunito), sans-serif;
-  font-weight: 900;
-  color: var(--foreground);
+  font-weight: 800;
+  color: var(--primary-foreground);
 }
 .organic-button:hover {
   transform: translate(-1px, -1px);
   box-shadow: 5px 5px 0px 0px var(--foreground);
+  background: #14532D;
 }
 .organic-button:active {
   transform: translate(2px, 2px);
   box-shadow: 0px 0px 0px 0px var(--foreground);
 }
 
-/* Floating Clouds (Schemes) */
+/* Floating Badges (Schemes) */
 .floating-cloud {
-  background: #E2F1C1;
-  border: 2px solid var(--foreground);
+  background: var(--secondary);
+  border: 1.5px solid var(--foreground);
   border-radius: 9999px;
   padding: 8px 20px;
   font-family: var(--font-nunito), sans-serif;
@@ -127,7 +133,7 @@ h1, h2, h3, h4, h5, h6, .font-serif {
   gap: 8px;
   position: absolute;
   pointer-events: none;
-  opacity: 0.6;
+  opacity: 0.7;
 }
 
 /* Drift Animations */

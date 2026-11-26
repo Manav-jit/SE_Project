@@ -1,12 +1,99 @@
-<mxfile version="24.4.13">
-  <diagram id="placeholder" name="Page-1">
-    <mxGraphModel dx="1000" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+<mxfile host="app.diagrams.net" version="24.4.13" pages="1">
+  <diagram id="use-case-diagram" name="Use Case Diagram">
+    <mxGraphModel dx="1420" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1280" pageHeight="920" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="2" value="UseCaseDiagram.drawio" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
-          <mxGeometry x="300" y="280" width="200" height="30" as="geometry" />
+        <mxCell id="title" value="SchemeSaathi — UML Use Case Diagram" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontStyle=1;fontColor=#166534;" vertex="1" parent="1">
+          <mxGeometry x="430" y="15" width="400" height="36" as="geometry" />
         </mxCell>
+
+        <!-- System Boundary -->
+        <mxCell id="sys_boundary" value="&lt;b&gt;SchemeSaathi Digital Welfare Platform (Next.js 16)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=center;fillColor=#F8FAF8;strokeColor=#166534;strokeWidth=2;fontSize=14;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry x="250" y="65" width="760" height="820" as="geometry" />
+        </mxCell>
+
+        <!-- Actors (Left) -->
+        <mxCell id="actor_citizen" value="&lt;b&gt;Citizen /&lt;br&gt;Beneficiary&lt;/b&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#DCFCE7;strokeColor=#166534;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="90" y="210" width="45" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="actor_csc" value="&lt;b&gt;CSC VLE&lt;br&gt;Operator&lt;/b&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#FEF3C7;strokeColor=#B45309;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="90" y="610" width="45" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Actors (Right) -->
+        <mxCell id="actor_llm" value="&lt;b&gt;Groq LLM API&lt;/b&gt;&lt;br&gt;&lt;i&gt;(openai/gpt-oss-20b)&lt;/i&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#EFF6FF;strokeColor=#1D4ED8;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1115" y="150" width="45" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="actor_digilocker" value="&lt;b&gt;DigiLocker&lt;br&gt;eKYC Gateway&lt;/b&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#EFF6FF;strokeColor=#1D4ED8;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1115" y="380" width="45" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="actor_gov" value="&lt;b&gt;Govt Portals&lt;/b&gt;&lt;br&gt;&lt;i&gt;(myScheme / OGD)&lt;/i&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#F3E8FF;strokeColor=#6D28D9;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1115" y="660" width="45" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Use Cases -->
+        <mxCell id="uc_chat" value="Bilingual AI Discovery Chat&lt;br&gt;(EN / HI)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#166534;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="330" y="115" width="220" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_wizard" value="3-Step Quick-Match Wizard&lt;br&gt;&amp;amp; Life-Event Bundles" style="ellipse;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#166534;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="330" y="200" width="220" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_dag" value="Inspect Formal DAG Proof&lt;br&gt;&amp;amp; Counterfactual Gaps" style="ellipse;whiteSpace=wrap;html=1;fillColor=#E0F2FE;strokeColor=#0369A1;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="660" y="155" width="230" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_ocr" value="Scan ID via Tesseract OCR&lt;br&gt;&amp;amp; Verhoeff Checksum" style="ellipse;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#166534;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="330" y="295" width="220" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_ekyc" value="Verify Identity via DigiLocker&lt;br&gt;OTP &amp;amp; SHA-256 Attestation" style="ellipse;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#166534;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="660" y="295" width="230" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_scrutiny" value="Pre-Submission DBT Scrutiny&lt;br&gt;(Name &amp;amp; PFMS Readiness)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FEF9C3;strokeColor=#CA8A04;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="660" y="395" width="230" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_pdf" value="Generate Filled Application PDF&lt;br&gt;&amp;amp; DBT Receipt" style="ellipse;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#166534;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="330" y="420" width="220" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_track" value="Submit &amp;amp; Track Application&lt;br&gt;Lifecycle (5 Stages)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#166534;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="330" y="515" width="220" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_offline" value="Queue &amp;amp; Sync Offline PWA&lt;br&gt;Submissions" style="ellipse;whiteSpace=wrap;html=1;fillColor=#F3E8FF;strokeColor=#7E22CE;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="660" y="515" width="230" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_csc" value="Manage CSC Multi-Applicant&lt;br&gt;Queue &amp;amp; WhatsApp Share" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#B45309;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="330" y="635" width="230" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_ingest" value="Ingest Live Govt Schemes&lt;br&gt;from URL / Gazette Text" style="ellipse;whiteSpace=wrap;html=1;fillColor=#F3E8FF;strokeColor=#6D28D9;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="660" y="680" width="230" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_card" value="Export Citizen Welfare Card&lt;br&gt;&amp;amp; Accessibility Controls" style="ellipse;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#166534;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="330" y="750" width="230" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- Actor Associations -->
+        <mxCell id="a1" edge="1" parent="1" source="actor_citizen" target="uc_chat" style="endArrow=none;strokeWidth=1.5;strokeColor=#166534;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="a2" edge="1" parent="1" source="actor_citizen" target="uc_wizard" style="endArrow=none;strokeWidth=1.5;strokeColor=#166534;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="a3" edge="1" parent="1" source="actor_citizen" target="uc_ocr" style="endArrow=none;strokeWidth=1.5;strokeColor=#166534;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="a4" edge="1" parent="1" source="actor_citizen" target="uc_pdf" style="endArrow=none;strokeWidth=1.5;strokeColor=#166534;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="a5" edge="1" parent="1" source="actor_citizen" target="uc_track" style="endArrow=none;strokeWidth=1.5;strokeColor=#166534;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="a6" edge="1" parent="1" source="actor_citizen" target="uc_card" style="endArrow=none;strokeWidth=1.5;strokeColor=#166534;"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- CSC Inheritance & Associations -->
+        <mxCell id="gen_csc" edge="1" parent="1" source="actor_csc" target="actor_citizen" style="endArrow=block;endFill=0;strokeWidth=1.5;strokeColor=#B45309;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="c1" edge="1" parent="1" source="actor_csc" target="uc_csc" style="endArrow=none;strokeWidth=1.5;strokeColor=#B45309;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="c2" edge="1" parent="1" source="actor_csc" target="uc_ingest" style="endArrow=none;strokeWidth=1.5;strokeColor=#B45309;"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- Secondary Actor Associations -->
+        <mxCell id="e1" edge="1" parent="1" source="uc_chat" target="actor_llm" style="endArrow=none;strokeWidth=1.5;strokeColor=#1D4ED8;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="uc_ekyc" target="actor_digilocker" style="endArrow=none;strokeWidth=1.5;strokeColor=#1D4ED8;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="uc_ingest" target="actor_gov" style="endArrow=none;strokeWidth=1.5;strokeColor=#6D28D9;"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- Include / Extend Relationships -->
+        <mxCell id="inc1" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" edge="1" parent="1" source="uc_chat" target="uc_dag" style="endArrow=open;dashed=1;strokeWidth=1.3;strokeColor=#0369A1;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="inc2" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" edge="1" parent="1" source="uc_wizard" target="uc_dag" style="endArrow=open;dashed=1;strokeWidth=1.3;strokeColor=#0369A1;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="inc3" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" edge="1" parent="1" source="uc_pdf" target="uc_scrutiny" style="endArrow=open;dashed=1;strokeWidth=1.3;strokeColor=#CA8A04;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ext1" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" edge="1" parent="1" source="uc_offline" target="uc_track" style="endArrow=open;dashed=1;strokeWidth=1.3;strokeColor=#7E22CE;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ext2" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" edge="1" parent="1" source="uc_ekyc" target="uc_ocr" style="endArrow=open;dashed=1;strokeWidth=1.3;strokeColor=#166534;"><mxGeometry relative="1" as="geometry" /></mxCell>
       </root>
     </mxGraphModel>
   </diagram>

@@ -28,6 +28,7 @@ export default function TrackClient() {
   const [isLoading, setIsLoading] = useState<boolean>(Boolean(initialId));
   const [error, setError] = useState<string | null>(null);
   const [isAdvancing, setIsAdvancing] = useState(false);
+  const [isDownloadingReceipt, setIsDownloadingReceipt] = useState(false);
 
   useEffect(() => {
     // Load all applications for quick suggestions
@@ -78,18 +79,58 @@ export default function TrackClient() {
     setError(null);
 
     try {
+      // First try exact ID lookup
       const res = await fetch(`/api/applications?id=${encodeURIComponent(id.trim())}`);
       const data = await res.json();
-      if (!res.ok || !data.application) {
-        setError(`No application found for Reference ID "${id}". Please check the ID or select from recent submissions.`);
-        setApplication(null);
-      } else {
+      if (res.ok && data.application) {
         setApplication(data.application);
+        return;
+      }
+
+      // Fallback: search by mobile, aadhaar last-4, or applicant name
+      const searchRes = await fetch(`/api/applications?query=${encodeURIComponent(id.trim())}`);
+      const searchData = await searchRes.json();
+      if (searchRes.ok && Array.isArray(searchData.applications) && searchData.applications.length > 0) {
+        setApplication(searchData.applications[0]);
+      } else {
+        setError(`No application found for "${id}". Please check the Reference ID or Mobile Number.`);
+        setApplication(null);
       }
     } catch {
       setError('Failed to connect to tracking registry. Please try again.');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleDownloadReceipt = async () => {
+    if (!application) return;
+    setIsDownloadingReceipt(true);
+    try {
+      const res = await fetch('/api/generate-pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'receipt',
+          applicationId: application.id,
+        }),
+      });
+
+      if (!res.ok) throw new Error("Could not download receipt");
+
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `acknowledgement_${application.id}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (err) {
+      console.error('Failed to download receipt:', err);
+    } finally {
+      setIsDownloadingReceipt(false);
     }
   };
 
@@ -265,16 +306,28 @@ export default function TrackClient() {
                 </p>
               </div>
 
-              {/* Simulation button for Evaluators */}
-              <button
-                type="button"
-                onClick={handleSimulateAdvance}
-                disabled={isAdvancing || application.status === 'DISBURSED'}
-                className="self-start md:self-center px-4 py-2 rounded-xl border-2 border-foreground bg-accent text-foreground text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-[2px_2px_0px_0px_var(--foreground)] hover:shadow-[4px_4px_0px_0px_var(--foreground)] hover:translate-y-[-1px] transition-all disabled:opacity-40"
-              >
-                <Sparkles className="w-4 h-4" />
-                {isAdvancing ? 'Advancing Stage...' : application.status === 'DISBURSED' ? 'Fully Disbursed' : 'Simulate Stage Approval'}
-              </button>
+              {/* Action Buttons: Download Receipt & Advance Stage */}
+              <div className="flex flex-wrap items-center gap-2 self-start md:self-center">
+                <button
+                  type="button"
+                  onClick={handleDownloadReceipt}
+                  disabled={isDownloadingReceipt}
+                  className="px-4 py-2 rounded-xl border-2 border-foreground bg-primary text-foreground text-xs font-black uppercase tracking-wider flex items-center gap-1.5 shadow-[2px_2px_0px_0px_var(--foreground)] hover:shadow-[4px_4px_0px_0px_var(--foreground)] hover:translate-y-[-1px] transition-all disabled:opacity-40"
+                >
+                  <Download className="w-4 h-4" />
+                  {isDownloadingReceipt ? 'Generating Receipt...' : 'Download Official Receipt (PDF)'}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleSimulateAdvance}
+                  disabled={isAdvancing || application.status === 'DISBURSED'}
+                  className="px-4 py-2 rounded-xl border-2 border-foreground bg-accent text-foreground text-xs font-black uppercase tracking-wider flex items-center gap-1.5 shadow-[2px_2px_0px_0px_var(--foreground)] hover:shadow-[4px_4px_0px_0px_var(--foreground)] hover:translate-y-[-1px] transition-all disabled:opacity-40"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  {isAdvancing ? 'Advancing Stage...' : application.status === 'DISBURSED' ? 'Fully Disbursed' : 'Advance Stage'}
+                </button>
+              </div>
             </div>
 
             {/* Credential Grid */}
@@ -324,7 +377,7 @@ export default function TrackClient() {
                     </div>
 
                     {/* Step Content */}
-                    <div className={`flex-1 p-4 rounded-xl border-2 transition-all ${isDone ? 'border-foreground/30 bg-[#F9FFF4]' : isCurrent ? 'border-foreground bg-accent/10 shadow-[3px_3px_0px_0px_var(--foreground)]' : 'border-foreground/15 bg-background opacity-60'}`}>
+                    <div className={`flex-1 p-4 rounded-xl border-2 transition-all ${isDone ? 'border-foreground/30 bg-secondary/40' : isCurrent ? 'border-foreground bg-accent/10 shadow-[3px_3px_0px_0px_var(--foreground)]' : 'border-foreground/15 bg-background opacity-60'}`}>
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1">
                         <span className="font-black text-sm text-foreground">{m.stage}</span>
                         {m.timestamp && (

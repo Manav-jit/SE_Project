@@ -1,12 +1,55 @@
-<mxfile version="24.4.13">
-  <diagram id="placeholder" name="Page-1">
-    <mxGraphModel dx="1000" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+<mxfile host="app.diagrams.net" version="24.4.13" pages="1">
+  <diagram id="collaboration-diagram" name="Collaboration Diagram">
+    <mxGraphModel dx="1420" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1280" pageHeight="860" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="2" value="CollaborationDiagram.drawio" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
-          <mxGeometry x="300" y="280" width="200" height="30" as="geometry" />
+        <mxCell id="title" value="SchemeSaathi — UML Collaboration (Communication) Diagram" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=18;fontStyle=1;fontColor=#166534;" vertex="1" parent="1">
+          <mxGeometry x="350" y="15" width="580" height="34" as="geometry" />
         </mxCell>
+
+        <!-- Objects -->
+        <mxCell id="obj_ui" value="&lt;u&gt;:CitizenCoPilotUI&lt;/u&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#166534;strokeWidth=2;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="340" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="obj_ocr" value="&lt;u&gt;:OCRVerhoeffParser&lt;/u&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FEF9C3;strokeColor=#CA8A04;strokeWidth=2;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="120" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="obj_digi" value="&lt;u&gt;:DigiLockerGateway&lt;/u&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FEF9C3;strokeColor=#CA8A04;strokeWidth=2;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="560" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="obj_chat" value="&lt;u&gt;:ChatRouteController&lt;/u&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E0F2FE;strokeColor=#0369A1;strokeWidth=2;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="440" y="340" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="obj_prof" value="&lt;u&gt;:ProfileExtractor&lt;/u&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E0F2FE;strokeColor=#0369A1;strokeWidth=2;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="440" y="120" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="obj_rag" value="&lt;u&gt;:HybridRAGRetriever&lt;/u&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E0F2FE;strokeColor=#0369A1;strokeWidth=2;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="780" y="120" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="obj_dag" value="&lt;u&gt;:StatutoryDAGEngine&lt;/u&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E0F2FE;strokeColor=#0369A1;strokeWidth=2;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="780" y="340" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="obj_scrutiny" value="&lt;u&gt;:DBTScrutinyInspector&lt;/u&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#166534;strokeWidth=2;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="440" y="560" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="obj_app" value="&lt;u&gt;:ApplicationsRegistry&lt;/u&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F3E8FF;strokeColor=#7E22CE;strokeWidth=2;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="780" y="560" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="obj_pdf" value="&lt;u&gt;:PDFGenerator&lt;/u&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F3E8FF;strokeColor=#7E22CE;strokeWidth=2;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="560" width="160" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Links with numbered collaboration messages -->
+        <mxCell id="l1" value="1: scanDocument()&#xa;2: validateVerhoeff()" edge="1" parent="1" source="obj_ui" target="obj_ocr" style="endArrow=classic;strokeWidth=1.5;strokeColor=#CA8A04;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="l2" value="3: sendOtp() &amp; verifyOtp()" edge="1" parent="1" source="obj_ui" target="obj_digi" style="endArrow=classic;strokeWidth=1.5;strokeColor=#CA8A04;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="l3" value="4: POST /api/chat(profile)" edge="1" parent="1" source="obj_ui" target="obj_chat" style="endArrow=classic;strokeWidth=1.5;strokeColor=#0369A1;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="l4" value="4.1: extractProfileHeuristics()" edge="1" parent="1" source="obj_chat" target="obj_prof" style="endArrow=classic;strokeWidth=1.5;strokeColor=#0369A1;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="l5" value="4.2: findRelevantSchemes()" edge="1" parent="1" source="obj_chat" target="obj_rag" style="endArrow=classic;strokeWidth=1.5;strokeColor=#0369A1;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="l6" value="5: evaluateSchemeDAG()&#xa;5.1: generateCounterfactuals()" edge="1" parent="1" source="obj_ui" target="obj_dag" style="edgeStyle=orthogonalEdgeStyle;endArrow=classic;strokeWidth=1.5;strokeColor=#0369A1;exitX=0.5;exitY=0;entryX=0.5;entryY=0;"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="160" y="250" /><mxPoint x="865" y="250" /></Array></mxGeometry></mxCell>
+        <mxCell id="l7" value="6: inspectProfileDbtScrutiny()" edge="1" parent="1" source="obj_ui" target="obj_scrutiny" style="endArrow=classic;strokeWidth=1.5;strokeColor=#166534;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="l8" value="7: createApplication() /&#xa;queueOfflineSubmission()" edge="1" parent="1" source="obj_scrutiny" target="obj_app" style="endArrow=classic;strokeWidth=1.5;strokeColor=#7E22CE;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="l9" value="8: generateFilledForm() /&#xa;generateAcknowledgementReceipt()" edge="1" parent="1" source="obj_app" target="obj_pdf" style="endArrow=classic;strokeWidth=1.5;strokeColor=#7E22CE;"><mxGeometry relative="1" as="geometry" /></mxCell>
       </root>
     </mxGraphModel>
   </diagram>

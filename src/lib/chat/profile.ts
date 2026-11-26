@@ -15,6 +15,8 @@ export const UserProfileSchema = z.object({
   aadhaarNumber: z.string().optional(),
   verified: z.boolean().optional(),
   digilockerId: z.string().optional(),
+  digitalSignature: z.string().optional(),
+  verificationTimestamp: z.string().optional(),
   verifiedDocuments: z.array(z.string()).optional(),
 });
 
@@ -70,3 +72,84 @@ export function getMissingProfileFields(profile: UserProfile): string[] {
 export function formatProfileForPrompt(profile: UserProfile): string {
   return JSON.stringify(profile, null, 2);
 }
+
+const INDIAN_STATES = [
+  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana",
+  "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur",
+  "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana",
+  "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal", "Delhi", "Jammu and Kashmir", "Ladakh"
+];
+
+export function extractProfileHeuristics(text: string): Partial<UserProfile> {
+  const result: Partial<UserProfile> = {};
+  if (!text) return result;
+
+  const lower = text.toLowerCase();
+
+  // 1. Landholding in hectares
+  const landHectareMatch = text.match(/(\d+(?:\.\d+)?)\s*(?:hectares?|ha)\b/i);
+  if (landHectareMatch) {
+    result.landHoldingHectares = parseFloat(landHectareMatch[1]);
+  } else {
+    const landAcreMatch = text.match(/(\d+(?:\.\d+)?)\s*acres?\b/i);
+    if (landAcreMatch) {
+      result.landHoldingHectares = Math.round(parseFloat(landAcreMatch[1]) * 0.404686 * 100) / 100;
+    }
+  }
+
+  // 2. Occupation
+  if (/\b(?:farmer|kisan|कृषि|किसान|cultivator)\b/i.test(lower)) {
+    result.occupation = 'farmer';
+  } else if (/\b(?:student|विद्यार्थी|studying|class\s*\d+)\b/i.test(lower)) {
+    result.occupation = 'student';
+  } else if (/\b(?:artisan|craftsman|karigar|कारीगर|weaver)\b/i.test(lower)) {
+    result.occupation = 'artisan';
+  } else if (/\b(?:street vendor|vendor|hawker|रेहड़ी|पटरी)\b/i.test(lower)) {
+    result.occupation = 'street vendor';
+  } else if (/\b(?:homemaker|housewife|गृहणी)\b/i.test(lower)) {
+    result.occupation = 'homemaker';
+  } else if (/\b(?:laborer|daily wage|मजदूर|worker)\b/i.test(lower)) {
+    result.occupation = 'laborer';
+  } else if (/\b(?:self-employed|business|दुकानदार)\b/i.test(lower)) {
+    result.occupation = 'self-employed';
+  }
+
+  // 3. Gender
+  if (/\b(?:female|woman|girl|mother|महिला|औरत|माता)\b/i.test(lower)) {
+    result.gender = 'female';
+  } else if (/\b(?:male|man|boy|father|पुरुष|आदमी)\b/i.test(lower)) {
+    result.gender = 'male';
+  }
+
+  // 4. Age
+  const ageMatch = text.match(/\b(?:age|aged|i am|age is)[:\s]*([1-9][0-9]?)\b/i) || text.match(/\b([1-9][0-9]?)\s*(?:years?\s*old|yrs?\s*old)\b/i);
+  if (ageMatch) {
+    const parsedAge = parseInt(ageMatch[1], 10);
+    if (parsedAge >= 5 && parsedAge <= 110) {
+      result.age = parsedAge;
+    }
+  }
+
+  // 5. State
+  for (const st of INDIAN_STATES) {
+    const regex = new RegExp(`\\b${st}\\b`, 'i');
+    if (regex.test(text)) {
+      result.state = st;
+      break;
+    }
+  }
+
+  // 6. Caste
+  if (/\b(?:sc|scheduled caste|अनुसूचित जाति)\b/i.test(lower)) {
+    result.caste = 'SC';
+  } else if (/\b(?:st|scheduled tribe|अनुसूचित जनजाति)\b/i.test(lower)) {
+    result.caste = 'ST';
+  } else if (/\b(?:obc|other backward class|पिछड़ा वर्ग)\b/i.test(lower)) {
+    result.caste = 'OBC';
+  } else if (/\b(?:general|सामान्य)\b/i.test(lower)) {
+    result.caste = 'General';
+  }
+
+  return result;
+}
+

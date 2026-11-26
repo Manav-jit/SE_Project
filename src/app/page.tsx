@@ -45,7 +45,7 @@ export default function Home() {
         {/* Header */}
         <header className="flex justify-between items-center mb-12 sm:mb-16">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-primary border-2 border-foreground shadow-[3px_3px_0px_0px_var(--foreground)] flex items-center justify-center text-foreground font-black text-2xl font-serif">
+            <div className="w-12 h-12 rounded-2xl bg-primary border-2 border-foreground shadow-[3px_3px_0px_0px_var(--foreground)] flex items-center justify-center text-primary-foreground font-black text-2xl font-serif">
               S
             </div>
             <div>
@@ -117,7 +117,7 @@ export default function Home() {
               />
               <button
                 type="submit"
-                className="mr-2 px-5 py-2.5 sm:py-3 rounded-xl bg-primary border-2 border-foreground text-foreground text-xs font-black uppercase tracking-wider hover:bg-primary/90 transition-all flex items-center gap-1.5 shrink-0 shadow-[2px_2px_0px_0px_var(--foreground)]"
+                className="mr-2 px-5 py-2.5 sm:py-3 rounded-xl bg-primary border-2 border-foreground text-primary-foreground text-xs font-black uppercase tracking-wider hover:bg-emerald-800 transition-all flex items-center gap-1.5 shrink-0 shadow-[2px_2px_0px_0px_var(--foreground)]"
               >
                 <span>Diagnose</span>
                 <ArrowRight className="w-4 h-4" />

@@ -1,0 +1,32 @@
+{
+  "id": "pmay_gramin",
+  "name": "Pradhan Mantri Awas Yojana - Gramin (PMAY-G)",
+  "ministry": "Ministry of Rural Development",
+  "category": "housing",
+  "eligibility": {
+    "age_min": 18,
+    "age_max": 85,
+    "gender": "all",
+    "income_max": 300000,
+    "occupations": ["farmer", "laborer", "self-employed", "homemaker", "unemployed", "other"],
+    "citizenship": "Indian",
+    "other_conditions": "Houseless families or households living in kutcha/dilapidated houses in rural areas as per SECC 2011 or Awaas+ list. Must not own a pucca house."
+  },
+  "benefits": "Direct financial grant of Rs. 1,20,000 in plain areas and Rs. 1,30,000 in hilly/difficult states for construction of a disaster-resilient pucca house with toilet and clean cooking gas.",
+  "documents_required": [
+    "Aadhaar Card",
+    "Job Card / MGNREGA Number (for 90 days unskilled labor allowance)",
+    "Bank Account Details (Aadhaar linked)",
+    "Consent form for biometric verification",
+    "Land / Homestead allotment certificate"
+  ],
+  "application_process": [
+    "Beneficiary identified via Gram Sabha verification from Awaas+ portal list.",
+    "Geo-tagging of existing site before and during stage-wise construction.",
+    "DBT installments credited directly across plinth, lintel, and roof completion stages."
+  ],
+  "submission_url": "https://pmayg.nic.in/",
+  "annual_benefit_amount": 130000,
+  "statutory_citation": "Ministry of Rural Development Framework for Implementation No. J-11060/01/2016-RH",
+  "benefit_type": "Direct Cash Grant for Housing"
+}
