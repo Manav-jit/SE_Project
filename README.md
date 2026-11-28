@@ -6,7 +6,7 @@
 
 ## ✨ Key Features
 
-- **Bilingual AI Welfare Co-Pilot (`/chat`)**: Guided, streaming conversational discovery powered by Groq (`openai/gpt-oss-20b`), deterministic regex heuristics (`extractProfileHeuristics`), and hybrid semantic retrieval (`Xenova/all-MiniLM-L6-v2` embeddings + eligibility scoring) in **English (`en`)** and **Hindi (`hi`)**.
+- **Bilingual AI Welfare Co-Pilot (`/chat`)**: Guided, streaming conversational discovery powered by Grok (`grok-4.7`) via xAI, deterministic regex heuristics (`extractProfileHeuristics`), and hybrid semantic retrieval (`Xenova/all-MiniLM-L6-v2` embeddings + eligibility scoring) in **English (`en`)** and **Hindi (`hi`)**.
 - **Formal Statutory DAG Verification & Counterfactuals**: Evaluates citizen profiles against structured boolean/comparison rule trees (`src/lib/dag/`) for transparent eligibility proofs (`ProofGraphModal`), showing exact passing/failing criteria and actionable counterfactual gap advice with alternative scheme suggestions.
 - **Life-Event Bundle Navigator & 3-Step Quick-Match Wizard (`/`, `/wizard`, `/matches`)**: Discover curated multi-scheme packages triggered by life events (e.g., *Newborn & Maternity*, *Crop Sowing & Agriculture*, *Student Higher Education*) or match in under 30 seconds via a 3-step wizard.
 - **Document OCR Scanner & Verhoeff Aadhaar Validation**: Client-side image preprocessing (HTML5 Canvas grayscale + contrast stretch) and **Tesseract.js** OCR (`src/lib/ocr/parser.ts`) with UIDAI **Verhoeff checksum validation** (`validateVerhoeff`, `generateVerhoeffCheckDigit`).
@@ -50,7 +50,7 @@ flowchart TB
     end
 
     subgraph External["External Services & Data Stores"]
-        Groq["Groq Inference API (openai/gpt-oss-20b)"]
+        xAI["xAI Grok Inference API (grok-4.7)"]
         HF["Hugging Face Hub (Xenova/all-MiniLM-L6-v2)"]
         Gov["Govt Portals (myScheme / india.gov.in / data.gov.in)"]
         SchemesDB[("data/schemes/*.json (26+ Schemes)")]
@@ -68,7 +68,7 @@ flowchart TB
 
     APIChat --> Profile
     APIChat --> RAG
-    APIChat --> Groq
+    APIChat --> xAI
     RAG --> HF
     RAG --> SchemesDB
     UI --> DAG
@@ -89,19 +89,19 @@ sequenceDiagram
     participant UI as Next.js UI (/chat & Modals)
     participant Chat as /api/chat
     participant Engine as Hybrid RAG + Statutory DAG
-    participant Groq as Groq LLM (gpt-oss-20b)
+    participant xAI as Grok LLM (grok-4.7)
     participant eKYC as /api/ekyc/digilocker
     participant AppPDF as /api/applications & /generate-pdf
 
     Citizen->>UI: Describe situation (EN/HI) or scan ID (Tesseract + Verhoeff)
     UI->>Chat: POST { messages, profile, language }
     Chat->>Chat: extractProfileHeuristics(latestMessage)
-    Chat->>Groq: Extract structured UserProfile JSON
-    Groq-->>Chat: Parsed UserProfile fields
+    Chat->>xAI: Extract structured UserProfile JSON
+    xAI-->>Chat: Parsed UserProfile fields
     Chat->>Engine: findRelevantSchemes(query, k=4, mergedProfile)
     Engine-->>Chat: Ranked eligible schemes
-    Chat->>Groq: streamText(SYSTEM_PROMPT + profile + schemes)
-    Groq-->>UI: SSE response + X-Updated-Profile & X-Matched-Schemes
+    Chat->>xAI: streamText(SYSTEM_PROMPT + profile + schemes)
+    xAI-->>UI: SSE response + X-Updated-Profile & X-Matched-Schemes
     UI->>Engine: evaluateSchemeDAG(dag, profile) + generateCounterfactuals()
     Engine-->>UI: Node-by-node Proof Graph & gap advice
 
@@ -155,20 +155,20 @@ All editable UML & architectural source diagrams in [`/diagrams`](./diagrams) ar
 
 | Diagram File | Diagram Type | Coverage |
 | :--- | :--- | :--- |
-| [UseCaseDiagram.drawio](./diagrams/UseCaseDiagram.drawio) | UML Use Case | Citizen & CSC VLE actors, Groq/DigiLocker/Govt boundaries, `<<include>>` / `<<extend>>` relationships |
+| [UseCaseDiagram.drawio](./diagrams/UseCaseDiagram.drawio) | UML Use Case | Citizen & CSC VLE actors, xAI/DigiLocker/Govt boundaries, `<<include>>` / `<<extend>>` relationships |
 | [ActivityDiagram.drawio](./diagrams/ActivityDiagram.drawio) | UML Activity | Multi-modal entry, OCR/DigiLocker fork, Hybrid RAG + DAG verdict, DBT scrutiny, offline fallback & tracking |
-| [SequenceDiagram.drawio](./diagrams/SequenceDiagram.drawio) | UML Sequence | Message exchange across UI, `/api/chat`, RAG+DAG, Groq, `/api/ekyc/digilocker`, `/api/applications`, `/api/generate-pdf` |
+| [SequenceDiagram.drawio](./diagrams/SequenceDiagram.drawio) | UML Sequence | Message exchange across UI, `/api/chat`, RAG+DAG, xAI Grok, `/api/ekyc/digilocker`, `/api/applications`, `/api/generate-pdf` |
 | [SwimlaneDiagram.drawio](./diagrams/SwimlaneDiagram.drawio) | Cross-Functional Swimlane | Responsibilities across Citizen/CSC, Client Browser PWA, Next.js Server, and Cloud/JSON Stores |
 | [CollaborationDiagram.drawio](./diagrams/CollaborationDiagram.drawio) | UML Collaboration | Numbered object interactions across UI, parsers, extractors, RAG/DAG, scrutiny, registry, and PDF engine |
 | [Class_and_Component_Diagram.drawio](./diagrams/Class_and_Component_Diagram.drawio) | UML Class & Component (2 Tabs) | Domain models (`Scheme`, `UserProfile`, `ApplicationRecord`, `StatutoryDAGEngine`) & Next.js module wiring |
-| [DeploymentDiagram.drawio](./diagrams/DeploymentDiagram.drawio) | UML Deployment | PWA Client Browser, Next.js 16 Node.js runtime, Groq/HuggingFace/Govt cloud nodes, JSON persistence |
+| [DeploymentDiagram.drawio](./diagrams/DeploymentDiagram.drawio) | UML Deployment | PWA Client Browser, Next.js 16 Node.js runtime, xAI/HuggingFace/Govt cloud nodes, JSON persistence |
 
 ---
 
 ## 🛠 Tech Stack
 
 - **Framework & UI**: Next.js `16.3.5` (App Router), React `19.2.8`, TypeScript `5`, Tailwind CSS `4`
-- **AI & Embeddings**: Vercel AI SDK (`ai`, `@ai-sdk/openai`, `@ai-sdk/react`), Groq (`openai/gpt-oss-20b`), `@xenova/transformers` (`Xenova/all-MiniLM-L6-v2`)
+- **AI & Embeddings**: Vercel AI SDK (`ai`, `@ai-sdk/openai`, `@ai-sdk/react`), Grok (`grok-4.7`) via xAI, `@xenova/transformers` (`Xenova/all-MiniLM-L6-v2`)
 - **OCR, PDF & Validation**: `tesseract.js` (client WASM OCR + Verhoeff checksum), `pdf-lib` (A4 PDF forms & receipts), `zod`
 - **Icons & Fonts**: `lucide-react`, Google Fonts (`Nunito`, `Quicksand`)
 
@@ -203,7 +203,7 @@ All editable UML & architectural source diagrams in [`/diagrams`](./diagrams) ar
 
 ### Prerequisites
 - Node.js 20+ and npm
-- A [Groq API Key](https://console.groq.com/) for AI chat extraction and streaming
+- An [xAI API key](https://console.x.ai/) for Grok AI chat extraction and streaming
 
 ### Installation & Local Development
 
@@ -221,7 +221,7 @@ All editable UML & architectural source diagrams in [`/diagrams`](./diagrams) ar
 3. **Configure environment variables:**
    Create a `.env.local` file in the project root:
    ```env
-   GROQ_API_KEY=your_groq_api_key_here
+   XAI_API_KEY=your_xai_api_key_here
    ```
 
 4. **Run the development server:**

@@ -5,9 +5,9 @@ import { findRelevantSchemes } from "@/lib/rag/retriever";
 import { SYSTEM_PROMPT, EXTRACTION_PROMPT } from "@/lib/chat/prompts";
 import { UserProfile, formatProfileForPrompt, extractProfileHeuristics } from "@/lib/chat/profile";
 
-const groq = createOpenAI({
-  baseURL: 'https://api.groq.com/openai/v1',
-  apiKey: process.env.GROQ_API_KEY,
+const xai = createOpenAI({
+  baseURL: 'https://api.x.ai/v1',
+  apiKey: process.env.XAI_API_KEY,
 });
 
 function getMessageText(message: UIMessage | { content?: unknown; parts?: Array<{ type: string; text?: string }> }): string {
@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
         .replace('{message}', latestMessage);
 
       const { text } = await generateText({
-        model: groq.chat('openai/gpt-oss-20b'),
+        model: xai.chat('grok-4.7'),
         prompt: extractionPrompt,
         temperature: 0,
         maxOutputTokens: 250
@@ -122,7 +122,7 @@ export async function POST(req: NextRequest) {
     const modelMessages = await convertToModelMessages(uiMessages);
 
     const result = streamText({
-      model: groq.chat('openai/gpt-oss-20b'),
+      model: xai.chat('grok-4.7'),
       system: formattedSysPrompt,
       messages: modelMessages,
       temperature: 0.3,
